@@ -1,15 +1,84 @@
 /**
  * Code Compass — Quiz Mode (Quick Drill)
- * Design: Industrial Control Panel — rapid-fire, no timer pressure
+ * Shows full NEC index lookup path after every answer
  */
 import { useState, useCallback } from "react";
 import AppLayout from "@/components/AppLayout";
 import { getRandomQuestions, type QuestionCard } from "@/data/questionBank";
-import { Zap, CheckCircle, XCircle, BookOpen, RotateCcw, ArrowRight } from "lucide-react";
+import { useNecVersion } from "@/contexts/NecVersionContext";
+import { Zap, CheckCircle, XCircle, BookOpen, RotateCcw, ArrowRight, Search, Target, ChevronRight } from "lucide-react";
 
 type QuizState = "setup" | "active" | "complete";
 
+function LookupPathPanel({ card }: { card: QuestionCard }) {
+  return (
+    <div className="panel-card rounded-sm p-4 border-l-2 border-l-amber-400/60 space-y-3">
+      <p className="font-mono text-xs font-bold text-amber-400 tracking-wider">HOW TO FIND THIS IN YOUR BOOK</p>
+
+      <div className="space-y-2">
+        {/* Step 1: Index Keywords */}
+        <div className="flex items-start gap-3">
+          <div className="w-5 h-5 rounded-sm bg-amber-400/15 flex items-center justify-center shrink-0 mt-0.5">
+            <Search className="w-3 h-3 text-amber-400" />
+          </div>
+          <div>
+            <p className="stencil-label mb-0.5">1 — INDEX KEYWORD</p>
+            <div className="flex flex-wrap gap-1.5">
+              {card.lookup_path.index_keywords.map(kw => (
+                <span key={kw} className="px-2 py-0.5 bg-amber-400/10 border border-amber-400/30 rounded-sm font-mono text-xs text-amber-400">
+                  {kw}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Step 2: Index Entry */}
+        <div className="flex items-start gap-3">
+          <div className="w-5 h-5 rounded-sm bg-blue-400/15 flex items-center justify-center shrink-0 mt-0.5">
+            <BookOpen className="w-3 h-3 text-blue-400" />
+          </div>
+          <div>
+            <p className="stencil-label mb-0.5">2 — INDEX ENTRY READS</p>
+            <p className="text-xs text-blue-400 font-mono">{card.lookup_path.index_entry}</p>
+          </div>
+        </div>
+
+        {/* Step 3: Article/Table */}
+        <div className="flex items-start gap-3">
+          <div className="w-5 h-5 rounded-sm bg-green-400/15 flex items-center justify-center shrink-0 mt-0.5">
+            <ArrowRight className="w-3 h-3 text-green-400" />
+          </div>
+          <div>
+            <p className="stencil-label mb-0.5">3 — NAVIGATE TO</p>
+            <span className="px-2 py-0.5 bg-green-400/10 border border-green-400/30 rounded-sm font-mono text-xs text-green-400">
+              {card.lookup_path.article_or_table}
+            </span>
+          </div>
+        </div>
+
+        {/* Step 4: What to look for */}
+        <div className="flex items-start gap-3">
+          <div className="w-5 h-5 rounded-sm bg-primary/15 flex items-center justify-center shrink-0 mt-0.5">
+            <Target className="w-3 h-3 text-primary" />
+          </div>
+          <div>
+            <p className="stencil-label mb-0.5">4 — WHAT TO READ</p>
+            <p className="text-xs text-muted-foreground leading-relaxed">{card.lookup_path.what_to_look_for}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Explanation */}
+      <div className="pt-2 border-t border-border">
+        <p className="text-xs text-muted-foreground leading-relaxed">{card.explanation}</p>
+      </div>
+    </div>
+  );
+}
+
 export default function QuizMode() {
+  const { version } = useNecVersion();
   const [state, setState] = useState<QuizState>("setup");
   const [questions, setQuestions] = useState<QuestionCard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -17,13 +86,13 @@ export default function QuizMode() {
   const [revealed, setRevealed] = useState(false);
 
   const startQuiz = useCallback((count: number, difficulty?: QuestionCard["difficulty"]) => {
-    const q = getRandomQuestions(count, difficulty);
+    const q = getRandomQuestions(count, difficulty, version);
     setQuestions(q);
     setAnswers({});
     setCurrentIndex(0);
     setRevealed(false);
     setState("active");
-  }, []);
+  }, [version]);
 
   const selectAnswer = (questionId: string, answer: string) => {
     if (revealed) return;
@@ -47,10 +116,10 @@ export default function QuizMode() {
       <AppLayout>
         <div className="p-6 lg:p-8 max-w-2xl mx-auto space-y-8">
           <div>
-            <p className="stencil-label mb-2">QUICK DRILL</p>
+            <p className="stencil-label mb-2">QUICK DRILL — NEC {version}</p>
             <h2 className="text-2xl font-bold text-foreground">Rapid-Fire Practice</h2>
             <p className="text-muted-foreground mt-2 text-sm">
-              No timer. Instant feedback. Perfect for building muscle memory on NEC lookups.
+              No timer. After each answer you'll see the exact index path to find it in your book.
             </p>
           </div>
 
@@ -61,6 +130,7 @@ export default function QuizMode() {
                 <button
                   key={count}
                   onClick={() => startQuiz(count)}
+                  data-testid={`drill-size-${count}`}
                   className="panel-card p-4 rounded-sm text-center hover:border-primary/40 transition-all"
                 >
                   <p className="text-2xl font-mono font-bold text-primary">{count}</p>
@@ -77,6 +147,7 @@ export default function QuizMode() {
                 <button
                   key={diff}
                   onClick={() => startQuiz(5, diff)}
+                  data-testid={`drill-level-${diff}`}
                   className="panel-card p-4 rounded-sm text-center hover:border-primary/40 transition-all"
                 >
                   <Zap className="w-4 h-4 text-primary mx-auto mb-2" />
@@ -118,19 +189,17 @@ export default function QuizMode() {
             </div>
           </div>
 
-          {/* Missed Questions */}
           {questions.filter(q => answers[q.id] !== q.correct_answer).length > 0 && (
             <div>
-              <p className="stencil-label mb-3">REVIEW MISSED</p>
-              <div className="space-y-2">
+              <p className="stencil-label mb-3">REVIEW MISSED — LOOKUP PATHS</p>
+              <div className="space-y-4">
                 {questions.filter(q => answers[q.id] !== q.correct_answer).map(q => (
-                  <div key={q.id} className="panel-card p-4 rounded-sm">
-                    <p className="text-sm text-foreground font-medium mb-2">{q.question}</p>
-                    <p className="text-xs text-green-400 font-mono">✓ {q.correct_answer}</p>
-                    <div className="flex items-center gap-2 mt-2">
-                      <BookOpen className="w-3 h-3 text-primary" />
-                      <span className="font-mono text-xs text-primary">{q.nec_article}</span>
-                    </div>
+                  <div key={q.id} className="space-y-2">
+                    <p className="text-sm text-foreground font-medium">{q.question}</p>
+                    <p className="text-xs text-green-400 font-mono flex items-center gap-1">
+                      <CheckCircle className="w-3 h-3" /> {q.correct_answer}
+                    </p>
+                    <LookupPathPanel card={q} />
                   </div>
                 ))}
               </div>
@@ -141,22 +210,21 @@ export default function QuizMode() {
     );
   }
 
-  // Active quiz
   const currentQ = questions[currentIndex];
   const userAnswer = answers[currentQ.id];
 
   return (
     <AppLayout>
-      <div className="p-6 lg:p-8 max-w-2xl mx-auto space-y-6">
+      <div className="p-6 lg:p-8 max-w-2xl mx-auto space-y-5">
         {/* Progress */}
         <div className="flex items-center justify-between">
-          <span className="stencil-label">DRILL {currentIndex + 1} OF {questions.length}</span>
+          <span className="stencil-label">QUESTION {currentIndex + 1} OF {questions.length} — NEC {version}</span>
           <span className="font-mono text-xs text-green-400">{score} correct</span>
         </div>
         <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
           <div
             className="h-full bg-primary transition-all duration-300"
-            style={{ width: `${((currentIndex) / questions.length) * 100}%` }}
+            style={{ width: `${(currentIndex / questions.length) * 100}%` }}
           />
         </div>
 
@@ -185,6 +253,7 @@ export default function QuizMode() {
                 key={choice}
                 onClick={() => selectAnswer(currentQ.id, choice)}
                 disabled={revealed}
+                data-testid={`choice-${letter}`}
                 className={`w-full panel-card p-4 rounded-sm flex items-center gap-3 transition-all text-left ${
                   revealed && isCorrect
                     ? "border-green-400/60 bg-green-400/5"
@@ -193,7 +262,7 @@ export default function QuizMode() {
                     : "hover:border-primary/30"
                 }`}
               >
-                <span className={`w-7 h-7 rounded-sm flex items-center justify-center font-mono text-xs font-bold ${
+                <span className={`w-7 h-7 rounded-sm flex items-center justify-center font-mono text-xs font-bold shrink-0 ${
                   revealed && isCorrect
                     ? "bg-green-400/20 text-green-400"
                     : revealed && selected && !isCorrect
@@ -203,27 +272,23 @@ export default function QuizMode() {
                   {letter}
                 </span>
                 <span className="text-sm text-foreground flex-1">{choice}</span>
-                {revealed && isCorrect && <CheckCircle className="w-4 h-4 text-green-400" />}
-                {revealed && selected && !isCorrect && <XCircle className="w-4 h-4 text-destructive" />}
+                {revealed && isCorrect && <CheckCircle className="w-4 h-4 text-green-400 shrink-0" />}
+                {revealed && selected && !isCorrect && <XCircle className="w-4 h-4 text-destructive shrink-0" />}
               </button>
             );
           })}
         </div>
 
-        {/* Rationale */}
+        {/* Lookup Path — shown after answer */}
         {revealed && (
           <>
-            <div className="panel-card p-4 rounded-sm border-l-2 border-l-primary">
-              <p className="text-sm text-muted-foreground leading-relaxed">{currentQ.explanation}</p>
-              <p className="mt-2 text-xs text-muted-foreground italic">
-                Open your code book to {currentQ.nec_article} to verify.
-              </p>
-            </div>
+            <LookupPathPanel card={currentQ} />
             <button
               onClick={nextQuestion}
+              data-testid="next-question"
               className="w-full bg-primary text-primary-foreground py-3 rounded-sm font-mono text-sm font-bold uppercase tracking-wider hover:brightness-110 transition-all flex items-center justify-center gap-2"
             >
-              {currentIndex < questions.length - 1 ? "NEXT" : "FINISH"}
+              {currentIndex < questions.length - 1 ? "NEXT QUESTION" : "FINISH DRILL"}
               <ArrowRight className="w-4 h-4" />
             </button>
           </>

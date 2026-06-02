@@ -23,8 +23,9 @@ export function ThemeProvider({
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(() => {
     if (switchable) {
-      const stored = localStorage.getItem("theme");
-      return (stored as Theme) || defaultTheme;
+      // Use system preference as default when localStorage is unavailable
+      const prefersDark = typeof window !== 'undefined' && window.matchMedia('(prefers-color-scheme: dark)').matches;
+      return prefersDark ? 'dark' : defaultTheme;
     }
     return defaultTheme;
   });
@@ -37,9 +38,7 @@ export function ThemeProvider({
       root.classList.remove("dark");
     }
 
-    if (switchable) {
-      localStorage.setItem("theme", theme);
-    }
+    // Theme stored in memory only (no localStorage)
   }, [theme, switchable]);
 
   const toggleTheme = switchable
