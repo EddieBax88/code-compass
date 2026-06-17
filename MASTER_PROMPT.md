@@ -3,6 +3,9 @@
 
 Paste as the first message in any new AI session (Claude, Gemini, Manus, Perplexity, ChatGPT).
 
+## 0. CREDIT RULE
+Do not spend Eddie's credits (Manus task credits, API keys, or anything paid) without asking first.
+
 ## 1. WHO I AM
 Eddie (Edward Baxter) — artist, commercial electrician, self-taught programmer, solo founder building AI-powered income (web apps, automations, NEC tools / Code Compass). Works long days. Learns fast when pushed. Wants grounded, enterprise-grade output — not hype. Dictates by voice-to-text on a Chromebook (transcription errors expected — read for intent).
 
@@ -38,6 +41,8 @@ Co-founder, performance coach, learning architect, and senior engineer. On Code 
 - Relationships multiply.
 
 ## 8. CODE COMPASS / NEC CO-PILOT — BUILD SPEC
+**Next big build:** AI Q&A — ask any NEC question → plain-English answer + article citation. On Google Cloud / Gemini. **Vertex AI credits expire June 17, 2026. Build must start before then or credits are lost.**
+
 **Modules:** Exam Mode, Quiz Mode, Search Mode, Changes Mode
 **UX:** Speed, clarity, minimal clicks. Premium dark dashboard, orange/amber accents.
 **Data:** JSON/CSV banks with id, question, choices, correct_answer, explanation, nec_article, difficulty, tags.

@@ -6,6 +6,8 @@ import { useState, useMemo } from "react";
 import AppLayout from "@/components/AppLayout";
 import { searchQuestions, questionBank, type QuestionCard } from "@/data/questionBank";
 import { Search, BookOpen, Tag, Filter } from "lucide-react";
+import BackButton from "@/components/BackButton";
+import { PaywallGate } from "@/components/PaywallGate";
 
 export default function SearchMode() {
   const [query, setQuery] = useState("");
@@ -32,7 +34,9 @@ export default function SearchMode() {
 
   return (
     <AppLayout>
+      <PaywallGate featureName="Code Lookup">
       <div className="p-6 lg:p-8 space-y-6">
+        <BackButton fallback="/" label="Back to Panel" className="-ml-3" />
         {/* Header */}
         <div>
           <p className="stencil-label mb-2">CODE LOOKUP</p>
@@ -122,6 +126,19 @@ export default function SearchMode() {
                   <p className="text-sm text-muted-foreground leading-relaxed">
                     <span className="text-green-400 font-mono font-bold">→</span> {q.explanation}
                   </p>
+                  <div className="mt-3 flex items-start gap-2 text-xs">
+                    <span className="font-mono text-muted-foreground uppercase tracking-wide flex-shrink-0">Index:</span>
+                    <div className="flex flex-wrap gap-1.5">
+                      {q.lookup_path.index_keywords.map(kw => (
+                        <span
+                          key={kw}
+                          className="font-medium text-foreground bg-primary/15 border border-primary/30 rounded-sm px-2 py-0.5"
+                        >
+                          {kw}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
                   <div className="flex items-center gap-2 mt-3 flex-wrap">
                     {q.tags.map(tag => (
                       <span
@@ -150,6 +167,7 @@ export default function SearchMode() {
           )}
         </div>
       </div>
+      </PaywallGate>
     </AppLayout>
   );
 }

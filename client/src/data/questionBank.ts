@@ -228,16 +228,6 @@ export const questionBank: QuestionCard[] = [
       what_to_look_for: "Read (A)(2) for surface-mounted enclosed luminaires — 12 inch clearance from storage space"
     }
   },
-];
-
-// Helper: get random questions
-export function getRandomQuestions(count: number, difficulty?: QuestionCard["difficulty"], version?: string): QuestionCard[] {
-  let pool = difficulty ? questionBank.filter(q => q.difficulty === difficulty) : [...questionBank// 50 NEW NEC QUESTIONS — to be appended to questionBank array
-// Topics: ampacity, box fill, grounding, motors, dwelling units, service entrance,
-// transformers, hazardous locations, GFCI/AFCI, overcurrent protection, conduit fill,
-// working clearances, load calculations, panelboards, generators
-// Mix: 35 journeyman (70%), 15 master (30%)
-
   // ─── AMPACITY ───────────────────────────────────────────────────────────────
   {
     id: "310-002",
@@ -1202,6 +1192,9 @@ export function getRandomQuestions(count: number, difficulty?: QuestionCard["dif
   },
 
 ];
+
+export function getRandomQuestions(count: number, difficulty?: QuestionCard["difficulty"], version?: string): QuestionCard[] {
+  let pool = difficulty ? questionBank.filter(q => q.difficulty === difficulty) : [...questionBank];
   if (version && version !== "all") {
     pool = pool.filter(q => q.nec_versions.includes(version as "2017" | "2020" | "2023" | "2026"));
   }

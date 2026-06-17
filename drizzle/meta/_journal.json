@@ -1,0 +1,27 @@
+{
+  "version": "7",
+  "dialect": "mysql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1780472715797,
+      "tag": "0000_military_madrox",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1780472886009,
+      "tag": "0001_strong_gressill",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1780533023741,
+      "tag": "0002_red_ares",
+      "breakpoints": true
+    }
+  ]
+}

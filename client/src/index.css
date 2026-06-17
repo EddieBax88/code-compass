@@ -46,11 +46,51 @@
 
 :root {
   --radius: 0.25rem;
-  --background: oklch(0.08 0.005 250);
+  /* Light — readability-first. HARD DEFAULT for everyone (no class needed,
+     so the first paint is Light with zero flash). OLED is a paid perk and
+     lives under `.dark`, which ThemeContext only adds for unlocked users. */
+  --background: oklch(0.98 0.001 250);
+  --foreground: oklch(0.1 0.01 250);
+  --card: oklch(0.95 0.001 250);
+  --card-foreground: oklch(0.1 0.01 250);
+  --popover: oklch(0.95 0.001 250);
+  --popover-foreground: oklch(0.1 0.01 250);
+  --primary: oklch(0.75 0.18 70);
+  --primary-foreground: oklch(0.98 0 0);
+  --secondary: oklch(0.85 0.005 250);
+  --secondary-foreground: oklch(0.15 0.01 250);
+  --muted: oklch(0.85 0.005 250);
+  --muted-foreground: oklch(0.4 0.01 250);
+  --accent: oklch(0.85 0.01 250);
+  --accent-foreground: oklch(0.1 0.01 250);
+  --destructive: oklch(0.6 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+  --border: oklch(0.85 0.01 250);
+  --input: oklch(0.9 0.005 250);
+  --ring: oklch(0.75 0.18 70);
+  --chart-1: oklch(0.75 0.18 70);
+  --chart-2: oklch(0.65 0.15 60);
+  --chart-3: oklch(0.7 0.2 140);
+  --chart-4: oklch(0.55 0.12 250);
+  --chart-5: oklch(0.6 0.22 25);
+  --sidebar: oklch(0.92 0.001 250);
+  --sidebar-foreground: oklch(0.15 0.01 250);
+  --sidebar-primary: oklch(0.75 0.18 70);
+  --sidebar-primary-foreground: oklch(0.98 0 0);
+  --sidebar-accent: oklch(0.85 0.01 250);
+  --sidebar-accent-foreground: oklch(0.1 0.01 250);
+  --sidebar-border: oklch(0.85 0.01 250);
+  --sidebar-ring: oklch(0.75 0.18 70);
+}
+
+.dark {
+  /* OLED Black — true #000000 background (paid perk). Applied only when
+     ThemeContext adds `.dark`; also drives all shadcn `dark:` utilities. */
+  --background: oklch(0 0 0);
   --foreground: oklch(0.92 0.01 80);
-  --card: oklch(0.12 0.005 250);
+  --card: oklch(0.10 0.005 250);
   --card-foreground: oklch(0.92 0.01 80);
-  --popover: oklch(0.12 0.005 250);
+  --popover: oklch(0.10 0.005 250);
   --popover-foreground: oklch(0.92 0.01 80);
   --primary: oklch(0.75 0.18 70);
   --primary-foreground: oklch(0.1 0.01 70);
@@ -70,7 +110,7 @@
   --chart-3: oklch(0.7 0.2 140);
   --chart-4: oklch(0.55 0.12 250);
   --chart-5: oklch(0.6 0.22 25);
-  --sidebar: oklch(0.1 0.005 250);
+  --sidebar: oklch(0 0 0);
   --sidebar-foreground: oklch(0.85 0.01 80);
   --sidebar-primary: oklch(0.75 0.18 70);
   --sidebar-primary-foreground: oklch(0.1 0.01 70);
@@ -133,6 +173,10 @@
   /* Industrial Control Panel signature elements */
   .panel-card {
     @apply border border-border bg-card;
+    box-shadow: 0 4px 12px oklch(0 0 0 / 12%);
+  }
+
+  .dark .panel-card {
     box-shadow: inset 0 1px 0 oklch(0.3 0.01 250), 0 4px 12px oklch(0 0 0 / 40%);
   }
 
@@ -151,6 +195,6 @@
     font-weight: 700;
     letter-spacing: 0.15em;
     text-transform: uppercase;
-    color: oklch(0.6 0.01 250);
+    color: var(--muted-foreground);
   }
 }
