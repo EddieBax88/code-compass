@@ -2,14 +2,15 @@
   "buildCommand": "vite build",
   "outputDirectory": "dist/public",
   "functions": {
-    "api/index.ts": {
-      "includeFiles": "shared/**,server/**,drizzle/**"
+    "api/index.mjs": {
+      "memory": 1024,
+      "maxDuration": 10
     }
   },
   "rewrites": [
-    { "source": "/api/trpc/:path*", "destination": "/api" },
-    { "source": "/api/oauth/:path*", "destination": "/api" },
-    { "source": "/api/stripe/:path*", "destination": "/api" },
-    { "source": "/manus-storage/:path*", "destination": "/api" }
+    { "source": "/api/trpc/:path*", "destination": "/api/index.mjs" },
+    { "source": "/api/oauth/:path*", "destination": "/api/index.mjs" },
+    { "source": "/api/stripe/:path*", "destination": "/api/index.mjs" },
+    { "source": "/manus-storage/:path*", "destination": "/api/index.mjs" }
   ]
 }
