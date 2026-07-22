@@ -10,11 +10,14 @@ import { serveStatic } from "../server/_core/vite";
 
 const app = express();
 
+// Stripe webhook MUST be before express.json() for raw body access
 registerStripeWebhook(app);
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ limit: "50mb", extended: true }));
 registerStorageProxy(app);
 registerOAuthRoutes(app);
+
+// tRPC API
 app.use(
   "/api/trpc",
   createExpressMiddleware({
@@ -23,6 +26,7 @@ app.use(
   })
 );
 
+// Production static serving
 process.env.NODE_ENV = "production";
 serveStatic(app);
 
