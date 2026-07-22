@@ -26,8 +26,7 @@ app.use(
   })
 );
 
-// Production static serving
-process.env.NODE_ENV = "production";
-serveStatic(app);
+// Static files are served by Vercel CDN via outputDirectory: dist/public
+// This function only handles API + webhook routes.
 
 export default app;
