@@ -2,6 +2,9 @@
   "buildCommand": "vite build",
   "outputDirectory": "dist/public",
   "rewrites": [
-    { "source": "/((?!api|manus-storage|assets).*)", "destination": "/index.html" }
+    { "source": "/api/trpc/:path*", "destination": "/api" },
+    { "source": "/api/oauth/:path*", "destination": "/api" },
+    { "source": "/api/stripe/:path*", "destination": "/api" },
+    { "source": "/manus-storage/:path*", "destination": "/api" }
   ]
 }
