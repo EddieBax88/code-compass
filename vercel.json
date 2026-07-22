@@ -1,11 +1,15 @@
 {
   "buildCommand": "vite build",
   "outputDirectory": "dist/public",
+  "functions": {
+    "api/index.ts": {
+      "includeFiles": "shared/**,server/**,drizzle/**"
+    }
+  },
   "rewrites": [
     { "source": "/api/trpc/:path*", "destination": "/api" },
     { "source": "/api/oauth/:path*", "destination": "/api" },
     { "source": "/api/stripe/:path*", "destination": "/api" },
-    { "source": "/api/diag", "destination": "/api/diag" },
     { "source": "/manus-storage/:path*", "destination": "/api" }
   ]
 }
