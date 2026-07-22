@@ -2,6 +2,7 @@
  * Vercel serverless entry point.
  * Wraps the Express app so /api/trpc/* and /api/stripe/webhook work on Vercel.
  */
+import "dotenv/config";
 import express from "express";
 import { createExpressMiddleware } from "@trpc/server/adapters/express";
 import { registerOAuthRoutes } from "../server/_core/oauth";
