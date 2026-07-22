@@ -9,9 +9,14 @@
     "api/diag.ts": {
       "runtime": "@vercel/node@5.8.26",
       "maxDuration": 30
+    },
+    "api/ping.ts": {
+      "runtime": "@vercel/node@5.8.26",
+      "maxDuration": 10
     }
   },
   "rewrites": [
+    { "source": "/api/ping", "destination": "/api/ping.ts" },
     { "source": "/api/diag", "destination": "/api/diag.ts" },
     { "source": "/api/:path*", "destination": "/api/index.ts" },
     { "source": "/webhooks/:path*", "destination": "/api/index.ts" },
