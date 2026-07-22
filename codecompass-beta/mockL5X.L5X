@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<RSLogix5000Content SchemaRevision="1.0" SoftwareVersion="V33.011" TargetName="DemoController" TargetType="Controller" ContainsContext="false" ExportDate="Wed Jul 16 10:00:00 2025" Owner="CodeCompass" ExportOptions="DecoratedData ForceProtectedEncoding AllProjDocTrans">
+<Controller Use="Target" Name="DemoController" ProcessorType="1756-L85E" MajorRev="33" MinorRev="11" TimeSlice="20" ShareUnusedTimeSlice="1" ProjectName="DataCenterCooling" ProjectCreationDate="Wed Jul 16 10:00:00 2025" ProjectModificationDate="Wed Jul 16 12:30:00 2025">
+<Tags>
+<Tag Name="Start_PB" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write"><Data Type="BOOL" Value="0" /></Tag>
+<Tag Name="Stop_PB" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write"><Data Type="BOOL" Value="0" /></Tag>
+<Tag Name="Motor_Run" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write"><Data Type="BOOL" Value="0" /></Tag>
+<Tag Name="Overload" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write"><Data Type="BOOL" Value="0" /></Tag>
+<Tag Name="Timer_ON" TagType="Base" DataType="TIMER" Radix="Decimal" Constant="false" ExternalAccess="Read/Write"><Data Type="TIMER" Value="0" Preset="5000" Accum="0" EN="0" TT="0" DN="0" /></Tag>
+<Tag Name="Coolant_Temp" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write"><Data Type="REAL" Value="72.5" /></Tag>
+<Tag Name="Setpoint" TagType="Base" DataType="REAL" Radix="Float" Constant="false" ExternalAccess="Read/Write"><Data Type="REAL" Value="68.0" /></Tag>
+<Tag Name="Fan_Speed" TagType="Base" DataType="DINT" Radix="Decimal" Constant="false" ExternalAccess="Read/Write"><Data Type="DINT" Value="0" /></Tag>
+</Tags>
+<Programs>
+<Program Name="MainProgram" TestEdits="false" MainRoutineName="MainRoutine" Disabled="false" Use="Context">
+<Tags>
+<Tag Name="ProgramScope_Var" TagType="Base" DataType="BOOL" Radix="Decimal" Constant="false" ExternalAccess="Read/Write"><Data Type="BOOL" Value="0" /></Tag>
+</Tags>
+<Routines>
+<Routine Name="MainRoutine" Type="RLL">
+<Rung Number="0">
+<Comment>
+<!-- Start/Stop Motor Control with Overload Protection -->
+</Comment>
+<Text>XIC Start_PB OTL Motor_Run</Text>
+</Rung>
+<Rung Number="1">
+<Comment>
+<!-- Stop Button - Latching Off -->
+</Comment>
+<Text>XIO Stop_PB OTU Motor_Run</Text>
+</Rung>
+<Rung Number="2">
+<Comment>
+<!-- Overload Trip - Motor Safety -->
+</Comment>
+<Text>XIC Overload OTU Motor_Run</Text>
+</Rung>
+<Rung Number="3">
+<Comment>
+<!-- Run Timer - 5 Second Delay -->
+</Comment>
+<Text>XIC Motor_Run TON Timer_ON</Text>
+</Rung>
+<Rung Number="4">
+<Comment>
+<!-- Coolant Temperature PID Control -->
+</Comment>
+<Text>LES Coolant_Temp Setpoint MOV 0 Fan_Speed</Text>
+</Rung>
+</Routine>
+</Routines>
+</Program>
+</Programs>
+</Controller>
+</RSLogix5000Content>

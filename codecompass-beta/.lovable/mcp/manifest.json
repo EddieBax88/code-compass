@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "sdk_version": "0.20.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://zfppghgngxcvyfebaxjn.supabase.co/auth/v1",
+    "accepted_audiences": ["authenticated"]
+  },
+  "mcp": {
+    "server": {
+      "name": "code-compass-mcp",
+      "version": "0.1.0",
+      "title": "Code Compass"
+    },
+    "tools": [
+      {
+        "name": "get_my_progress",
+        "title": "Get my Code Compass progress",
+        "description": "Return an overall summary of the signed-in user's Code Compass progress: lessons completed, quizzes attempted, quizzes passed (>=80%), and per-course completion percentages.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_my_quiz_results",
+        "title": "List my quiz results",
+        "description": "List the signed-in user's quiz results across Code Compass modules, including best score, attempts, and pass status. Optionally filter by course_id.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "course_id": {
+              "description": "Optional Code Compass course id to filter by.",
+              "type": "string"
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_courses",
+        "title": "List Code Compass courses",
+        "description": "List Code Compass courses and their modules with lesson and quiz counts. Optionally filter by trade.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "trade": {
+              "description": "Optional trade filter.",
+              "type": "string",
+              "enum": ["electrical", "plumbing", "hvac"]
+            }
+          }
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "set_nec_edition",
+        "title": "Set my NEC edition",
+        "description": "Update the signed-in user's active NEC edition (2017, 2020, or 2023). This edition is used for citations across Code Compass lessons and quizzes.",
+        "annotations": {
+          "readOnlyHint": false,
+          "destructiveHint": false,
+          "idempotentHint": true
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {
+            "edition": {
+              "type": "string",
+              "enum": ["2017", "2020", "2023"],
+              "description": "NEC edition to make active."
+            }
+          },
+          "required": ["edition"]
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}

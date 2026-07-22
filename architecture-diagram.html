@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Code Compass — System Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    background: #020617;
+    color: #e2e8f0;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 32px;
+    min-height: 100vh;
+  }
+  .header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .pulse-dot {
+    width: 10px; height: 10px;
+    background: #f97316;
+    border-radius: 50%;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(249,115,22,0.7); }
+    50% { box-shadow: 0 0 0 8px rgba(249,115,22,0); }
+  }
+  h1 { font-size: 20px; font-weight: 700; color: #f8fafc; }
+  .subtitle { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+  .diagram-card {
+    border: 1px solid #1e293b;
+    border-radius: 12px;
+    padding: 24px;
+    background: #020617;
+    margin-bottom: 24px;
+  }
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .card {
+    border: 1px solid #1e293b;
+    border-radius: 8px;
+    padding: 16px;
+    background: #0f172a;
+  }
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+  }
+  .card-dot {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+  }
+  .card-dot.cyan { background: #22d3ee; }
+  .card-dot.emerald { background: #34d399; }
+  .card-dot.violet { background: #a78bfa; }
+  .card h3 { font-size: 12px; font-weight: 600; color: #f8fafc; }
+  .card ul { list-style: none; }
+  .card li { font-size: 10px; color: #94a3b8; line-height: 1.8; }
+  .footer {
+    font-size: 9px;
+    color: #475569;
+    margin-top: 20px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="pulse-dot"></div>
+  <div>
+    <h1>Code Compass — System Architecture</h1>
+    <div class="subtitle">NEC Co-Pilot &nbsp;·&nbsp; Qwen Cloud + DashScope AI &nbsp;·&nbsp; Enterprise-Grade Compliance Layer</div>
+  </div>
+</div>
+
+<div class="diagram-card">
+<svg width="100%" viewBox="0 0 960 620" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+    </pattern>
+    <marker id="arrow-cyan" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#22d3ee"/>
+    </marker>
+    <marker id="arrow-emerald" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#34d399"/>
+    </marker>
+    <marker id="arrow-amber" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#fbbf24"/>
+    </marker>
+    <marker id="arrow-violet" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#a78bfa"/>
+    </marker>
+    <marker id="arrow-slate" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <!-- Background grid -->
+  <rect width="960" height="620" fill="#020617"/>
+  <rect width="960" height="620" fill="url(#grid)"/>
+
+  <!-- ═══ ARROWS (drawn first so they sit behind boxes) ═══ -->
+
+  <!-- Frontend → Vite Proxy -->
+  <line x1="200" y1="90" x2="200" y2="150" stroke="#22d3ee" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+
+  <!-- Vite Proxy → Express Backend -->
+  <line x1="200" y1="210" x2="200" y2="280" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow-emerald)"/>
+
+  <!-- Express → qwenMemoryAgent -->
+  <line x1="200" y1="360" x2="200" y2="410" stroke="#34d399" stroke-width="1.5" marker-end="url(#arrow-emerald)"/>
+
+  <!-- qwenMemoryAgent → DashScope API -->
+  <line x1="300" y1="440" x2="440" y2="440" stroke="#fbbf24" stroke-width="1.5" marker-end="url(#arrow-amber)"/>
+
+  <!-- qwenMemoryAgent → Memory Bank -->
+  <line x1="200" y1="470" x2="200" y2="540" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrow-violet)"/>
+
+  <!-- Express → Supabase -->
+  <line x1="300" y1="320" x2="440" y2="320" stroke="#a78bfa" stroke-width="1.5" marker-end="url(#arrow-violet)"/>
+
+  <!-- Express → PostHog (dashed) -->
+  <line x1="300" y1="340" x2="440" y2="220" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arrow-slate)"/>
+
+  <!-- Express → Webhooks -->
+  <line x1="100" y1="360" x2="100" y2="440" stroke="#94a3b8" stroke-width="1" stroke-dasharray="4,4" marker-end="url(#arrow-slate)"/>
+
+  <!-- ═══ FRONTEND ═══ -->
+  <rect x="80" y="30" width="240" height="60" rx="6" fill="#0f172a"/>
+  <rect x="80" y="30" width="240" height="60" rx="6" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="200" y="58" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="600" fill="#22d3ee">Frontend</text>
+  <text x="200" y="76" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">TanStack Start + React 19</text>
+
+  <!-- ═══ VITE PROXY ═══ -->
+  <rect x="80" y="150" width="240" height="60" rx="6" fill="#0f172a"/>
+  <rect x="80" y="150" width="240" height="60" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="200" y="178" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="600" fill="#94a3b8">Vite Dev Proxy</text>
+  <text x="200" y="196" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#64748b">/api/chat/qwen · /api/lookup</text>
+
+  <!-- ═══ EXPRESS BACKEND ═══ -->
+  <rect x="80" y="280" width="240" height="80" rx="6" fill="#0f172a"/>
+  <rect x="80" y="280" width="240" height="80" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+  <text x="200" y="308" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="600" fill="#34d399">Express Backend</text>
+  <text x="200" y="326" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">server/index.ts · port 3001</text>
+  <text x="200" y="344" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#64748b">REST API + CORS + Webhooks</text>
+
+  <!-- ═══ QWEN MEMORY AGENT ═══ -->
+  <rect x="80" y="410" width="240" height="60" rx="6" fill="#0f172a"/>
+  <rect x="80" y="410" width="240" height="60" rx="6" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1.5"/>
+  <text x="200" y="438" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="600" fill="#34d399">qwenMemoryAgent.js</text>
+  <text x="200" y="456" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">Core Orchestrator · Validation Gates</text>
+
+  <!-- ═══ DASHSCOPE / QWEN CLOUD ═══ -->
+  <rect x="440" y="390" width="240" height="100" rx="6" fill="#0f172a"/>
+  <rect x="440" y="390" width="240" height="100" rx="6" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1.5"/>
+  <text x="560" y="420" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="600" fill="#fbbf24">Qwen Cloud (DashScope)</text>
+  <text x="560" y="440" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">dashscope-intl.aliyuncs.com</text>
+  <text x="560" y="458" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">Model: qwen-max</text>
+  <text x="560" y="476" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#64748b">preserve_thinking: true · temp 0.3</text>
+
+  <!-- ═══ MEMORY BANK ═══ -->
+  <rect x="80" y="540" width="240" height="70" rx="6" fill="#0f172a"/>
+  <rect x="80" y="540" width="240" height="70" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="200" y="564" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="600" fill="#a78bfa">Memory Bank</text>
+  <text x="200" y="582" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#94a3b8">apprenticeProfile · activeProjectContext</text>
+  <text x="200" y="598" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#94a3b8">longTermKnowledge</text>
+
+  <!-- ═══ SUPABASE ═══ -->
+  <rect x="440" y="280" width="240" height="60" rx="6" fill="#0f172a"/>
+  <rect x="440" y="280" width="240" height="60" rx="6" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="560" y="308" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="600" fill="#a78bfa">Supabase</text>
+  <text x="560" y="326" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">PostgreSQL + RLS Auth</text>
+
+  <!-- ═══ POSTHOG ═══ -->
+  <rect x="440" y="180" width="240" height="60" rx="6" fill="#0f172a"/>
+  <rect x="440" y="180" width="240" height="60" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="560" y="208" text-anchor="middle" font-family="JetBrains Mono" font-size="12" font-weight="600" fill="#94a3b8">PostHog Analytics</text>
+  <text x="560" y="226" text-anchor="middle" font-family="JetBrains Mono" font-size="9" fill="#64748b">Event Tracking · Exception Capture</text>
+
+  <!-- ═══ WEBHOOKS ═══ -->
+  <rect x="20" y="440" width="120" height="50" rx="6" fill="#0f172a"/>
+  <rect x="20" y="440" width="120" height="50" rx="6" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="80" y="464" text-anchor="middle" font-family="JetBrains Mono" font-size="10" font-weight="600" fill="#94a3b8">Webhooks</text>
+  <text x="80" y="480" text-anchor="middle" font-family="JetBrains Mono" font-size="8" fill="#64748b">Stripe Billing</text>
+
+  <!-- ═══ SECURITY BOUNDARY ═══ -->
+  <rect x="70" y="270" width="260" height="200" rx="12" fill="none" stroke="#fb7185" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="75" y="266" font-family="JetBrains Mono" font-size="8" fill="#fb7185">SECURITY BOUNDARY · CSP + RLS</text>
+
+  <!-- ═══ CLOUD BOUNDARY ═══ -->
+  <rect x="430" y="170" width="260" height="330" rx="12" fill="none" stroke="#fbbf24" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="435" y="166" font-family="JetBrains Mono" font-size="8" fill="#fbbf24">EXTERNAL SERVICES</text>
+
+  <!-- ═══ LEGEND ═══ -->
+  <rect x="740" y="30" width="200" height="200" rx="6" fill="#0f172a" stroke="#1e293b" stroke-width="1"/>
+  <text x="760" y="55" font-family="JetBrains Mono" font-size="10" font-weight="600" fill="#f8fafc">Legend</text>
+
+  <rect x="760" y="68" width="12" height="12" rx="2" fill="rgba(8,51,68,0.4)" stroke="#22d3ee" stroke-width="1"/>
+  <text x="780" y="78" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">Frontend</text>
+
+  <rect x="760" y="90" width="12" height="12" rx="2" fill="rgba(6,78,59,0.4)" stroke="#34d399" stroke-width="1"/>
+  <text x="780" y="100" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">Backend</text>
+
+  <rect x="760" y="112" width="12" height="12" rx="2" fill="rgba(76,29,149,0.4)" stroke="#a78bfa" stroke-width="1"/>
+  <text x="780" y="122" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">Database / Storage</text>
+
+  <rect x="760" y="134" width="12" height="12" rx="2" fill="rgba(120,53,15,0.3)" stroke="#fbbf24" stroke-width="1"/>
+  <text x="780" y="144" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">Cloud / AI Service</text>
+
+  <rect x="760" y="156" width="12" height="12" rx="2" fill="rgba(30,41,59,0.5)" stroke="#94a3b8" stroke-width="1"/>
+  <text x="780" y="166" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">External Service</text>
+
+  <line x1="760" y1="188" x2="772" y2="188" stroke="#fb7185" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="780" y="192" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">Security Boundary</text>
+
+  <line x1="760" y1="210" x2="772" y2="210" stroke="#fbbf24" stroke-width="1" stroke-dasharray="8,4"/>
+  <text x="780" y="214" font-family="JetBrains Mono" font-size="9" fill="#94a3b8">Cloud Boundary</text>
+
+</svg>
+</div>
+
+<div class="cards-grid">
+  <div class="card">
+    <div class="card-header">
+      <div class="card-dot cyan"></div>
+      <h3>Frontend</h3>
+    </div>
+    <ul>
+      <li>• TanStack Start + React 19</li>
+      <li>• Vite dev proxy → Express:3001</li>
+      <li>• SPA with hash routing</li>
+      <li>• Industrial Control Panel UI</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-dot emerald"></div>
+      <h3>Backend &amp; AI</h3>
+    </div>
+    <ul>
+      <li>• Express.js (port 3001)</li>
+      <li>• qwenMemoryAgent.js orchestrator</li>
+      <li>• DashScope intl API (qwen-max)</li>
+      <li>• Validation gates + memory R/W</li>
+    </ul>
+  </div>
+  <div class="card">
+    <div class="card-header">
+      <div class="card-dot violet"></div>
+      <h3>Data &amp; Compliance</h3>
+    </div>
+    <ul>
+      <li>• Supabase PostgreSQL + RLS</li>
+      <li>• 3-file Memory Bank (JSON/MD)</li>
+      <li>• PostHog analytics + error capture</li>
+      <li>• NEC 2026 + EU AI Act audit trail</li>
+    </ul>
+  </div>
+</div>
+
+<div class="footer">Code Compass · NEC Co-Pilot · Architecture v1.0 · github.com/eddiebax88/code-compass</div>
+
+</body>
+</html>
