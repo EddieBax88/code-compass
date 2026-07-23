@@ -76,7 +76,13 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeContext.Provider
-      value={{ theme: effectiveTheme, setTheme, toggleTheme, oledUnlocked, setOledUnlocked }}
+      value={{
+        theme: effectiveTheme,
+        setTheme,
+        toggleTheme,
+        oledUnlocked,
+        setOledUnlocked,
+      }}
     >
       {children}
     </ThemeContext.Provider>

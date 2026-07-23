@@ -5,7 +5,11 @@
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 
-export default function ThemeToggle({ className = "" }: { className?: string }) {
+export default function ThemeToggle({
+  className = "",
+}: {
+  className?: string;
+}) {
   const { theme, toggleTheme } = useTheme();
   const isOled = theme === "oled";
 

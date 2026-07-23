@@ -117,7 +117,9 @@ describe("copilot.analyze", () => {
   it("reports remaining free questions via usageStatus", async () => {
     usageState.count = 1;
     const caller = appRouter.createCaller(makeCtx());
-    const status = await caller.copilot.usageStatus({ clientId: "test-device-3" });
+    const status = await caller.copilot.usageStatus({
+      clientId: "test-device-3",
+    });
     expect(status.unlimited).toBe(false);
     expect(status.remaining).toBe(2);
   });

@@ -236,7 +236,8 @@ export function renderLadderSVG(rungs: L5XRung[], options: RenderOptions = {}): 
   // Enforce hard limit
   const MAX_RUNGS = 500;
   const effectiveMaxRungs = Math.min(maxRungs, MAX_RUNGS);
-  const renderRungs = effectiveMaxRungs > 0 ? rungs.slice(0, effectiveMaxRungs) : rungs.slice(0, MAX_RUNGS);
+  const renderRungs =
+    effectiveMaxRungs > 0 ? rungs.slice(0, effectiveMaxRungs) : rungs.slice(0, MAX_RUNGS);
   const numRungs = renderRungs.length;
 
   if (numRungs === 0) {

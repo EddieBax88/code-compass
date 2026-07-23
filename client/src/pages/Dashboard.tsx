@@ -5,14 +5,7 @@
  */
 import AppLayout from "@/components/AppLayout";
 import { Link } from "wouter";
-import {
-  Timer,
-  Zap,
-  Search,
-  Bot,
-  ArrowRight,
-  BookOpen,
-} from "lucide-react";
+import { Timer, Zap, Search, Bot, ArrowRight, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
@@ -66,7 +59,9 @@ export default function Dashboard() {
           </p>
 
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold text-white leading-[1.05] tracking-tight">
-            Find any NEC<br />answer fast.
+            Find any NEC
+            <br />
+            answer fast.
           </h1>
 
           <p className="mt-5 text-xl sm:text-2xl font-mono text-amber-400 tracking-tight">
@@ -74,8 +69,8 @@ export default function Dashboard() {
           </p>
 
           <p className="mt-5 text-white/75 text-base sm:text-lg max-w-xl mx-auto leading-relaxed">
-            The exact method journeyman and master electricians use —
-            on the exam and on the job.
+            The exact method journeyman and master electricians use — on the
+            exam and on the job.
           </p>
 
           {/* Single primary CTA */}
@@ -126,18 +121,41 @@ export default function Dashboard() {
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-6">
             {(
               [
-                { step: "01", label: "Question", note: "Read what's actually being asked." },
-                { step: "02", label: "Index Keyword", note: "Spot the word to look up." },
-                { step: "03", label: "Article / Table", note: "Navigate straight to it." },
-                { step: "04", label: "Answer", note: "Pull the answer from the book." },
+                {
+                  step: "01",
+                  label: "Question",
+                  note: "Read what's actually being asked.",
+                },
+                {
+                  step: "02",
+                  label: "Index Keyword",
+                  note: "Spot the word to look up.",
+                },
+                {
+                  step: "03",
+                  label: "Article / Table",
+                  note: "Navigate straight to it.",
+                },
+                {
+                  step: "04",
+                  label: "Answer",
+                  note: "Pull the answer from the book.",
+                },
               ] as const
             ).map(({ step, label, note }) => (
-              <div key={step} className="flex flex-col items-center text-center gap-2">
+              <div
+                key={step}
+                className="flex flex-col items-center text-center gap-2"
+              >
                 <span className="text-4xl font-bold text-amber-500/20 font-mono leading-none">
                   {step}
                 </span>
-                <h3 className="font-semibold text-foreground text-sm">{label}</h3>
-                <p className="text-xs text-muted-foreground leading-relaxed">{note}</p>
+                <h3 className="font-semibold text-foreground text-sm">
+                  {label}
+                </h3>
+                <p className="text-xs text-muted-foreground leading-relaxed">
+                  {note}
+                </p>
               </div>
             ))}
           </div>
@@ -155,13 +173,17 @@ export default function Dashboard() {
                   <Bot className="w-7 h-7 text-amber-600" />
                 </div>
                 <div className="flex-1">
-                  <h2 className="text-xl font-bold text-foreground">AI Co-Pilot</h2>
+                  <h2 className="text-xl font-bold text-foreground">
+                    AI Co-Pilot
+                  </h2>
                   <p className="text-muted-foreground mt-1 text-sm leading-relaxed max-w-lg">
-                    Paste any NEC question. The Co-Pilot walks you through the index keyword,
-                    the article, and the answer — so you learn to find it yourself next time.
+                    Paste any NEC question. The Co-Pilot walks you through the
+                    index keyword, the article, and the answer — so you learn to
+                    find it yourself next time.
                   </p>
                   <p className="text-xs text-amber-600 font-mono mt-2 font-semibold">
-                    3 FREE questions/day · Unlimited with Lifetime Access ($39.99)
+                    3 FREE questions/day · Unlimited with Lifetime Access
+                    ($39.99)
                   </p>
                 </div>
                 <ArrowRight className="w-5 h-5 text-amber-500 group-hover:translate-x-1 transition-transform flex-shrink-0" />
@@ -192,8 +214,12 @@ export default function Dashboard() {
                       LIFETIME
                     </span>
                   </div>
-                  <h3 className="font-semibold text-foreground text-base">{title}</h3>
-                  <p className="text-sm text-muted-foreground mt-1 leading-relaxed">{subtitle}</p>
+                  <h3 className="font-semibold text-foreground text-base">
+                    {title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground mt-1 leading-relaxed">
+                    {subtitle}
+                  </p>
                   <div className="mt-4 flex items-center gap-1 text-xs text-amber-600 font-medium group-hover:gap-2 transition-all">
                     <span>Get access</span>
                     <ArrowRight className="w-3.5 h-3.5" />
@@ -208,7 +234,9 @@ export default function Dashboard() {
                 Get Lifetime Access — $39.99
               </Button>
             </Link>
-            <p className="text-xs text-muted-foreground mt-2">One-time payment. No subscription. Ever.</p>
+            <p className="text-xs text-muted-foreground mt-2">
+              One-time payment. No subscription. Ever.
+            </p>
           </div>
         </div>
       </section>
@@ -218,7 +246,9 @@ export default function Dashboard() {
         <div className="max-w-5xl mx-auto px-6 py-10 flex flex-col sm:flex-row items-start gap-4">
           <BookOpen className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-medium text-foreground">Don't own the code book yet?</p>
+            <p className="text-sm font-medium text-foreground">
+              Don't own the code book yet?
+            </p>
             <p className="text-sm text-muted-foreground mt-0.5">
               NFPA offers free read-only access to NFPA 70 (NEC) online.{" "}
               <a
@@ -235,7 +265,8 @@ export default function Dashboard() {
         </div>
         <div className="max-w-5xl mx-auto px-6 pb-10 border-t border-border pt-6">
           <p className="text-xs text-muted-foreground">
-            Unofficial study tool — not affiliated with NFPA. Always verify answers with your code book.
+            Unofficial study tool — not affiliated with NFPA. Always verify
+            answers with your code book.
           </p>
         </div>
       </section>

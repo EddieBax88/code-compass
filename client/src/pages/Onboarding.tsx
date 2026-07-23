@@ -103,7 +103,7 @@ function HighlightedText({
   return (
     <span>
       {parts.map((part, i) =>
-        highlights.some((h) => h.toLowerCase() === part.toLowerCase()) ? (
+        highlights.some(h => h.toLowerCase() === part.toLowerCase()) ? (
           <mark
             key={i}
             className="bg-amber-400/25 text-amber-300 px-0.5 rounded font-semibold not-italic"
@@ -141,10 +141,16 @@ function Step1() {
       {/* Sample question card */}
       <div className="rounded-lg border border-border bg-card p-5 space-y-4">
         <div className="flex items-center gap-2">
-          <Badge variant="outline" className="text-amber-400 border-amber-400/40 font-mono text-xs">
+          <Badge
+            variant="outline"
+            className="text-amber-400 border-amber-400/40 font-mono text-xs"
+          >
             SAMPLE QUESTION
           </Badge>
-          <Badge variant="outline" className="text-muted-foreground font-mono text-xs">
+          <Badge
+            variant="outline"
+            className="text-muted-foreground font-mono text-xs"
+          >
             Motor / Branch Circuit
           </Badge>
         </div>
@@ -244,8 +250,8 @@ function Step2() {
                 isTerm
                   ? "text-amber-400 font-bold cursor-pointer hover:bg-amber-400/10 px-1 rounded"
                   : isSubEntry
-                  ? "text-muted-foreground pl-4"
-                  : "text-foreground/70"
+                    ? "text-muted-foreground pl-4"
+                    : "text-foreground/70"
               }`}
               onClick={isTerm ? () => setSelected(line) : undefined}
             >
@@ -295,11 +301,9 @@ function Step3() {
         </h2>
         <p className="text-muted-foreground">
           You have your article number:{" "}
-          <span className="text-yellow-400 font-mono font-bold">
-            210.19(A)
-          </span>
-          . Now flip to it. Articles are numbered sequentially — use the
-          running header at the top of each page to navigate fast.
+          <span className="text-yellow-400 font-mono font-bold">210.19(A)</span>
+          . Now flip to it. Articles are numbered sequentially — use the running
+          header at the top of each page to navigate fast.
         </p>
       </div>
 
@@ -309,9 +313,7 @@ function Step3() {
           <span className="font-mono text-xs text-muted-foreground uppercase tracking-widest">
             NEC 2026 — Article 210 · Branch Circuits
           </span>
-          <span className="font-mono text-xs text-yellow-400">
-            Page ~70
-          </span>
+          <span className="font-mono text-xs text-yellow-400">Page ~70</span>
         </div>
         <div className="p-5 space-y-3 font-mono text-sm">
           <p className="text-foreground font-bold text-base">
@@ -361,7 +363,9 @@ function Step3() {
             )}
           </div>
           <div className="rounded border border-border p-3 opacity-40">
-            <span className="text-muted-foreground">(B) Household Ranges and Cooking Appliances</span>
+            <span className="text-muted-foreground">
+              (B) Household Ranges and Cooking Appliances
+            </span>
           </div>
           <div className="rounded border border-border p-3 opacity-40">
             <span className="text-muted-foreground">(C) Household Dryers</span>
@@ -396,9 +400,9 @@ function Step4({ onComplete }: { onComplete: () => void }) {
           Select the Answer. Cite the Article.
         </h2>
         <p className="text-muted-foreground">
-          You've navigated to the article. You've found the rule. Now select
-          the answer — and always write the article number next to it. That's
-          your proof.
+          You've navigated to the article. You've found the rule. Now select the
+          answer — and always write the article number next to it. That's your
+          proof.
         </p>
       </div>
 
@@ -412,7 +416,7 @@ function Step4({ onComplete }: { onComplete: () => void }) {
 
       {/* Answer choices */}
       <div className="grid grid-cols-2 gap-3">
-        {choices.map((choice) => {
+        {choices.map(choice => {
           const isSelected = selected === choice;
           const isCorrect = choice === correct;
           const showResult = selected !== null;
@@ -426,8 +430,8 @@ function Step4({ onComplete }: { onComplete: () => void }) {
                   ? isCorrect
                     ? "border-green-400 bg-green-400/15 text-green-400"
                     : isSelected
-                    ? "border-red-400 bg-red-400/15 text-red-400"
-                    : "border-border text-muted-foreground opacity-50"
+                      ? "border-red-400 bg-red-400/15 text-red-400"
+                      : "border-border text-muted-foreground opacity-50"
                   : "border-border hover:border-amber-400/50 hover:bg-amber-400/5 text-foreground cursor-pointer"
               }`}
             >
@@ -450,7 +454,10 @@ function Step4({ onComplete }: { onComplete: () => void }) {
             {SAMPLE_QUESTION.answerExplanation}
           </p>
           <div className="flex items-center gap-2">
-            <Badge variant="outline" className="text-yellow-400 border-yellow-400/40 font-mono text-xs">
+            <Badge
+              variant="outline"
+              className="text-yellow-400 border-yellow-400/40 font-mono text-xs"
+            >
               Citation: Article 210.19(A)(1)
             </Badge>
           </div>
@@ -545,8 +552,8 @@ export default function Onboarding() {
                     isActive
                       ? `${step.bgColor} ${step.color} border ${step.borderColor}`
                       : isDone
-                      ? "text-green-400 opacity-70"
-                      : "text-muted-foreground opacity-40"
+                        ? "text-green-400 opacity-70"
+                        : "text-muted-foreground opacity-40"
                   }`}
                 >
                   <StepIcon className="w-3 h-3 shrink-0" />
@@ -577,7 +584,7 @@ export default function Onboarding() {
                 Step {currentStep} of 4
               </p>
               <Button
-                onClick={() => setCurrentStep((s) => s + 1)}
+                onClick={() => setCurrentStep(s => s + 1)}
                 className="bg-amber-500 hover:bg-amber-400 text-black font-bold"
               >
                 Next Step

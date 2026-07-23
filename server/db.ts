@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users } from "../drizzle/schema";
-import { ENV } from './_core/env';
+import { ENV } from "./_core/env";
 
 let _db: ReturnType<typeof drizzle> | null = null;
 
@@ -56,8 +56,8 @@ export async function upsertUser(user: InsertUser): Promise<void> {
       values.role = user.role;
       updateSet.role = user.role;
     } else if (user.openId === ENV.ownerOpenId) {
-      values.role = 'admin';
-      updateSet.role = 'admin';
+      values.role = "admin";
+      updateSet.role = "admin";
     }
 
     if (!values.lastSignedIn) {
@@ -84,13 +84,16 @@ export async function getUserByOpenId(openId: string) {
     return undefined;
   }
 
-  const result = await db.select().from(users).where(eq(users.openId, openId)).limit(1);
+  const result = await db
+    .select()
+    .from(users)
+    .where(eq(users.openId, openId))
+    .limit(1);
 
   return result.length > 0 ? result[0] : undefined;
 }
 
 // TODO: add feature queries here as your schema grows.
-
 
 // ----- Co-Pilot usage tracking (freemium gate) -----
 import { and, eq as eqOp } from "drizzle-orm";
@@ -109,7 +112,12 @@ export async function getCopilotUsageToday(clientId: string): Promise<number> {
   const rows = await db
     .select()
     .from(copilotUsage)
-    .where(and(eqOp(copilotUsage.clientId, clientId), eqOp(copilotUsage.usageDay, day)))
+    .where(
+      and(
+        eqOp(copilotUsage.clientId, clientId),
+        eqOp(copilotUsage.usageDay, day)
+      )
+    )
     .limit(1);
   return rows.length > 0 ? rows[0].count : 0;
 }
@@ -122,7 +130,12 @@ export async function incrementCopilotUsage(clientId: string): Promise<number> {
   const existing = await db
     .select()
     .from(copilotUsage)
-    .where(and(eqOp(copilotUsage.clientId, clientId), eqOp(copilotUsage.usageDay, day)))
+    .where(
+      and(
+        eqOp(copilotUsage.clientId, clientId),
+        eqOp(copilotUsage.usageDay, day)
+      )
+    )
     .limit(1);
 
   if (existing.length > 0) {

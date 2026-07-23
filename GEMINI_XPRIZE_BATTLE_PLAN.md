@@ -12,6 +12,7 @@
 Code Compass is an AI-native NEC compliance co-pilot that connects electricians (apprentice → master) with expert code guidance. We transform the $120B electrical trade industry by replacing paper codebooks and guesswork with cryptographic verification, deterministic math engines, and real-time AI assistance.
 
 **Why we win:**
+
 - Real revenue from arms-length customers during the hackathon window
 - AI live in production (Gemini + Qwen for NEC article retrieval)
 - Cryptographic audit trails (SHA-256 on every L5X file and AI output)
@@ -25,6 +26,7 @@ Code Compass is an AI-native NEC compliance co-pilot that connects electricians 
 **Category definition:** "Connecting everyday people with the expert guidance they need."
 
 **Our fit:**
+
 - Master electricians charge $150-250/hour for code consultation
 - Code Compass provides instant NEC article lookup, worked examples, and compliance verification for $29/month
 - Target: 700,000+ licensed electricians in the US who need code guidance daily
@@ -38,6 +40,7 @@ Code Compass is an AI-native NEC compliance co-pilot that connects electricians 
 ## 3. Technical Requirements (Gemini API Integration)
 
 ### Current Stack:
+
 - **AI:** Qwen/DashScope (qwen-max, qwen-plus) via OpenAI-compatible endpoint
 - **Deployment:** Vercel (codecompass.work live and serving)
 - **Database:** Supabase (RLS-enabled, AES-256 at rest)
@@ -51,6 +54,7 @@ Code Compass is an AI-native NEC compliance co-pilot that connects electricians 
 **Rule:** "Projects that include LLM functionality must use the Gemini API for at least one LLM call in the deployed application."
 
 **Implementation strategy:**
+
 1. Keep Qwen for NEC article retrieval (deterministic, proven)
 2. Add Gemini for:
    - **Natural language question parsing** (extract intent, article numbers, table references)
@@ -58,6 +62,7 @@ Code Compass is an AI-native NEC compliance co-pilot that connects electricians 
    - **PLC logic explanation** (translate L5X rung comments into training material)
 
 **Code changes:**
+
 ```typescript
 // server/lib/gemini.ts
 import { GoogleGenerativeAI } from "@google/generative-ai";
@@ -67,12 +72,16 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 export async function parseQuestion(userInput: string) {
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
   const result = await model.generateContent({
-    contents: [{
-      role: "user",
-      parts: [{
-        text: `Extract NEC article numbers, table references, and key concepts from: "${userInput}"`
-      }]
-    }],
+    contents: [
+      {
+        role: "user",
+        parts: [
+          {
+            text: `Extract NEC article numbers, table references, and key concepts from: "${userInput}"`,
+          },
+        ],
+      },
+    ],
     generationConfig: {
       responseMimeType: "application/json",
       responseSchema: {
@@ -81,36 +90,43 @@ export async function parseQuestion(userInput: string) {
           articles: { type: "array", items: { type: "string" } },
           tables: { type: "array", items: { type: "string" } },
           concepts: { type: "array", items: { type: "string" } },
-          intent: { type: "string", enum: ["lookup", "explain", "calculate", "validate"] }
-        }
-      }
-    }
+          intent: {
+            type: "string",
+            enum: ["lookup", "explain", "calculate", "validate"],
+          },
+        },
+      },
+    },
   });
   return JSON.parse(result.response.text());
 }
 ```
 
 **Integration point:**
+
 ```typescript
 // server/index.ts (modify /api/chat/qwen route)
 app.post("/api/chat/qwen", async (req, res) => {
   const { message } = req.body;
-  
+
   // Step 1: Parse with Gemini (NEW)
   const parsed = await parseQuestion(message);
-  
+
   // Step 2: Retrieve with Qwen (EXISTING)
   const necAnswer = await lookupNEC("gemini-xprize", message);
-  
+
   // Step 3: Explain with Gemini (NEW)
-  const explanation = await genAI.getGenerativeModel({ model: "gemini-1.5-flash" })
-    .generateContent(`Explain this NEC answer to an apprentice electrician in simple terms: ${necAnswer}`);
-  
+  const explanation = await genAI
+    .getGenerativeModel({ model: "gemini-1.5-flash" })
+    .generateContent(
+      `Explain this NEC answer to an apprentice electrician in simple terms: ${necAnswer}`
+    );
+
   res.json({
     answer: necAnswer,
     explanation: explanation.response.text(),
     parsed,
-    sources: parsed.articles
+    sources: parsed.articles,
   });
 });
 ```
@@ -138,6 +154,7 @@ app.post("/api/chat/qwen", async (req, res) => {
 #### C. Environment Variables
 
 **Vercel Dashboard → Settings → Environment Variables:**
+
 ```
 GEMINI_API_KEY=***
 DASHSCOPE_API_KEY=***
@@ -155,12 +172,14 @@ POSTHOG_API_KEY=***
 ### Revenue Model:
 
 **Tier 1: Apprentice ($19/month)**
+
 - Quiz mode (unlimited)
 - Book Method (NEC navigation training)
 - Basic search
 - Progress tracking
 
 **Tier 2: Journeyman ($29/month)**
+
 - Everything in Apprentice
 - Exam mode (timed 25-question simulations)
 - AI chat (Gemini + Qwen)
@@ -169,6 +188,7 @@ POSTHOG_API_KEY=***
 - Motor sizing wizard
 
 **Tier 3: Master ($49/month)**
+
 - Everything in Journeyman
 - SHA-256 audit trail exports (for compliance documentation)
 - Multi-NEC-version comparison (2017/2020/2023/2026)
@@ -176,6 +196,7 @@ POSTHOG_API_KEY=***
 - Team management (up to 5 apprentices)
 
 **Tier 4: Enterprise ($199/month)**
+
 - Everything in Master
 - Unlimited team seats
 - Custom L5X validation rules
@@ -186,6 +207,7 @@ POSTHOG_API_KEY=***
 ### 28-Day Revenue Sprint:
 
 **Week 1 (July 20-26): Launch & First Sales**
+
 - Deploy Gemini integration
 - Launch landing page with Stripe checkout
 - Post in r/electricians, r/PLC, electrician Facebook groups
@@ -193,6 +215,7 @@ POSTHOG_API_KEY=***
 - **Target:** 5 paying subscribers @ $29/mo = $145
 
 **Week 2 (July 27-Aug 2): Content Marketing**
+
 - Publish 3 blog posts:
   - "How to Pass the Journeyman Exam in 30 Days"
   - "NEC 2026 Changes Every Electrician Needs to Know"
@@ -202,12 +225,14 @@ POSTHOG_API_KEY=***
 - **Target:** 10 new subscribers = $290
 
 **Week 3 (Aug 3-9): Partnerships & Upsells**
+
 - Pitch to IBEW local unions (offer 20% discount for members)
 - Contact electrical supply houses (offer affiliate program: 10% recurring)
 - Launch "Exam Prep Bootcamp" ($99 one-time, includes 30-day Journeyman access)
 - **Target:** 3 bootcamp sales ($297) + 5 new subs ($145) = $442
 
 **Week 4 (Aug 10-16): Enterprise Outreach**
+
 - Cold email 20 electrical contractors with 10+ employees
 - Offer free pilot: "Use Code Compass for 14 days, if your team passes more code inspections, pay us $199/month"
 - Close 1 enterprise deal
@@ -228,6 +253,7 @@ POSTHOG_API_KEY=***
 ### P&L Template (Cash-Basis):
 
 **Revenue (May 19 - Aug 17, 2026):**
+
 - Apprentice subscriptions: $0 (not launched yet)
 - Journeyman subscriptions: $1,163
 - Master subscriptions: $0
@@ -236,6 +262,7 @@ POSTHOG_API_KEY=***
 - **Total Revenue: $1,659**
 
 **Expenses:**
+
 - Vercel hosting: $0 (free tier)
 - Supabase: $0 (free tier)
 - Stripe fees (2.9% + $0.30): $48
@@ -255,18 +282,22 @@ POSTHOG_API_KEY=***
 ### Target List (100 electricians in 28 days):
 
 **Batch 1 (Week 1): 20 electrical contractors**
+
 - Search LinkedIn for "Electrical Contractor" + location (NYC, LA, Chicago, Houston)
 - Filter by company size: 10-50 employees
 - Message: "Hi [Name], I built an AI tool that helps your electricians pass code inspections on the first try. Can I send you a 2-minute demo video?"
 
 **Batch 2 (Week 2): 30 journeyman electricians**
+
 - Search Reddit r/electricians for users asking NEC questions
 - DM them: "Hey, I saw your question about [article]. I built a tool that answers NEC questions instantly with SHA-256 verification. Want to try it free for 7 days?"
 
 **Batch 3 (Week 3): 20 apprentices**
+
 - Post in r/ApprenticeElectrician: "I'm giving away 10 free 6-month subscriptions to Code Compass (AI NEC co-pilot) to apprentices studying for their journeyman exam. DM me if interested."
 
 **Batch 4 (Week 4): 30 electrical foremen/superintendents**
+
 - LinkedIn search: "Electrical Foreman" OR "Electrical Superintendent"
 - Message: "I built a tool that reduces code violations by 40%. Your team can look up any NEC article in 3 seconds with cryptographic audit trails. Want to see a demo?"
 
@@ -280,6 +311,7 @@ Show a 1,200-page NEC codebook. Flip through pages. "Finding Article 310.15 for 
 
 **[0:45-1:30] Solution:**
 Screen recording:
+
 1. Type "What's the derating factor for 40°C ambient?"
 2. AI responds in 2 seconds with answer + article citation
 3. Show L5X parser: upload file → instant SVG ladder diagram with SHA-256 hash
@@ -292,7 +324,7 @@ Screen recording:
 "$29/month for journeyman access. $199/month for enterprise teams. 7-day free trial."
 
 **[2:45-3:00] CTA:**
-"Try it free at codecompass.work. Questions? Email me at ed***@***ompass.work"
+"Try it free at codecompass.work. Questions? Email me at ed**_@_**ompass.work"
 
 ---
 
@@ -335,22 +367,28 @@ Screen recording:
 ## 7. Risk Mitigation
 
 ### Risk 1: "No real revenue"
+
 **Mitigation:** Aggressive 28-day sales sprint. Offer free trials that convert to paid. Partner with trade schools for bulk licenses.
 
 ### Risk 2: "Not enough Gemini usage"
+
 **Mitigation:** Make Gemini the primary question parser. Log every Gemini API call. Show usage dashboard in submission.
 
 ### Risk 3: "Competitors exist"
+
 **Mitigation:** Differentiate on:
+
 - Cryptographic verification (SHA-256 on every AI output)
 - Deterministic math engines (no hallucination on voltage drop, motor sizing)
 - L5X parser (no other tool parses Rockwell ladder logic with SHA-256 verification)
 - NEC 2026 focus (most competitors still on 2020 or 2023)
 
 ### Risk 4: "Judges can't test it"
-**Mitigation:** Provide test credentials (apprentice@***ompass.work / password123). Record a 5-minute walkthrough video showing every feature.
+
+**Mitigation:** Provide test credentials (apprentice@\*\*\*ompass.work / password123). Record a 5-minute walkthrough video showing every feature.
 
 ### Risk 5: "Domain not live"
+
 **Mitigation:** codecompass.work is already deployed to Vercel and returning 200 OK. Verify before submission.
 
 ---
@@ -358,12 +396,14 @@ Screen recording:
 ## 8. Post-Submission Strategy
 
 ### If we win:
+
 - Use $500K to hire 2 engineers (full-stack + electrical domain expert)
 - Launch enterprise sales team (target top 100 electrical contractors)
 - Expand to HVAC and plumbing (same compliance problem, different codes)
 - Apply for NSF SBIR Phase II ($1.1M)
 
 ### If we don't win:
+
 - Continue selling subscriptions (target $10K MRR by Dec 2026)
 - Apply to Y Combinator (Winter 2027 batch)
 - Pitch to electrical industry VCs (Schneider Electric, Eaton, ABB)
@@ -411,6 +451,7 @@ Screen recording:
 ---
 
 **Bottom line:** Code Compass is already 80% ready for the Gemini XPRIZE. We need to:
+
 1. Add Gemini API integration (mandatory)
 2. Get real revenue ($1,163 target in 28 days)
 3. Document everything (P&L, user evidence, product evidence)

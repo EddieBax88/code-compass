@@ -51,11 +51,11 @@ Pure string assembly (zero dependencies). Industrial Control Panel palette: oran
 
 **NEC Table 310.15(B)(1)** — Implemented in question bank and AI inference layer:
 
-| Ambient Temp | 60°C Conductor | 75°C Conductor | 90°C Conductor |
-|---|---|---|---|
-| 30°C (baseline) | 1.00 | 1.00 | 1.00 |
-| 40°C | — | **0.88** (validated in question 310-002) | — |
-| 46°C (115°F rooftop) | — | **0.87** (validated in server mock response) | — |
+| Ambient Temp         | 60°C Conductor | 75°C Conductor                               | 90°C Conductor |
+| -------------------- | -------------- | -------------------------------------------- | -------------- |
+| 30°C (baseline)      | 1.00           | 1.00                                         | 1.00           |
+| 40°C                 | —              | **0.88** (validated in question 310-002)     | —              |
+| 46°C (115°F rooftop) | —              | **0.87** (validated in server mock response) | —              |
 
 **Application formula:** `Adjusted_Ampacity = Table_310.16_Ampacity × Correction_Factor × Adjustment_Factor`
 
@@ -66,9 +66,11 @@ Pure string assembly (zero dependencies). Industrial Control Panel palette: oran
 **Resistivity constants:** K_Cu = 12.9 Ω·cmil/ft | K_Al = 21.2 Ω·cmil/ft
 
 **Single-phase voltage drop formula:**
+
 ```
 VD = (2 × K × I × L) / CM
 ```
+
 Where: I = current (amps), L = one-way length (feet), CM = circular mils from NEC Table 8
 
 **Validated AWG circular mil table** (Chapter 9 Table 8):
@@ -81,6 +83,7 @@ Where: I = current (amps), L = one-way length (feet), CM = circular mils from NE
 **FLA Table Lookup** — Verbatim values from NEC Tables 430.248 (single-phase) and 430.250 (three-phase). 10 HP ratings × 4-5 voltage classes = ~50 discrete data points. No interpolation — unsupported (HP, V) pairs return `{missing: true}`.
 
 **Branch-circuit conductor sizing (430.22):** `min_ampacity = FLA × 1.25`
+
 - Validated: 5HP/230V/3φ → FLA 15.2 × 1.25 = **19.0A**
 
 **OCP Sizing (Table 430.52 + 240.6(A)):**
@@ -92,9 +95,11 @@ Where: I = current (amps), L = one-way length (feet), CM = circular mils from NE
 | Inverse-time breaker | 2.5 (250%) | FLA 30.8 × 2.5 = 77 → standard **80A** |
 
 **Disconnect sizing (430.110(A)):** `min_amps = FLA × 1.15`
+
 - Validated: 25HP/460V → FLA 34 × 1.15 = **39.1A**
 
 **Feeder ampacity (430.24):** `125% × largest_FLA + Σ(other FLAs)`
+
 - Validated: Motors [34, 15.2, 7.6] → 34×1.25 + 15.2 + 7.6 = **65.3A**
 
 **Standard OCP ladder (240.6(A)):** 37 standard sizes from 15A to 6000A. Round-up algorithm with floating-point tolerance (1e-9).
@@ -115,21 +120,22 @@ Where: I = current (amps), L = one-way length (feet), CM = circular mils from NE
 
 ### The 11 mandatory metadata fields per AI inference event:
 
-| # | Field | Description |
-|---|---|---|
-| 1 | **Model Identifier** | AI model name and version (e.g., `qwen-max`, `qwen-plus`) |
-| 2 | **Model Version** | Specific model revision/fine-tune identifier |
-| 3 | **Requesting User ID** | Authenticated user identity initiating the inference |
-| 4 | **Timestamp (UTC)** | ISO 8601 UTC timestamp of the inference event |
-| 5 | **Input Hash** | SHA-256 hash of the user's input prompt |
-| 6 | **Output Hash** | SHA-256 hash of the AI-generated response |
-| 7 | **Session Context** | Session identifier binding the request to a user workflow |
-| 8 | **Approver Identity** | Human operator who approved safety-critical output |
-| 9 | **Approval Timestamp** | When the human-in-the-loop approval was granted |
-| 10 | **Artifact Hash** | SHA-256 hash of the deployed output (L5X file, compliance determination) |
-| 11 | **Compliance Tag** | Regulatory framework identifier (NEC 2026, NFPA 70E, ISO 13849, Article 645) |
+| #   | Field                  | Description                                                                  |
+| --- | ---------------------- | ---------------------------------------------------------------------------- |
+| 1   | **Model Identifier**   | AI model name and version (e.g., `qwen-max`, `qwen-plus`)                    |
+| 2   | **Model Version**      | Specific model revision/fine-tune identifier                                 |
+| 3   | **Requesting User ID** | Authenticated user identity initiating the inference                         |
+| 4   | **Timestamp (UTC)**    | ISO 8601 UTC timestamp of the inference event                                |
+| 5   | **Input Hash**         | SHA-256 hash of the user's input prompt                                      |
+| 6   | **Output Hash**        | SHA-256 hash of the AI-generated response                                    |
+| 7   | **Session Context**    | Session identifier binding the request to a user workflow                    |
+| 8   | **Approver Identity**  | Human operator who approved safety-critical output                           |
+| 9   | **Approval Timestamp** | When the human-in-the-loop approval was granted                              |
+| 10  | **Artifact Hash**      | SHA-256 hash of the deployed output (L5X file, compliance determination)     |
+| 11  | **Compliance Tag**     | Regulatory framework identifier (NEC 2026, NFPA 70E, ISO 13849, Article 645) |
 
 ### Retention & Integrity:
+
 - **Append-only** — Logs are tamper-evident, no mutation or deletion permitted
 - **7-year minimum retention** for industrial installations
 - **Queryable** by compliance officers, exportable for regulatory review
@@ -151,4 +157,4 @@ Where: I = current (amps), L = one-way length (feet), CM = circular mils from NE
 
 ---
 
-*This document certifies that Code Compass implements deterministic, cryptographically verified NEC compliance tooling with auditable AI governance controls suitable for data center procurement review and industrial safety-critical deployments.*
+_This document certifies that Code Compass implements deterministic, cryptographically verified NEC compliance tooling with auditable AI governance controls suitable for data center procurement review and industrial safety-critical deployments._

@@ -1,4 +1,11 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import {
+  int,
+  mysqlEnum,
+  mysqlTable,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -24,7 +31,15 @@ export const users = mysqlTable("users", {
   stripeCustomerId: varchar("stripeCustomerId", { length: 128 }),
   stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 128 }),
   // Cached subscription status for fast access — kept in sync via webhooks
-  subscriptionStatus: mysqlEnum("subscriptionStatus", ["active", "trialing", "past_due", "canceled", "none"]).default("none").notNull(),
+  subscriptionStatus: mysqlEnum("subscriptionStatus", [
+    "active",
+    "trialing",
+    "past_due",
+    "canceled",
+    "none",
+  ])
+    .default("none")
+    .notNull(),
   subscriptionPlan: varchar("subscriptionPlan", { length: 64 }), // e.g. "pro_monthly" | "pro_annual" | "lifetime"
   subscriptionCurrentPeriodEnd: timestamp("subscriptionCurrentPeriodEnd"),
 });

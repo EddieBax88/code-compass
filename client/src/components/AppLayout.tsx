@@ -5,7 +5,14 @@
  */
 import { useEffect } from "react";
 import { Link, useLocation } from "wouter";
-import { Zap, Search, LayoutDashboard, Timer, CreditCard, Bot } from "lucide-react";
+import {
+  Zap,
+  Search,
+  LayoutDashboard,
+  Timer,
+  CreditCard,
+  Bot,
+} from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { InAppBrowserBanner } from "./InAppBrowserBanner";
 import { trpc } from "@/lib/trpc";
@@ -27,9 +34,12 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
   const { oledUnlocked, setOledUnlocked } = useTheme();
 
   // OLED is a paid perk. Unlock it only when the signed-in user has active access.
-  const { data: subStatus } = trpc.stripe.subscriptionStatus.useQuery(undefined, {
-    enabled: isAuthenticated,
-  });
+  const { data: subStatus } = trpc.stripe.subscriptionStatus.useQuery(
+    undefined,
+    {
+      enabled: isAuthenticated,
+    }
+  );
   const hasPaidAccess =
     isAuthenticated &&
     (subStatus?.status === "active" || subStatus?.status === "trialing");
@@ -52,7 +62,9 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
                 className="w-8 h-8"
               />
               <div className="hidden sm:block leading-tight">
-                <h1 className="text-sm font-bold text-foreground tracking-tight">CODE COMPASS</h1>
+                <h1 className="text-sm font-bold text-foreground tracking-tight">
+                  CODE COMPASS
+                </h1>
                 <p className="stencil-label">NEC 2026</p>
               </div>
             </div>
@@ -82,9 +94,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
           </nav>
 
           {/* Single theme toggle — paid perk only */}
-          <div className="flex-shrink-0">
-            {oledUnlocked && <ThemeToggle />}
-          </div>
+          <div className="flex-shrink-0">{oledUnlocked && <ThemeToggle />}</div>
         </div>
       </header>
 

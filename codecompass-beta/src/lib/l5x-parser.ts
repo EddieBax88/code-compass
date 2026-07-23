@@ -219,7 +219,9 @@ function assignCoordinates(
 export function parseL5X(fileBuffer: Buffer): L5XParseResult {
   // CRITICAL: Buffer size validation (prevent memory exhaustion)
   if (fileBuffer.length > 10 * 1024 * 1024) {
-    throw new Error(`L5X file too large: ${(fileBuffer.length / 1024 / 1024).toFixed(2)} MB exceeds 10 MB limit`);
+    throw new Error(
+      `L5X file too large: ${(fileBuffer.length / 1024 / 1024).toFixed(2)} MB exceeds 10 MB limit`,
+    );
   }
 
   const xmlString = fileBuffer.toString("utf-8");
@@ -315,7 +317,10 @@ export function parseL5X(fileBuffer: Buffer): L5XParseResult {
   return {
     metadata,
     routines,
-    routine: routines.length > 0 ? routines[0] : { name: "No routines found", type: "empty", rungs: [], rung_count: 0 },
+    routine:
+      routines.length > 0
+        ? routines[0]
+        : { name: "No routines found", type: "empty", rungs: [], rung_count: 0 },
     tag_inventory: [...knownTags],
     validation_summary: {
       total_rungs: routines.reduce((s, r) => s + r.rung_count, 0),

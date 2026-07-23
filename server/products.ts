@@ -49,7 +49,8 @@ export const PLANS: Plan[] = [
   {
     id: "lifetime",
     name: "Lifetime Access",
-    description: "One payment. Unlimited Co-Pilot. All future updates. Forever.",
+    description:
+      "One payment. Unlimited Co-Pilot. All future updates. Forever.",
     priceUsd: 39.99,
     interval: "once",
     stripePriceId: LIFETIME_PRICE_ID,
@@ -70,5 +71,5 @@ export const PLANS: Plan[] = [
 ];
 
 export function getPlanById(id: PlanId): Plan | undefined {
-  return PLANS.find((p) => p.id === id);
+  return PLANS.find(p => p.id === id);
 }

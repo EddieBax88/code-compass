@@ -43,13 +43,10 @@ export const Route = createFileRoute("/api/stripe-webhook")({
             .map((s) => s.replace("v1=", ""));
 
           const payload = `${timestamp}.${rawBody}`;
-          const computed = crypto
-            .createHmac("sha256", webhookSecret)
-            .update(payload)
-            .digest("hex");
+          const computed = crypto.createHmac("sha256", webhookSecret).update(payload).digest("hex");
 
-          const isValid = sigValues.some(
-            (v) => crypto.timingSafeEqual(Buffer.from(v), Buffer.from(computed)),
+          const isValid = sigValues.some((v) =>
+            crypto.timingSafeEqual(Buffer.from(v), Buffer.from(computed)),
           );
 
           if (!isValid) {
@@ -81,23 +78,20 @@ export const Route = createFileRoute("/api/stripe-webhook")({
               const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
               if (supabaseUrl && serviceKey) {
-                await fetch(
-                  `${supabaseUrl}/rest/v1/users?id=eq.${userId}`,
-                  {
-                    method: "PATCH",
-                    headers: {
-                      apikey: serviceKey,
-                      Authorization: `Bearer ${serviceKey}`,
-                      "Content-Type": "application/json",
-                      Prefer: "return=minimal",
-                    },
-                    body: JSON.stringify({
-                      subscription_status: "active",
-                      subscription_plan: "lifetime",
-                      stripe_customer_id: session.customer,
-                    }),
+                await fetch(`${supabaseUrl}/rest/v1/users?id=eq.${userId}`, {
+                  method: "PATCH",
+                  headers: {
+                    apikey: serviceKey,
+                    Authorization: `Bearer ${serviceKey}`,
+                    "Content-Type": "application/json",
+                    Prefer: "return=minimal",
                   },
-                );
+                  body: JSON.stringify({
+                    subscription_status: "active",
+                    subscription_plan: "lifetime",
+                    stripe_customer_id: session.customer,
+                  }),
+                });
                 console.log(`[Webhook] Granted lifetime access to user ${userId}`);
               }
             }
@@ -109,10 +103,10 @@ export const Route = createFileRoute("/api/stripe-webhook")({
         } catch (error) {
           const errMsg = error instanceof Error ? error.message : "Unknown error";
           console.error("[Webhook] Processing error:", errMsg);
-          return new Response(
-            JSON.stringify({ error: "Webhook processing error" }),
-            { status: 500, headers: { "content-type": "application/json" } },
-          );
+          return new Response(JSON.stringify({ error: "Webhook processing error" }), {
+            status: 500,
+            headers: { "content-type": "application/json" },
+          });
         }
       },
     },

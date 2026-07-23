@@ -6,7 +6,14 @@ import { useState, useCallback } from "react";
 import AppLayout from "@/components/AppLayout";
 import { PaywallGate } from "@/components/PaywallGate";
 import { getRandomQuestions, type QuestionCard } from "@/data/questionBank";
-import { Zap, CheckCircle, XCircle, BookOpen, RotateCcw, ArrowRight } from "lucide-react";
+import {
+  Zap,
+  CheckCircle,
+  XCircle,
+  BookOpen,
+  RotateCcw,
+  ArrowRight,
+} from "lucide-react";
 import BackButton from "@/components/BackButton";
 import LookupGuide from "@/components/LookupGuide";
 
@@ -19,14 +26,17 @@ function QuizContent() {
   const [answers, setAnswers] = useState<Record<string, string>>({});
   const [revealed, setRevealed] = useState(false);
 
-  const startQuiz = useCallback((count: number, difficulty?: QuestionCard["difficulty"]) => {
-    const q = getRandomQuestions(count, difficulty);
-    setQuestions(q);
-    setAnswers({});
-    setCurrentIndex(0);
-    setRevealed(false);
-    setState("active");
-  }, []);
+  const startQuiz = useCallback(
+    (count: number, difficulty?: QuestionCard["difficulty"]) => {
+      const q = getRandomQuestions(count, difficulty);
+      setQuestions(q);
+      setAnswers({});
+      setCurrentIndex(0);
+      setRevealed(false);
+      setState("active");
+    },
+    []
+  );
 
   const selectAnswer = (questionId: string, answer: string) => {
     if (revealed) return;
@@ -43,7 +53,10 @@ function QuizContent() {
     }
   };
 
-  const score = questions.reduce((acc, q) => acc + (answers[q.id] === q.correct_answer ? 1 : 0), 0);
+  const score = questions.reduce(
+    (acc, q) => acc + (answers[q.id] === q.correct_answer ? 1 : 0),
+    0
+  );
 
   if (state === "setup") {
     return (
@@ -51,9 +64,12 @@ function QuizContent() {
         <BackButton fallback="/" label="Back to Panel" className="-ml-3" />
         <div>
           <p className="stencil-label mb-2">QUICK DRILL</p>
-          <h2 className="text-2xl font-bold text-foreground">Rapid-Fire Practice</h2>
+          <h2 className="text-2xl font-bold text-foreground">
+            Rapid-Fire Practice
+          </h2>
           <p className="text-muted-foreground mt-2 text-sm">
-            No timer. Instant feedback. Perfect for building muscle memory on NEC lookups.
+            No timer. Instant feedback. Perfect for building muscle memory on
+            NEC lookups.
           </p>
         </div>
         <div>
@@ -65,7 +81,9 @@ function QuizContent() {
                 onClick={() => startQuiz(count)}
                 className="panel-card p-4 rounded-sm text-center hover:border-primary/40 transition-all"
               >
-                <p className="text-2xl font-mono font-bold text-primary">{count}</p>
+                <p className="text-2xl font-mono font-bold text-primary">
+                  {count}
+                </p>
                 <p className="stencil-label mt-1">QUESTIONS</p>
               </button>
             ))}
@@ -81,7 +99,9 @@ function QuizContent() {
                 className="panel-card p-4 rounded-sm text-center hover:border-primary/40 transition-all"
               >
                 <Zap className="w-4 h-4 text-primary mx-auto mb-2" />
-                <p className="font-mono text-sm font-bold text-foreground uppercase">{diff}</p>
+                <p className="font-mono text-sm font-bold text-foreground uppercase">
+                  {diff}
+                </p>
                 <p className="stencil-label mt-1">5 QUESTIONS</p>
               </button>
             ))}
@@ -98,8 +118,12 @@ function QuizContent() {
         <div className="panel-card p-8 rounded-sm text-center">
           <Zap className="w-8 h-8 text-primary mx-auto mb-4" />
           <p className="stencil-label mb-2">DRILL COMPLETE</p>
-          <p className="text-4xl font-mono font-bold text-foreground">{score}/{questions.length}</p>
-          <p className="text-muted-foreground font-mono text-sm mt-2">{percentage}% accuracy</p>
+          <p className="text-4xl font-mono font-bold text-foreground">
+            {score}/{questions.length}
+          </p>
+          <p className="text-muted-foreground font-mono text-sm mt-2">
+            {percentage}% accuracy
+          </p>
           <div className="mt-6 flex gap-3 justify-center">
             <button
               onClick={() => startQuiz(questions.length)}
@@ -116,22 +140,35 @@ function QuizContent() {
             </button>
           </div>
         </div>
-        {questions.filter(q => answers[q.id] !== q.correct_answer).length > 0 && (
+        {questions.filter(q => answers[q.id] !== q.correct_answer).length >
+          0 && (
           <div>
             <p className="stencil-label mb-3">REVIEW MISSED</p>
             <div className="space-y-2">
-              {questions.filter(q => answers[q.id] !== q.correct_answer).map(q => (
-                <div key={q.id} className="panel-card p-4 rounded-sm">
-                  <p className="text-sm text-foreground font-medium mb-2">{q.question}</p>
-                  <p className="text-xs text-green-400 font-mono">✓ {q.correct_answer}</p>
-                  <div className="flex items-center gap-2 mt-2 flex-wrap">
-                    <BookOpen className="w-3 h-3 text-primary" />
-                    <span className="font-mono text-xs text-primary">{q.nec_article}</span>
-                    <span className="text-xs text-muted-foreground">· index:</span>
-                    <span className="text-xs text-foreground">{q.lookup_path.index_keywords[0]}</span>
+              {questions
+                .filter(q => answers[q.id] !== q.correct_answer)
+                .map(q => (
+                  <div key={q.id} className="panel-card p-4 rounded-sm">
+                    <p className="text-sm text-foreground font-medium mb-2">
+                      {q.question}
+                    </p>
+                    <p className="text-xs text-green-400 font-mono">
+                      ✓ {q.correct_answer}
+                    </p>
+                    <div className="flex items-center gap-2 mt-2 flex-wrap">
+                      <BookOpen className="w-3 h-3 text-primary" />
+                      <span className="font-mono text-xs text-primary">
+                        {q.nec_article}
+                      </span>
+                      <span className="text-xs text-muted-foreground">
+                        · index:
+                      </span>
+                      <span className="text-xs text-foreground">
+                        {q.lookup_path.index_keywords[0]}
+                      </span>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         )}
@@ -146,23 +183,37 @@ function QuizContent() {
   return (
     <div className="p-6 lg:p-8 max-w-2xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
-        <span className="stencil-label">DRILL {currentIndex + 1} OF {questions.length}</span>
-        <span className="font-mono text-xs text-green-400">{score} correct</span>
+        <span className="stencil-label">
+          DRILL {currentIndex + 1} OF {questions.length}
+        </span>
+        <span className="font-mono text-xs text-green-400">
+          {score} correct
+        </span>
       </div>
       <div className="w-full h-1 bg-secondary rounded-full overflow-hidden">
         <div
           className="h-full bg-primary transition-all duration-300"
-          style={{ width: `${((currentIndex) / questions.length) * 100}%` }}
+          style={{ width: `${(currentIndex / questions.length) * 100}%` }}
         />
       </div>
       <div className="panel-card p-6 rounded-sm">
         <div className="flex items-center gap-2 mb-3">
-          <span className={`px-2 py-0.5 rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider ${
-            currentQ.difficulty === "master" ? "bg-primary/20 text-primary" : "bg-secondary text-muted-foreground"
-          }`}>{currentQ.difficulty}</span>
-          <span className="font-mono text-xs text-muted-foreground">{currentQ.nec_article}</span>
+          <span
+            className={`px-2 py-0.5 rounded-sm text-[10px] font-mono font-bold uppercase tracking-wider ${
+              currentQ.difficulty === "master"
+                ? "bg-primary/20 text-primary"
+                : "bg-secondary text-muted-foreground"
+            }`}
+          >
+            {currentQ.difficulty}
+          </span>
+          <span className="font-mono text-xs text-muted-foreground">
+            {currentQ.nec_article}
+          </span>
         </div>
-        <p className="text-foreground font-medium leading-relaxed">{currentQ.question}</p>
+        <p className="text-foreground font-medium leading-relaxed">
+          {currentQ.question}
+        </p>
       </div>
       <div className="space-y-2">
         {currentQ.choices.map((choice, i) => {
@@ -175,19 +226,31 @@ function QuizContent() {
               onClick={() => selectAnswer(currentQ.id, choice)}
               disabled={revealed}
               className={`w-full panel-card p-4 rounded-sm flex items-center gap-3 transition-all text-left ${
-                revealed && isCorrect ? "border-green-400/60 bg-green-400/5"
-                : revealed && selected && !isCorrect ? "border-destructive/60 bg-destructive/5"
-                : "hover:border-primary/30"
+                revealed && isCorrect
+                  ? "border-green-400/60 bg-green-400/5"
+                  : revealed && selected && !isCorrect
+                    ? "border-destructive/60 bg-destructive/5"
+                    : "hover:border-primary/30"
               }`}
             >
-              <span className={`w-7 h-7 rounded-sm flex items-center justify-center font-mono text-xs font-bold ${
-                revealed && isCorrect ? "bg-green-400/20 text-green-400"
-                : revealed && selected && !isCorrect ? "bg-destructive/20 text-destructive"
-                : "bg-secondary text-muted-foreground"
-              }`}>{letter}</span>
+              <span
+                className={`w-7 h-7 rounded-sm flex items-center justify-center font-mono text-xs font-bold ${
+                  revealed && isCorrect
+                    ? "bg-green-400/20 text-green-400"
+                    : revealed && selected && !isCorrect
+                      ? "bg-destructive/20 text-destructive"
+                      : "bg-secondary text-muted-foreground"
+                }`}
+              >
+                {letter}
+              </span>
               <span className="text-sm text-foreground flex-1">{choice}</span>
-              {revealed && isCorrect && <CheckCircle className="w-4 h-4 text-green-400" />}
-              {revealed && selected && !isCorrect && <XCircle className="w-4 h-4 text-destructive" />}
+              {revealed && isCorrect && (
+                <CheckCircle className="w-4 h-4 text-green-400" />
+              )}
+              {revealed && selected && !isCorrect && (
+                <XCircle className="w-4 h-4 text-destructive" />
+              )}
             </button>
           );
         })}
@@ -196,7 +259,9 @@ function QuizContent() {
         <>
           <LookupGuide lookup={currentQ.lookup_path} />
           <div className="panel-card p-4 rounded-sm border-l-2 border-l-primary">
-            <p className="text-sm text-muted-foreground leading-relaxed">{currentQ.explanation}</p>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              {currentQ.explanation}
+            </p>
             <p className="mt-2 text-xs text-muted-foreground italic">
               Open your code book to {currentQ.nec_article} to verify.
             </p>
