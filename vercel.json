@@ -1,4 +1,17 @@
 {
-  "rootDirectory": "codecompass-beta",
-  "buildCommand": "pnpm run build"
+  "buildCommand": "pnpm run build",
+  "outputDirectory": "dist/public",
+  "functions": {
+    "api/index.mjs": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "rewrites": [
+    { "source": "/api/trpc/:path*", "destination": "/api/index.mjs" },
+    { "source": "/api/oauth/:path*", "destination": "/api/index.mjs" },
+    { "source": "/api/stripe/:path*", "destination": "/api/index.mjs" },
+    { "source": "/manus-storage/:path*", "destination": "/api/index.mjs" },
+    { "source": "/(.*)", "destination": "/" }
+  ]
 }
