@@ -15,7 +15,9 @@ export default function PaymentCancel() {
           </div>
           <div>
             <p className="stencil-label mb-2">CHECKOUT CANCELED</p>
-            <h1 className="text-2xl font-bold text-foreground mb-3">No charge made.</h1>
+            <h1 className="text-2xl font-bold text-foreground mb-3">
+              No charge made.
+            </h1>
             <p className="text-muted-foreground">
               You can upgrade anytime. Your free access is still active.
             </p>

@@ -10,7 +10,9 @@ vi.mock("stripe", () => {
     },
     checkout: {
       sessions: {
-        create: vi.fn().mockResolvedValue({ url: "https://checkout.stripe.com/test" }),
+        create: vi
+          .fn()
+          .mockResolvedValue({ url: "https://checkout.stripe.com/test" }),
       },
     },
   };
@@ -66,7 +68,10 @@ describe("stripe.createCheckoutSession", () => {
     const ctx = createAuthContext();
     const caller = appRouter.createCaller(ctx);
     await expect(
-      caller.stripe.createCheckoutSession({ planId: "invalid_plan", origin: "https://example.com" })
+      caller.stripe.createCheckoutSession({
+        planId: "invalid_plan",
+        origin: "https://example.com",
+      })
     ).rejects.toThrow("Invalid plan");
   });
 
@@ -74,7 +79,10 @@ describe("stripe.createCheckoutSession", () => {
     const ctx = createAuthContext();
     const caller = appRouter.createCaller(ctx);
     await expect(
-      caller.stripe.createCheckoutSession({ planId: "free", origin: "https://example.com" })
+      caller.stripe.createCheckoutSession({
+        planId: "free",
+        origin: "https://example.com",
+      })
     ).rejects.toThrow("Invalid plan");
   });
 });

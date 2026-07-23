@@ -16,9 +16,14 @@ import { getCopilotUsageToday, incrementCopilotUsage } from "../db";
 export const FREE_DAILY_LIMIT = 3;
 
 /** True if the user has an active or trialing subscription (unlimited access). */
-function hasUnlimitedAccess(user: { subscriptionStatus?: string } | null | undefined): boolean {
+function hasUnlimitedAccess(
+  user: { subscriptionStatus?: string } | null | undefined
+): boolean {
   if (!user) return false;
-  return user.subscriptionStatus === "active" || user.subscriptionStatus === "trialing";
+  return (
+    user.subscriptionStatus === "active" ||
+    user.subscriptionStatus === "trialing"
+  );
 }
 
 const SUGGESTED_QUESTIONS = [
@@ -73,9 +78,16 @@ export const copilotRouter = router({
   usageStatus: publicProcedure
     .input(z.object({ clientId: z.string().min(1).max(128) }))
     .query(async ({ ctx, input }) => {
-      const unlimited = hasUnlimitedAccess(ctx.user as { subscriptionStatus?: string } | null);
+      const unlimited = hasUnlimitedAccess(
+        ctx.user as { subscriptionStatus?: string } | null
+      );
       if (unlimited) {
-        return { unlimited: true, used: 0, limit: FREE_DAILY_LIMIT, remaining: FREE_DAILY_LIMIT };
+        return {
+          unlimited: true,
+          used: 0,
+          limit: FREE_DAILY_LIMIT,
+          remaining: FREE_DAILY_LIMIT,
+        };
       }
       const used = await getCopilotUsageToday(input.clientId);
       return {
@@ -96,7 +108,9 @@ export const copilotRouter = router({
     )
     .mutation(async ({ ctx, input }) => {
       // Freemium gate: subscribers are unlimited; everyone else gets FREE_DAILY_LIMIT/day.
-      const unlimited = hasUnlimitedAccess(ctx.user as { subscriptionStatus?: string } | null);
+      const unlimited = hasUnlimitedAccess(
+        ctx.user as { subscriptionStatus?: string } | null
+      );
       if (!unlimited) {
         const used = await getCopilotUsageToday(input.clientId);
         if (used >= FREE_DAILY_LIMIT) {
@@ -142,7 +156,12 @@ export const copilotRouter = router({
 
         return {
           keywords: parsed.keywords as string[],
-          indexDrilldown: (parsed.indexDrilldown as Array<{ level: number; entry: string; description: string }>) ?? [],
+          indexDrilldown:
+            (parsed.indexDrilldown as Array<{
+              level: number;
+              entry: string;
+              description: string;
+            }>) ?? [],
           article: parsed.article as string,
           articleTitle: (parsed.articleTitle as string) ?? "",
           lookupSteps: (parsed.lookupSteps as string[]) ?? [],

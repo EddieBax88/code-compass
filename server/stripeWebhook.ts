@@ -15,7 +15,9 @@ export function registerStripeWebhook(app: Express) {
     (req, res, next) => {
       let data = "";
       req.setEncoding("utf8");
-      req.on("data", (chunk) => { data += chunk; });
+      req.on("data", chunk => {
+        data += chunk;
+      });
       req.on("end", () => {
         (req as Request & { rawBody: string }).rawBody = data;
         next();
@@ -49,7 +51,9 @@ export function registerStripeWebhook(app: Express) {
 
       // Test event passthrough — required for Stripe webhook verification
       if (event.id.startsWith("evt_test_")) {
-        console.log("[Webhook] Test event detected, returning verification response");
+        console.log(
+          "[Webhook] Test event detected, returning verification response"
+        );
         res.json({ verified: true });
         return;
       }
@@ -70,8 +74,8 @@ export function registerStripeWebhook(app: Express) {
             const userId = session.metadata?.user_id
               ? parseInt(session.metadata.user_id)
               : session.client_reference_id
-              ? parseInt(session.client_reference_id)
-              : null;
+                ? parseInt(session.client_reference_id)
+                : null;
             const planId = session.metadata?.plan_id ?? null;
 
             if (!userId) break;
@@ -82,7 +86,10 @@ export function registerStripeWebhook(app: Express) {
             // confirms the money actually cleared — `payment_status === "paid"`.
             // Without this guard, any completed-but-unpaid (or test) session
             // would unlock lifetime access.
-            if (session.mode === "payment" && session.payment_status === "paid") {
+            if (
+              session.mode === "payment" &&
+              session.payment_status === "paid"
+            ) {
               updateData.subscriptionStatus = "active";
               updateData.subscriptionPlan = planId ?? "lifetime";
             }
@@ -93,7 +100,10 @@ export function registerStripeWebhook(app: Express) {
             }
 
             if (Object.keys(updateData).length > 0) {
-              await db.update(users).set(updateData).where(eq(users.id, userId));
+              await db
+                .update(users)
+                .set(updateData)
+                .where(eq(users.id, userId));
             }
             break;
           }
@@ -111,7 +121,12 @@ export function registerStripeWebhook(app: Express) {
 
             if (!userRow) break;
 
-            const status = sub.status as "active" | "trialing" | "past_due" | "canceled" | "none";
+            const status = sub.status as
+              | "active"
+              | "trialing"
+              | "past_due"
+              | "canceled"
+              | "none";
             const firstItem = sub.items.data[0];
             const periodEnd = firstItem?.current_period_end
               ? new Date(firstItem.current_period_end * 1000)
@@ -122,14 +137,19 @@ export function registerStripeWebhook(app: Express) {
             const interval = sub.items.data[0]?.price?.recurring?.interval;
             const planId = interval === "year" ? "pro_annual" : "pro_monthly";
 
-            await db.update(users).set({
-              stripeSubscriptionId: sub.id,
-              subscriptionStatus: status,
-              subscriptionPlan: planId,
-              subscriptionCurrentPeriodEnd: periodEnd,
-            }).where(eq(users.id, userRow.id));
+            await db
+              .update(users)
+              .set({
+                stripeSubscriptionId: sub.id,
+                subscriptionStatus: status,
+                subscriptionPlan: planId,
+                subscriptionCurrentPeriodEnd: periodEnd,
+              })
+              .where(eq(users.id, userRow.id));
 
-            console.log(`[Webhook] Updated subscription for user ${userRow.id}: ${status}`);
+            console.log(
+              `[Webhook] Updated subscription for user ${userRow.id}: ${status}`
+            );
             break;
           }
 
@@ -150,12 +170,17 @@ export function registerStripeWebhook(app: Express) {
               ? new Date(deletedItem.current_period_end * 1000)
               : null;
 
-            await db.update(users).set({
-              subscriptionStatus: "canceled",
-              subscriptionCurrentPeriodEnd: deletedPeriodEnd,
-            }).where(eq(users.id, userRow.id));
+            await db
+              .update(users)
+              .set({
+                subscriptionStatus: "canceled",
+                subscriptionCurrentPeriodEnd: deletedPeriodEnd,
+              })
+              .where(eq(users.id, userRow.id));
 
-            console.log(`[Webhook] Subscription canceled for user ${userRow.id}`);
+            console.log(
+              `[Webhook] Subscription canceled for user ${userRow.id}`
+            );
             break;
           }
 
@@ -171,7 +196,10 @@ export function registerStripeWebhook(app: Express) {
 
             if (!userRow) break;
 
-            await db.update(users).set({ subscriptionStatus: "past_due" }).where(eq(users.id, userRow.id));
+            await db
+              .update(users)
+              .set({ subscriptionStatus: "past_due" })
+              .where(eq(users.id, userRow.id));
             console.log(`[Webhook] Payment failed for user ${userRow.id}`);
             break;
           }

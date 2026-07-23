@@ -7,6 +7,7 @@
 **Design Movement:** Industrial Brutalism meets Control Room UI — inspired by SCADA interfaces, electrical panel labeling, and the tactile feel of breaker boxes.
 
 **Core Principles:**
+
 1. Information density over decoration — every pixel earns its place
 2. Monospaced precision — data feels engineered, not designed
 3. Status-indicator color language — amber = active, green = correct, red = fault
@@ -17,6 +18,7 @@
 **Layout Paradigm:** Fixed left sidebar (navigation as "breaker panel"), main content area as a "work surface" with card-based modules that snap into a grid like DIN-rail components. No scrolling hero sections — immediate utility.
 
 **Signature Elements:**
+
 1. Pulsing amber dot indicators on active modes (like a live panel)
 2. "Wire" connector lines between related UI elements using SVG paths
 3. Stencil-style uppercase labels reminiscent of panel schedules
@@ -37,6 +39,7 @@
 **Design Movement:** Technical Blueprint Aesthetic — inspired by architectural drawings, engineering schematics, and the blue-white contrast of cyanotype prints, modernized with a dark-mode twist.
 
 **Core Principles:**
+
 1. Grid-ruled precision — faint grid lines visible in backgrounds like graph paper
 2. Annotation-style UI — labels feel hand-written on a technical drawing
 3. Layered depth — content sits on "sheets" that cast subtle shadows
@@ -47,6 +50,7 @@
 **Layout Paradigm:** Full-width top navigation bar (like a toolbar), content organized in "blueprint sheets" — large cards with subtle dashed borders. Quiz/Exam modes use a split layout: question on left, answer workspace on right. No wasted vertical space.
 
 **Signature Elements:**
+
 1. Faint crosshatch grid pattern in section backgrounds
 2. "Dimension line" dividers between sections (like architectural measurements)
 3. Circular badge indicators with article numbers (like callout bubbles on a blueprint)
@@ -67,6 +71,7 @@
 **Design Movement:** Cyberpunk HUD (Heads-Up Display) — inspired by video game interfaces, night-shift jobsite lighting, and the glow of multimeter screens in dark spaces.
 
 **Core Principles:**
+
 1. Glowing focal points — key data radiates light against darkness
 2. Scanline texture — subtle horizontal lines create screen depth
 3. Segmented displays — numbers and stats shown in LED-style readouts
@@ -77,6 +82,7 @@
 **Layout Paradigm:** Centered single-column for mobile-first (tradesmen on phones at jobsites). Desktop expands to a cockpit layout — stats in corners, main content centered, persistent bottom toolbar for mode switching. No sidebar — everything accessible within thumb reach.
 
 **Signature Elements:**
+
 1. Glowing border effect on active cards (box-shadow with amber)
 2. Seven-segment LED-style number displays for scores and timers
 3. "Signal strength" bars for difficulty indicators

@@ -23,9 +23,12 @@ export default function PaymentSuccess() {
           </div>
           <div>
             <p className="stencil-label mb-2">PAYMENT CONFIRMED</p>
-            <h1 className="text-2xl font-bold text-foreground mb-3">You're in.</h1>
+            <h1 className="text-2xl font-bold text-foreground mb-3">
+              You're in.
+            </h1>
             <p className="text-muted-foreground">
-              Your Pro access is active. All 65+ NEC training cards and Exam Mode are unlocked.
+              Your Pro access is active. All 65+ NEC training cards and Exam
+              Mode are unlocked.
             </p>
           </div>
           <div className="flex flex-col gap-3">

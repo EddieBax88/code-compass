@@ -62,11 +62,22 @@ export function getInAppBrowserLabel(b: InAppBrowser): string {
 
 /** True when running on an iOS device (Safari is the escape browser). */
 export function isIOS(ua?: string): boolean {
-  const agent = (ua ?? (typeof navigator !== "undefined" ? navigator.userAgent : "")).toLowerCase();
-  return /iphone|ipad|ipod/.test(agent) || (/macintosh/.test(agent) && typeof navigator !== "undefined" && navigator.maxTouchPoints > 1);
+  const agent = (
+    ua ?? (typeof navigator !== "undefined" ? navigator.userAgent : "")
+  ).toLowerCase();
+  return (
+    /iphone|ipad|ipod/.test(agent) ||
+    (/macintosh/.test(agent) &&
+      typeof navigator !== "undefined" &&
+      navigator.maxTouchPoints > 1)
+  );
 }
 
-export function useInAppBrowser(): { browser: InAppBrowser; isInApp: boolean; ios: boolean } {
+export function useInAppBrowser(): {
+  browser: InAppBrowser;
+  isInApp: boolean;
+  ios: boolean;
+} {
   const [browser, setBrowser] = useState<InAppBrowser>(null);
   const [ios, setIos] = useState(false);
 

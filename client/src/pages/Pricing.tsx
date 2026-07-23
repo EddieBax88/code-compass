@@ -21,19 +21,22 @@ export default function Pricing() {
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
 
   const { data: plans = [] } = trpc.plans.list.useQuery();
-  const { data: subStatus } = trpc.stripe.subscriptionStatus.useQuery(undefined, {
-    enabled: isAuthenticated,
-  });
+  const { data: subStatus } = trpc.stripe.subscriptionStatus.useQuery(
+    undefined,
+    {
+      enabled: isAuthenticated,
+    }
+  );
 
   const createCheckout = trpc.stripe.createCheckoutSession.useMutation({
-    onSuccess: (data) => {
+    onSuccess: data => {
       if (data.url) {
         toast.info("Redirecting to checkout...");
         window.open(data.url, "_blank");
       }
       setLoadingPlan(null);
     },
-    onError: (err) => {
+    onError: err => {
       toast.error(err.message || "Checkout failed. Please try again.");
       setLoadingPlan(null);
     },
@@ -49,12 +52,16 @@ export default function Pricing() {
   };
 
   const isCurrentPlan = (planId: string) => {
-    if (planId === "free" && (!subStatus?.status || subStatus.status === "none")) return true;
+    if (
+      planId === "free" &&
+      (!subStatus?.status || subStatus.status === "none")
+    )
+      return true;
     return subStatus?.plan === planId && subStatus.status === "active";
   };
 
-  const freePlan = plans.find((p) => p.id === "free");
-  const lifetimePlan = plans.find((p) => p.id === "lifetime");
+  const freePlan = plans.find(p => p.id === "free");
+  const lifetimePlan = plans.find(p => p.id === "lifetime");
 
   return (
     <AppLayout>
@@ -70,8 +77,8 @@ export default function Pricing() {
             Stop guessing. Start finding.
           </h1>
           <p className="text-muted-foreground text-lg max-w-xl mx-auto">
-            Code Compass teaches you to find any NEC answer in under 60 seconds —
-            the same skill journeyman and master electricians use on the job.
+            Code Compass teaches you to find any NEC answer in under 60 seconds
+            — the same skill journeyman and master electricians use on the job.
           </p>
         </div>
 
@@ -89,7 +96,9 @@ export default function Pricing() {
 
               <div className="mb-4">
                 <span className="text-4xl font-bold text-foreground">$0</span>
-                <span className="text-muted-foreground text-sm ml-2">forever</span>
+                <span className="text-muted-foreground text-sm ml-2">
+                  forever
+                </span>
               </div>
 
               <p className="text-sm text-muted-foreground mb-6">
@@ -97,7 +106,7 @@ export default function Pricing() {
               </p>
 
               <ul className="space-y-2 mb-8 flex-1">
-                {freePlan.features.map((f) => (
+                {freePlan.features.map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm">
                     <Check className="w-4 h-4 text-muted-foreground flex-shrink-0 mt-0.5" />
                     <span className="text-foreground/80">{f}</span>
@@ -106,7 +115,11 @@ export default function Pricing() {
               </ul>
 
               {isCurrentPlan("free") ? (
-                <Button variant="outline" disabled className="w-full font-mono text-xs tracking-wider">
+                <Button
+                  variant="outline"
+                  disabled
+                  className="w-full font-mono text-xs tracking-wider"
+                >
                   CURRENT PLAN
                 </Button>
               ) : (
@@ -138,17 +151,23 @@ export default function Pricing() {
               </div>
 
               <div className="mb-1">
-                <span className="text-4xl font-bold text-foreground">$39.99</span>
-                <span className="text-muted-foreground text-sm ml-2">one-time</span>
+                <span className="text-4xl font-bold text-foreground">
+                  $39.99
+                </span>
+                <span className="text-muted-foreground text-sm ml-2">
+                  one-time
+                </span>
               </div>
-              <p className="text-xs text-primary font-mono mb-4">NO RECURRING FEES. EVER.</p>
+              <p className="text-xs text-primary font-mono mb-4">
+                NO RECURRING FEES. EVER.
+              </p>
 
               <p className="text-sm text-muted-foreground mb-6">
                 {lifetimePlan.description}
               </p>
 
               <ul className="space-y-2 mb-8 flex-1">
-                {lifetimePlan.features.map((f) => (
+                {lifetimePlan.features.map(f => (
                   <li key={f} className="flex items-start gap-2 text-sm">
                     <Check className="w-4 h-4 text-primary flex-shrink-0 mt-0.5" />
                     <span className="text-foreground/80">{f}</span>
@@ -157,7 +176,11 @@ export default function Pricing() {
               </ul>
 
               {isCurrentPlan("lifetime") ? (
-                <Button variant="outline" disabled className="w-full font-mono text-xs tracking-wider">
+                <Button
+                  variant="outline"
+                  disabled
+                  className="w-full font-mono text-xs tracking-wider"
+                >
                   YOU HAVE LIFETIME ACCESS
                 </Button>
               ) : (
@@ -166,7 +189,9 @@ export default function Pricing() {
                   disabled={loadingPlan === "lifetime"}
                   onClick={() => handleCheckout("lifetime")}
                 >
-                  {loadingPlan === "lifetime" ? "LOADING..." : "GET LIFETIME ACCESS — $39.99"}
+                  {loadingPlan === "lifetime"
+                    ? "LOADING..."
+                    : "GET LIFETIME ACCESS — $39.99"}
                 </Button>
               )}
             </div>
@@ -176,14 +201,18 @@ export default function Pricing() {
         {/* Trust signal */}
         <div className="max-w-3xl mx-auto mb-8 flex items-center justify-center gap-2 text-sm text-muted-foreground">
           <Zap className="w-4 h-4 text-primary" />
-          <span>Instant access after payment. No subscription. Cancel nothing.</span>
+          <span>
+            Instant access after payment. No subscription. Cancel nothing.
+          </span>
         </div>
 
         {/* Free NEC Access Banner */}
         <div className="max-w-3xl mx-auto mb-8 p-4 border border-border rounded-sm bg-card flex items-start gap-3">
           <BookOpen className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
           <div>
-            <p className="text-sm font-medium text-foreground mb-1">Free NEC Access via NFPA</p>
+            <p className="text-sm font-medium text-foreground mb-1">
+              Free NEC Access via NFPA
+            </p>
             <p className="text-xs text-muted-foreground">
               NFPA provides free online read-only access to NFPA 70 (NEC).{" "}
               <a
@@ -204,8 +233,9 @@ export default function Pricing() {
         {import.meta.env.DEV && (
           <div className="max-w-3xl mx-auto mb-10 p-3 border border-border rounded-sm bg-card">
             <p className="text-xs text-muted-foreground text-center font-mono">
-              TEST MODE — Use card <span className="text-primary">4242 4242 4242 4242</span> · any future date · any CVC.
-              Live payments activate after Stripe KYC.
+              TEST MODE — Use card{" "}
+              <span className="text-primary">4242 4242 4242 4242</span> · any
+              future date · any CVC. Live payments activate after Stripe KYC.
             </p>
           </div>
         )}
@@ -237,7 +267,10 @@ export default function Pricing() {
               a: "If it does not help you find NEC answers faster, email support within 30 days for a full refund. No questions asked.",
             },
           ].map(({ q, a }) => (
-            <div key={q} className="border border-border rounded-sm p-4 bg-card">
+            <div
+              key={q}
+              className="border border-border rounded-sm p-4 bg-card"
+            >
               <p className="font-medium text-foreground text-sm mb-1">{q}</p>
               <p className="text-sm text-muted-foreground">{a}</p>
             </div>

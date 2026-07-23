@@ -13,7 +13,11 @@ import { eq } from "drizzle-orm";
 
 function getStripe() {
   const key = process.env.STRIPE_SECRET_KEY;
-  if (!key) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "Stripe not configured" });
+  if (!key)
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: "Stripe not configured",
+    });
   return new Stripe(key, { apiVersion: "2026-05-27.dahlia" });
 }
 
@@ -60,10 +64,18 @@ export const appRouter = router({
 
         const stripe = getStripe();
         const db = await getDb();
-        if (!db) throw new TRPCError({ code: "INTERNAL_SERVER_ERROR", message: "DB unavailable" });
+        if (!db)
+          throw new TRPCError({
+            code: "INTERNAL_SERVER_ERROR",
+            message: "DB unavailable",
+          });
 
         // Get or create Stripe customer
-        const [userRow] = await db.select().from(users).where(eq(users.id, ctx.user.id)).limit(1);
+        const [userRow] = await db
+          .select()
+          .from(users)
+          .where(eq(users.id, ctx.user.id))
+          .limit(1);
         let customerId = userRow?.stripeCustomerId ?? undefined;
 
         if (!customerId) {
@@ -73,7 +85,10 @@ export const appRouter = router({
             metadata: { userId: ctx.user.id.toString() },
           });
           customerId = customer.id;
-          await db.update(users).set({ stripeCustomerId: customerId }).where(eq(users.id, ctx.user.id));
+          await db
+            .update(users)
+            .set({ stripeCustomerId: customerId })
+            .where(eq(users.id, ctx.user.id));
         }
 
         // Only lifetime (one-time payment) exists — always use payment mode
@@ -84,7 +99,9 @@ export const appRouter = router({
           line_items: [{ price: plan.stripePriceId, quantity: 1 }],
           allow_promotion_codes: true,
           client_reference_id: ctx.user.id.toString(),
-          customer_email: !customerId ? (ctx.user.email ?? undefined) : undefined,
+          customer_email: !customerId
+            ? (ctx.user.email ?? undefined)
+            : undefined,
           metadata: {
             user_id: ctx.user.id.toString(),
             plan_id: plan.id,
@@ -102,7 +119,11 @@ export const appRouter = router({
       const db = await getDb();
       if (!db) return { status: "none", plan: null, currentPeriodEnd: null };
 
-      const [userRow] = await db.select().from(users).where(eq(users.id, ctx.user.id)).limit(1);
+      const [userRow] = await db
+        .select()
+        .from(users)
+        .where(eq(users.id, ctx.user.id))
+        .limit(1);
       return {
         status: userRow?.subscriptionStatus ?? "none",
         plan: userRow?.subscriptionPlan ?? null,

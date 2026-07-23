@@ -48,7 +48,9 @@ export default function CoPilot() {
   const [question, setQuestion] = useState("");
   const [necVersion, setNecVersion] = useState<NecVersion>("2026");
   const [result, setResult] = useState<AnalysisResult | null>(null);
-  const [selectedDrilldownLevel, setSelectedDrilldownLevel] = useState<number | null>(null);
+  const [selectedDrilldownLevel, setSelectedDrilldownLevel] = useState<
+    number | null
+  >(null);
   const [clientId] = useState(() => getClientId());
   const [limitReached, setLimitReached] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -58,13 +60,13 @@ export default function CoPilot() {
   const { data: usage } = trpc.copilot.usageStatus.useQuery({ clientId });
 
   const analyze = trpc.copilot.analyze.useMutation({
-    onSuccess: (data) => {
+    onSuccess: data => {
       setResult(data);
       setSelectedDrilldownLevel(null);
       utils.copilot.usageStatus.invalidate({ clientId });
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
-    onError: (err) => {
+    onError: err => {
       if (err.message?.includes("LIMIT_REACHED")) {
         setLimitReached(true);
         return;
@@ -114,10 +116,12 @@ export default function CoPilot() {
             <div className="w-12 h-12 rounded-full bg-primary/15 flex items-center justify-center mx-auto mb-4">
               <Lock className="w-6 h-6 text-primary" />
             </div>
-            <h3 className="text-lg font-bold text-foreground mb-2">You're out of free questions today</h3>
+            <h3 className="text-lg font-bold text-foreground mb-2">
+              You're out of free questions today
+            </h3>
             <p className="text-sm text-muted-foreground mb-5">
-              You get {usage?.limit ?? 3} free Co-Pilot questions per day. Upgrade to Pro for unlimited
-              access to every NEC lookup.
+              You get {usage?.limit ?? 3} free Co-Pilot questions per day.
+              Upgrade to Pro for unlimited access to every NEC lookup.
             </p>
             <button
               onClick={() => navigate("/pricing")}
@@ -136,11 +140,13 @@ export default function CoPilot() {
       )}
       {/* Page heading + NEC version selector */}
       <div className="px-5 pt-6 pb-2 flex items-center justify-between gap-3">
-        <h1 className="text-2xl font-bold text-primary tracking-tight">Code Co-Pilot</h1>
+        <h1 className="text-2xl font-bold text-primary tracking-tight">
+          Code Co-Pilot
+        </h1>
         <div className="flex items-center gap-2">
           <span className="text-sm text-muted-foreground">NEC</span>
           <div className="flex gap-1">
-            {NEC_VERSIONS.map((v) => (
+            {NEC_VERSIONS.map(v => (
               <button
                 key={v}
                 onClick={() => setNecVersion(v)}
@@ -166,12 +172,14 @@ export default function CoPilot() {
               <div className="bg-card border border-border rounded-lg p-5">
                 <div className="flex items-center gap-2 mb-3">
                   <Search className="w-4 h-4 text-primary" />
-                  <span className="text-xs font-semibold text-muted-foreground uppercase">INPUT FEED</span>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase">
+                    INPUT FEED
+                  </span>
                 </div>
                 <textarea
                   ref={textareaRef}
                   value={question}
-                  onChange={(e) => setQuestion(e.target.value)}
+                  onChange={e => setQuestion(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Paste your exam question here..."
                   className="w-full bg-transparent text-foreground placeholder-muted-foreground resize-none focus:outline-none text-sm leading-relaxed"
@@ -200,15 +208,22 @@ export default function CoPilot() {
                 <div className="mt-3 text-center text-xs text-muted-foreground">
                   {usage.remaining > 0 ? (
                     <span>
-                      {usage.remaining} of {usage.limit} free questions left today ·{" "}
-                      <button onClick={() => navigate("/pricing")} className="text-primary hover:underline">
+                      {usage.remaining} of {usage.limit} free questions left
+                      today ·{" "}
+                      <button
+                        onClick={() => navigate("/pricing")}
+                        className="text-primary hover:underline"
+                      >
                         Go unlimited
                       </button>
                     </span>
                   ) : (
                     <span>
                       Daily free limit reached ·{" "}
-                      <button onClick={() => navigate("/pricing")} className="text-primary hover:underline">
+                      <button
+                        onClick={() => navigate("/pricing")}
+                        className="text-primary hover:underline"
+                      >
                         Upgrade to Pro
                       </button>
                     </span>
@@ -216,14 +231,18 @@ export default function CoPilot() {
                 </div>
               )}
               {usage?.unlimited && (
-                <div className="mt-3 text-center text-xs text-primary">Pro · Unlimited questions</div>
+                <div className="mt-3 text-center text-xs text-primary">
+                  Pro · Unlimited questions
+                </div>
               )}
             </div>
 
             {/* Suggested Keywords */}
             {suggestions.length > 0 && (
               <div className="max-w-2xl mx-auto mb-8">
-                <p className="text-xs font-semibold text-muted-foreground uppercase mb-3">SUGGESTED KEYWORDS</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase mb-3">
+                  SUGGESTED KEYWORDS
+                </p>
                 <div className="flex flex-wrap gap-2">
                   {suggestions.map((s, i) => (
                     <button
@@ -243,7 +262,9 @@ export default function CoPilot() {
               <div className="w-16 h-16 bg-card rounded-full flex items-center justify-center mx-auto mb-4">
                 <MapPin className="w-8 h-8 text-primary" />
               </div>
-              <p className="text-muted-foreground italic">READY FOR NAVIGATION INPUT</p>
+              <p className="text-muted-foreground italic">
+                READY FOR NAVIGATION INPUT
+              </p>
             </div>
           </>
         ) : (
@@ -254,7 +275,9 @@ export default function CoPilot() {
               <div className="bg-card border border-border rounded-lg p-6 mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <BookOpen className="w-4 h-4 text-primary" />
-                  <span className="text-xs font-semibold text-muted-foreground uppercase">NEC Index Lookup Path</span>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase">
+                    NEC Index Lookup Path
+                  </span>
                 </div>
 
                 {result.indexDrilldown.length > 0 ? (
@@ -264,7 +287,9 @@ export default function CoPilot() {
                         <button
                           onClick={() =>
                             setSelectedDrilldownLevel(
-                              selectedDrilldownLevel === level.level ? null : level.level
+                              selectedDrilldownLevel === level.level
+                                ? null
+                                : level.level
                             )
                           }
                           className={`w-full text-left px-4 py-3 rounded-lg border transition-all flex items-center justify-between ${
@@ -278,11 +303,15 @@ export default function CoPilot() {
                               Step {level.level}
                             </div>
                             <div className="font-semibold">{level.entry}</div>
-                            <div className="text-xs mt-1 opacity-70">{level.description}</div>
+                            <div className="text-xs mt-1 opacity-70">
+                              {level.description}
+                            </div>
                           </div>
                           <ChevronRight
                             className={`w-4 h-4 transition-transform ${
-                              selectedDrilldownLevel === level.level ? "rotate-90" : ""
+                              selectedDrilldownLevel === level.level
+                                ? "rotate-90"
+                                : ""
                             }`}
                           />
                         </button>
@@ -301,9 +330,13 @@ export default function CoPilot() {
               <div className="bg-card border border-border rounded-lg p-6 mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <FileText className="w-4 h-4 text-primary" />
-                  <span className="text-xs font-semibold text-muted-foreground uppercase">Article Citation</span>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase">
+                    Article Citation
+                  </span>
                 </div>
-                <div className="text-2xl font-bold text-primary mb-2">{result.article}</div>
+                <div className="text-2xl font-bold text-primary mb-2">
+                  {result.article}
+                </div>
                 <div className="text-foreground/80">{result.articleTitle}</div>
               </div>
 
@@ -311,9 +344,13 @@ export default function CoPilot() {
               <div className="bg-card border border-border rounded-lg p-6 mb-6">
                 <div className="flex items-center gap-2 mb-4">
                   <Lightbulb className="w-4 h-4 text-primary" />
-                  <span className="text-xs font-semibold text-muted-foreground uppercase">Answer</span>
+                  <span className="text-xs font-semibold text-muted-foreground uppercase">
+                    Answer
+                  </span>
                 </div>
-                <p className="text-foreground/90 leading-relaxed">{result.answer}</p>
+                <p className="text-foreground/90 leading-relaxed">
+                  {result.answer}
+                </p>
               </div>
 
               {/* Exam Tip */}
@@ -321,9 +358,13 @@ export default function CoPilot() {
                 <div className="bg-card border border-border rounded-lg p-6 mb-6">
                   <div className="flex items-center gap-2 mb-4">
                     <Zap className="w-4 h-4 text-primary" />
-                    <span className="text-xs font-semibold text-muted-foreground uppercase">Exam Tip</span>
+                    <span className="text-xs font-semibold text-muted-foreground uppercase">
+                      Exam Tip
+                    </span>
                   </div>
-                  <p className="text-foreground/90 leading-relaxed italic">{result.examTip}</p>
+                  <p className="text-foreground/90 leading-relaxed italic">
+                    {result.examTip}
+                  </p>
                 </div>
               )}
 
@@ -341,7 +382,6 @@ export default function CoPilot() {
           </>
         )}
       </div>
-
     </AppLayout>
   );
 }

@@ -1,9 +1,6 @@
 import { useState } from "react";
 import { Copy, ExternalLink, X } from "lucide-react";
-import {
-  getInAppBrowserLabel,
-  useInAppBrowser,
-} from "@/hooks/useInAppBrowser";
+import { getInAppBrowserLabel, useInAppBrowser } from "@/hooks/useInAppBrowser";
 
 /**
  * Shown when the app is opened inside a social in-app browser
@@ -45,7 +42,8 @@ export function InAppBrowserBanner() {
           </p>
           <p className="text-foreground/80">
             {appName}'s built-in browser blocks Google login. To create your
-            account or sign in: <span className="font-medium">{instruction}</span>
+            account or sign in:{" "}
+            <span className="font-medium">{instruction}</span>
           </p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <button

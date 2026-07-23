@@ -25,7 +25,7 @@ export default function LookupGuide({ lookup }: { lookup: LookupPath }) {
               1 · Look up in the index
             </p>
             <div className="flex flex-wrap gap-1.5 mt-1">
-              {lookup.index_keywords.map((kw) => (
+              {lookup.index_keywords.map(kw => (
                 <span
                   key={kw}
                   className="text-xs font-medium text-foreground bg-primary/15 border border-primary/30 rounded-sm px-2 py-0.5"
@@ -60,13 +60,16 @@ export default function LookupGuide({ lookup }: { lookup: LookupPath }) {
             <p className="text-xs font-mono text-muted-foreground uppercase tracking-wide">
               3 · Read for
             </p>
-            <p className="text-sm text-foreground mt-0.5">{lookup.what_to_look_for}</p>
+            <p className="text-sm text-foreground mt-0.5">
+              {lookup.what_to_look_for}
+            </p>
           </div>
         </li>
       </ol>
 
       <p className="mt-3 pt-3 border-t border-border text-xs text-muted-foreground italic">
-        Open your code book and trace this path yourself — that's the skill the exam tests.
+        Open your code book and trace this path yourself — that's the skill the
+        exam tests.
       </p>
     </div>
   );
