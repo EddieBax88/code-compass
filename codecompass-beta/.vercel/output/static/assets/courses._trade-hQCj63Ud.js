@@ -1,0 +1,1 @@
+import{t as e}from"./jsx-runtime-DGeXAQPT.js";import{t}from"./link-9NSJM2N1.js";var n=e(),r=()=>(0,n.jsxs)(`main`,{className:`mx-auto max-w-3xl px-5 py-20 text-center`,children:[(0,n.jsx)(`h1`,{className:`font-display text-4xl`,children:`Trade not found`}),(0,n.jsx)(t,{to:`/`,className:`mt-6 inline-block text-primary`,children:`← Back home`})]});export{r as notFoundComponent};
