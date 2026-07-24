@@ -1,0 +1,19 @@
+# Code Compass
+
+> Elite electrical compliance and industrial PLC training. NEC 2026 rapid lookup, L5K/L5X parsing, and data-center arc-flash and EMS compliance — built for electrical apprentices, journeymen, and controls engineers.
+
+Code Compass is exclusively an electrical training and compliance platform. Three primary modules: NEC 2026 Rapid Lookup, Industrial PLC Parsing, and Data Center Compliance.
+
+## Pages
+
+- [Home](/): Dashboard with the three primary modules.
+- [NEC 2026 Rapid Lookup](/study-tools): AI co-pilot for the National Electrical Code.
+- [Industrial PLC Parsing (L5K/L5X)](/plc): Rockwell PLC export parser for controls engineers.
+- [Data Center Compliance](/data-center): Arc-flash and EMS compliance workflows.
+- [Electrical courses](/courses/electrical): NEC navigation, motor calculations, and journeyman prep.
+- [Exam Prep](/exam-prep): Timed drills — Speed-Find, Motor Calc, and Code Hunt.
+- [Journeyman Practice Test](/practice-test): 25-question NEC multiple-choice practice test.
+
+## Optional
+
+- [Sign in](/auth): Sync progress across devices.
