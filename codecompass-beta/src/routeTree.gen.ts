@@ -23,6 +23,8 @@ import { Route as ShareTokenRouteImport } from './routes/share.$token'
 import { Route as DevMotorCalcsRouteImport } from './routes/dev.motor-calcs'
 import { Route as CoursesTradeRouteImport } from './routes/courses.$trade'
 import { Route as CourseCourseIdRouteImport } from './routes/course.$courseId'
+import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe-webhook'
+import { Route as ApiStripeCheckoutRouteImport } from './routes/api/stripe-checkout'
 import { Route as ApiParseL5xRouteImport } from './routes/api/parse-l5x'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
@@ -101,6 +103,16 @@ const CourseCourseIdRoute = CourseCourseIdRouteImport.update({
   path: '/course/$courseId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiStripeWebhookRoute = ApiStripeWebhookRouteImport.update({
+  id: '/api/stripe-webhook',
+  path: '/api/stripe-webhook',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStripeCheckoutRoute = ApiStripeCheckoutRouteImport.update({
+  id: '/api/stripe-checkout',
+  path: '/api/stripe-checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiParseL5xRoute = ApiParseL5xRouteImport.update({
   id: '/api/parse-l5x',
   path: '/api/parse-l5x',
@@ -155,6 +167,8 @@ export interface FileRoutesByFullPath {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
   '/api/parse-l5x': typeof ApiParseL5xRoute
+  '/api/stripe-checkout': typeof ApiStripeCheckoutRoute
+  '/api/stripe-webhook': typeof ApiStripeWebhookRoute
   '/course/$courseId': typeof CourseCourseIdRoute
   '/courses/$trade': typeof CoursesTradeRoute
   '/dev/motor-calcs': typeof DevMotorCalcsRoute
@@ -178,6 +192,8 @@ export interface FileRoutesByTo {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
   '/api/parse-l5x': typeof ApiParseL5xRoute
+  '/api/stripe-checkout': typeof ApiStripeCheckoutRoute
+  '/api/stripe-webhook': typeof ApiStripeWebhookRoute
   '/course/$courseId': typeof CourseCourseIdRoute
   '/courses/$trade': typeof CoursesTradeRoute
   '/dev/motor-calcs': typeof DevMotorCalcsRoute
@@ -202,6 +218,8 @@ export interface FileRoutesById {
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
   '/api/parse-l5x': typeof ApiParseL5xRoute
+  '/api/stripe-checkout': typeof ApiStripeCheckoutRoute
+  '/api/stripe-webhook': typeof ApiStripeWebhookRoute
   '/course/$courseId': typeof CourseCourseIdRoute
   '/courses/$trade': typeof CoursesTradeRoute
   '/dev/motor-calcs': typeof DevMotorCalcsRoute
@@ -227,6 +245,8 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
     | '/api/parse-l5x'
+    | '/api/stripe-checkout'
+    | '/api/stripe-webhook'
     | '/course/$courseId'
     | '/courses/$trade'
     | '/dev/motor-calcs'
@@ -250,6 +270,8 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
     | '/api/parse-l5x'
+    | '/api/stripe-checkout'
+    | '/api/stripe-webhook'
     | '/course/$courseId'
     | '/courses/$trade'
     | '/dev/motor-calcs'
@@ -273,6 +295,8 @@ export interface FileRouteTypes {
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
     | '/api/parse-l5x'
+    | '/api/stripe-checkout'
+    | '/api/stripe-webhook'
     | '/course/$courseId'
     | '/courses/$trade'
     | '/dev/motor-calcs'
@@ -297,6 +321,8 @@ export interface RootRouteChildren {
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiChatRoute: typeof ApiChatRoute
   ApiParseL5xRoute: typeof ApiParseL5xRoute
+  ApiStripeCheckoutRoute: typeof ApiStripeCheckoutRoute
+  ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
   CourseCourseIdRoute: typeof CourseCourseIdRoute
   CoursesTradeRoute: typeof CoursesTradeRoute
   DevMotorCalcsRoute: typeof DevMotorCalcsRoute
@@ -406,6 +432,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CourseCourseIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/stripe-webhook': {
+      id: '/api/stripe-webhook'
+      path: '/api/stripe-webhook'
+      fullPath: '/api/stripe-webhook'
+      preLoaderRoute: typeof ApiStripeWebhookRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stripe-checkout': {
+      id: '/api/stripe-checkout'
+      path: '/api/stripe-checkout'
+      fullPath: '/api/stripe-checkout'
+      preLoaderRoute: typeof ApiStripeCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/parse-l5x': {
       id: '/api/parse-l5x'
       path: '/api/parse-l5x'
@@ -474,6 +514,8 @@ const rootRouteChildren: RootRouteChildren = {
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiChatRoute: ApiChatRoute,
   ApiParseL5xRoute: ApiParseL5xRoute,
+  ApiStripeCheckoutRoute: ApiStripeCheckoutRoute,
+  ApiStripeWebhookRoute: ApiStripeWebhookRoute,
   CourseCourseIdRoute: CourseCourseIdRoute,
   CoursesTradeRoute: CoursesTradeRoute,
   DevMotorCalcsRoute: DevMotorCalcsRoute,

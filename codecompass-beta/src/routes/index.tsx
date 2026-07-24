@@ -80,25 +80,19 @@ function Home() {
             look up code on the job site.
           </p>
           <Link
-            to="/plc"
-            className="mt-8 inline-flex items-center justify-center gap-2 rounded-md bg-primary px-6 py-3 text-base font-bold text-primary-foreground shadow-ember transition hover:opacity-90"
+            to="/study-tools"
+            className="mt-6 inline-flex items-center gap-2 rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary transition"
           >
-            Launch Enterprise Demo
-            <ArrowRight className="h-4 w-4" />
+            <Zap className="h-3.5 w-3.5 text-primary" />
+            Open NEC Co-Pilot
           </Link>
         </div>
       </section>
 
-      {/* MODULE 02 */}
-      <ModuleCard {...MODULE_02} />
-
-      {/* MODULE 03 */}
-      <ModuleCard {...MODULE_03} />
-
-      {/* WHAT IT DOES */}
+      {/* WHAT CODE COMPASS DOES */}
       <section
         aria-labelledby="what"
-        className="mt-14 rounded-2xl border border-border bg-card/40 p-6 sm:p-8"
+        className="mt-10 rounded-2xl border border-border bg-card/40 p-6 sm:p-8"
       >
         <div className="text-[10px] uppercase tracking-[0.2em] text-accent">
           What Code Compass does
@@ -119,6 +113,9 @@ function Home() {
           ))}
         </ul>
       </section>
+
+      {/* MODULE 02 — PLC */}
+      <ModuleCard {...MODULE_02} />
 
       {/* EXAM PREP */}
       <section className="mt-14 rounded-2xl border border-border bg-card/50 p-6 sm:p-8">
@@ -149,6 +146,9 @@ function Home() {
           </div>
         </div>
       </section>
+
+      {/* MODULE 03 — Data Center */}
+      <ModuleCard {...MODULE_03} />
     </main>
   );
 }
