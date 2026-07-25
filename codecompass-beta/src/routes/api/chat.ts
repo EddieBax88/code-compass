@@ -37,7 +37,7 @@ export const Route = createFileRoute("/api/chat")({
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                model: "qwen-plus",
+                model: "glm-5.2",
                 messages: [
                   {
                     role: "system",
