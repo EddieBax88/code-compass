@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
-import { Zap } from "lucide-react";
+import { Zap, BookOpen, MessageCircle, Calculator } from "lucide-react";
 
 export const Route = createFileRoute("/study-tools")({
   head: () => {
@@ -31,11 +31,18 @@ const SUGGESTIONS = [
   "Bonding requirements for metal water pipe",
 ];
 
+const MODE_OPTIONS: { value: "book" | "quick" | "uglys"; label: string; Icon: typeof BookOpen }[] = [
+  { value: "book", label: "Book Lookup", Icon: BookOpen },
+  { value: "quick", label: "Quick Answer", Icon: MessageCircle },
+  { value: "uglys", label: "Ugly's Reference", Icon: Calculator },
+];
+
 function CoPilot() {
   const [query, setQuery] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [mode, setMode] = useState<"book" | "quick" | "uglys">("book");
 
   const send = async () => {
     if (!query.trim()) return;
@@ -46,7 +53,7 @@ function CoPilot() {
       const res = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: query }),
+        body: JSON.stringify({ message: query, mode }),
       });
       if (!res.ok) throw new Error(`Request failed: ${res.status}`);
       const data = await res.json();
@@ -64,6 +71,25 @@ function CoPilot() {
     <main className="min-h-[calc(100vh-4rem)] bg-background px-5 py-16">
       <div className="mx-auto flex max-w-2xl flex-col items-center">
         <div className="w-full rounded-2xl bg-card p-6 shadow-[0_10px_40px_-12px_rgba(15,23,42,0.15)] ring-1 ring-border">
+          {/* Mode toggle */}
+          <div className="mb-4 flex flex-wrap items-center gap-1">
+            {MODE_OPTIONS.map(({ value, label, Icon }) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setMode(value)}
+                className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium transition ${
+                  mode === value
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                <Icon className="h-4 w-4" />
+                {label}
+              </button>
+            ))}
+          </div>
+
           <label htmlFor="copilot-input" className="sr-only">
             Exam question
           </label>
@@ -71,7 +97,13 @@ function CoPilot() {
             id="copilot-input"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Paste your exam question here..."
+            placeholder={
+              mode === "uglys"
+                ? "Ask a calculation or reference question... (e.g., voltage drop for 100ft 12AWG)"
+                : mode === "quick"
+                  ? "Paste your NEC question for a fast answer..."
+                  : "Paste your exam question here..."
+            }
             rows={5}
             className="w-full resize-none border-0 bg-transparent p-2 text-[15px] leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-0"
           />
