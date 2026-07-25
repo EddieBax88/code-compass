@@ -272,10 +272,27 @@ export function parseL5X(fileBuffer: Buffer): L5XParseResult {
   const knownTags = extractTags(controller);
   const routines: L5XRoutine[] = [];
 
-  const routineList = controller?.Routines?.Routine;
-  if (routineList) {
-    const routineArr = Array.isArray(routineList) ? routineList : [routineList];
-    for (const routine of routineArr) {
+  // Collect routines from both Controller-level and Program-level (most L5X files nest under Programs)
+  let routineList: any[] = [];
+  const controllerRoutines = controller?.Routines?.Routine;
+  if (controllerRoutines) {
+    const arr = Array.isArray(controllerRoutines) ? controllerRoutines : [controllerRoutines];
+    routineList.push(...arr);
+  }
+  const progList = controller?.Programs?.Program;
+  if (progList) {
+    const progArr = Array.isArray(progList) ? progList : [progList];
+    for (const prog of progArr) {
+      const progRoutines = prog?.Routines?.Routine;
+      if (progRoutines) {
+        const pArr = Array.isArray(progRoutines) ? progRoutines : [progRoutines];
+        routineList.push(...pArr);
+      }
+    }
+  }
+
+  if (routineList.length > 0) {
+    for (const routine of routineList) {
       const routineName = routine.attributes?.Name || "Unknown";
       const routineType = routine.attributes?.Type || "LadderLogic";
       const rungs: L5XRung[] = [];
