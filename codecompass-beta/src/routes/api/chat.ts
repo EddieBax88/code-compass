@@ -5,7 +5,7 @@ export const Route = createFileRoute("/api/chat")({
     handlers: {
       POST: async ({ request }) => {
         try {
-          const { message } = await request.json();
+          const { message, mode } = await request.json();
 
           if (!message || typeof message !== "string") {
             return new Response(JSON.stringify({ error: "No message provided" }), {
@@ -28,6 +28,17 @@ export const Route = createFileRoute("/api/chat")({
             );
           }
 
+          // Mode-specific system prompts
+          const systemPrompts: Record<string, string> = {
+            book: "You are the Code Compass NEC Co-Pilot in Book Lookup mode. You teach electricians the real method for looking up answers in their NEC codebook: keyword → index → article → verify. You NEVER give the answer directly — you always walk through these 4 steps first, then tell them to open their codebook and verify.\\n\\nYour ONLY response format — every single time, no exceptions:\\n\\nSTEP 1 - KEYWORDS: [What 1-3 keywords would you look up in the NEC index? e.g. 'working space,' 'clearance,' 'panelboard']\\nSTEP 2 - INDEX: [What would you find in the index under that keyword? Point to the likely article or section number it references.]\\nSTEP 3 - ARTICLE: [Name the specific article and section number.]\\nSTEP 4 - VERIFY: [The specific subsection or table with the answer. State the answer clearly here.]\\n\\nOpen your codebook to Article [X.XX] and verify.\\n\\nRules:\\n- NEVER skip the 4-step format. If a question is unclear, ask them to rephrase using an NEC-related term.\\n- NEVER paste copyrighted NEC text verbatim. Paraphrase and cite.\\n- NEVER say 'the answer is...' without walking through all 4 steps first.\\n- Always end with 'Open your codebook to Article [number] and verify.'\\n- Keep each step to 1-2 sentences max. Be direct like a Master Electrician teaching an apprentice.\\n- Use plain text only — no markdown bold, no bullet asterisks, no headers.",
+            
+            quick: "You are the Code Compass NEC Co-Pilot in Quick Answer mode. Provide direct, concise answers with NEC article citations. No teaching framework — just the answer and the citation. Format:\n\n[Direct answer in 1-2 sentences]\n\nCitation: NEC [Year] Article [number], Section [number]\n\nBe practical and field-ready. Electricians need the answer fast.",
+            
+            uglys: "You are the Code Compass Ugly's Reference mode. Answer using Ugly's Electrical References content: electrical formulas, NEMA wiring configurations, conduit bending methods, ampacity tables, voltage drop calculations, motor calculations, and practical field references.\n\nFormat your response with:\n- The formula or reference data needed\n- Step-by-step calculation if applicable\n- Final answer with units\n\nFocus on practical electrical calculations and reference data that electricians use daily in the field. Do not cite NEC articles — this is a reference/calculation mode, not a code lookup mode."
+          };
+
+          const systemPrompt = systemPrompts[mode || "book"] || systemPrompts.book;
+
           const response = await fetch(
             "https://dashscope-intl.aliyuncs.com/compatible-mode/v1/chat/completions",
             {
@@ -41,8 +52,7 @@ export const Route = createFileRoute("/api/chat")({
                 messages: [
                   {
                     role: "system",
-                    content:
-                      "You are an expert Master Electrician and NEC Co-Pilot. Answer questions about the National Electrical Code (NEC) with accurate article references, table numbers, and practical guidance. Always cite the relevant NEC article or table. Never paste copyrighted NEC text verbatim — paraphrase and cite the article/table number.",
+                    content: systemPrompt,
                   },
                   { role: "user", content: message },
                 ],
