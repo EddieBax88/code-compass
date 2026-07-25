@@ -31,8 +31,9 @@ const SUGGESTIONS = [
   "Bonding requirements for metal water pipe",
 ];
 
-const MODE_OPTIONS: { value: "book" | "quick" | "uglys"; label: string; Icon: typeof BookOpen }[] = [
+const MODE_OPTIONS: { value: "book" | "fast" | "quick" | "uglys"; label: string; Icon: typeof BookOpen }[] = [
   { value: "book", label: "Book Lookup", Icon: BookOpen },
+  { value: "fast", label: "Fast Lookup", Icon: Zap },
   { value: "quick", label: "Quick Answer", Icon: MessageCircle },
   { value: "uglys", label: "Ugly's Reference", Icon: Calculator },
 ];
@@ -42,7 +43,7 @@ function CoPilot() {
   const [response, setResponse] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [mode, setMode] = useState<"book" | "quick" | "uglys">("book");
+  const [mode, setMode] = useState<"book" | "fast" | "quick" | "uglys">("book");
 
   const send = async () => {
     if (!query.trim()) return;

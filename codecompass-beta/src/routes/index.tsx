@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Zap, Cpu, ShieldCheck, ArrowRight, Search, BookOpen, MessageCircle, Calculator } from "lucide-react";
+import { Zap, Cpu, ShieldCheck, ArrowRight, Search, BookOpen, MessageCircle, Calculator, Zap as ZapIcon } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -69,7 +69,7 @@ const MODULE_03 = MODULES.find((m) => m.kicker.includes("Module 03"))!;
 
 function Home() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"book" | "quick" | "uglys">("book");
+  const [mode, setMode] = useState<"book" | "fast" | "quick" | "uglys">("book");
   const [edition, setEdition] = useState("2026");
   const [query, setQuery] = useState("");
 
@@ -148,6 +148,17 @@ function Home() {
                   >
                     <BookOpen className="h-4 w-4" />
                     Book Lookup
+                  </button>
+                  <button
+                    onClick={() => setMode("fast")}
+                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${
+                      mode === "fast"
+                        ? "bg-primary text-primary-foreground"
+                        : "text-muted-foreground hover:text-foreground"
+                    }`}
+                  >
+                    <ZapIcon className="h-4 w-4" />
+                    Fast Lookup
                   </button>
                   <button
                     onClick={() => setMode("quick")}
