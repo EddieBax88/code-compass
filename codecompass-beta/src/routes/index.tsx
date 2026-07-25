@@ -147,7 +147,7 @@ function Home() {
                     }`}
                   >
                     <BookOpen className="h-4 w-4" />
-                    Book Lookup
+                    Guided Method
                   </button>
                   <button
                     onClick={() => setMode("fast")}
@@ -158,7 +158,7 @@ function Home() {
                     }`}
                   >
                     <ZapIcon className="h-4 w-4" />
-                    Fast Lookup
+                    Index Search
                   </button>
                   <button
                     onClick={() => setMode("quick")}

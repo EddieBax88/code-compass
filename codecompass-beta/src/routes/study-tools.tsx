@@ -32,8 +32,8 @@ const SUGGESTIONS = [
 ];
 
 const MODE_OPTIONS: { value: "book" | "fast" | "quick" | "uglys"; label: string; Icon: typeof BookOpen }[] = [
-  { value: "book", label: "Book Lookup", Icon: BookOpen },
-  { value: "fast", label: "Fast Lookup", Icon: Zap },
+  { value: "book", label: "Guided Method", Icon: BookOpen },
+  { value: "fast", label: "Index Search", Icon: Zap },
   { value: "quick", label: "Quick Answer", Icon: MessageCircle },
   { value: "uglys", label: "Ugly's Reference", Icon: Calculator },
 ];
@@ -130,24 +130,6 @@ function CoPilot() {
             )}
           </div>
         )}
-
-        <div className="mt-10 w-full">
-          <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            Suggested keywords
-          </div>
-          <div className="mt-3 flex flex-wrap gap-2">
-            {SUGGESTIONS.map((s) => (
-              <button
-                key={s}
-                type="button"
-                onClick={() => setQuery(s)}
-                className="rounded-full bg-secondary px-4 py-2 text-sm text-secondary-foreground transition hover:bg-secondary/80 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-              >
-                {s}
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
     </main>
   );
