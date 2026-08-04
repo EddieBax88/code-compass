@@ -106,6 +106,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@19.2.1(@types/react@19.2.1))(@types/react@19.2.1)(react-dom@19.2.1(react@19.2.1))(react@19.2.1)
+      '@revenuecat/purchases-js':
+        specifier: ^1.51.0
+        version: 1.51.0
       '@stripe/stripe-js':
         specifier: ^9.7.0
         version: 9.7.0
@@ -2013,6 +2016,9 @@ packages:
   '@renovatebot/pep440@4.2.1':
     resolution: {integrity: sha512-2FK1hF93Fuf1laSdfiEmJvSJPVIDHEUTz68D3Fi9s0IZrrpaEcj6pTFBTbYvsgC5du4ogrtf5re7yMMvrKNgkw==}
     engines: {node: ^20.9.0 || ^22.11.0 || ^24, pnpm: ^10.0.0}
+
+  '@revenuecat/purchases-js@1.51.0':
+    resolution: {integrity: sha512-JD/T+7nERHvpz3lI9UjchtUcInKXHsOLHjemyVEKpiELALcfeT1k4s5Nzm83md1HzqQrzsX0bmAYl7FbEXiMZA==}
 
   '@rolldown/pluginutils@1.0.0-beta.38':
     resolution: {integrity: sha512-N/ICGKleNhA5nc9XXQG/kkKHJ7S55u0x0XUJbbkmdCnFuoRkM1Il12q9q0eX19+M7KKUEPw/daUPIRnxhcxAIw==}
@@ -6433,6 +6439,8 @@ snapshots:
   '@radix-ui/rect@1.1.1': {}
 
   '@renovatebot/pep440@4.2.1': {}
+
+  '@revenuecat/purchases-js@1.51.0': {}
 
   '@rolldown/pluginutils@1.0.0-beta.38': {}
 
