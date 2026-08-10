@@ -1,6 +1,8 @@
 {
   "buildCommand": "pnpm run build",
   "outputDirectory": "dist/public",
+  "cleanUrls": true,
+  "trailingSlash": false,
   "functions": {
     "api/index.mjs": {
       "memory": 1024,

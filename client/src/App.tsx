@@ -16,16 +16,19 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
 import CoPilot from "./pages/CoPilot";
 
-// NOTE: Front page = the welcome page. Onboarding is now opt-in (reachable via
-// /onboarding and the "How to use the book" link), NOT a forced redirect.
 function Router() {
-  // make sure to consider if you need authentication for certain routes
   return (
     <Switch>
       <Route path="/onboarding" component={Onboarding} />
       <Route path="/pricing" component={Pricing} />
+      {/* Founding Member Funnel (/founders) */}
       <Route path="/founders" component={FoundersFunnel} />
+      <Route path="/founders/*" component={FoundersFunnel} />
+      <Route path="/founder" component={FoundersFunnel} />
+      <Route path="/founder/*" component={FoundersFunnel} />
+      {/* Pass / Exam-Prep Funnel (/pass) */}
       <Route path="/pass" component={ExamFunnel} />
+      <Route path="/pass/*" component={ExamFunnel} />
       <Route path="/payment-success" component={PaymentSuccess} />
       <Route path="/payment-cancel" component={PaymentCancel} />
       <Route path="/" component={Dashboard} />
