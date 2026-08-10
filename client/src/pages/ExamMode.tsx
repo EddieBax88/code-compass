@@ -9,7 +9,7 @@ import { PaywallGate } from "@/components/PaywallGate";
 import { getRandomQuestions, type QuestionCard } from "@/data/questionBank";
 import { Timer, CheckCircle, XCircle, RotateCcw, BookOpen } from "lucide-react";
 import BackButton from "@/components/BackButton";
-import LookupGuide from "@/components/LookupGuide";
+import MethodGuide from "@/components/MethodGuide";
 
 type ExamState = "setup" | "active" | "review";
 
@@ -219,7 +219,7 @@ function ExamContent() {
 
       {showRationale && (
         <div className="space-y-3">
-          <LookupGuide lookup={currentQ.lookup_path} />
+          <MethodGuide question={currentQ} />
           <div className="panel-card p-4 rounded-sm border-l-2 border-l-primary">
             <div className="flex items-center gap-2 mb-2">
               <BookOpen className="w-3.5 h-3.5 text-primary" />
