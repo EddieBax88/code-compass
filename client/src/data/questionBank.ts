@@ -10,6 +10,13 @@ export interface LookupPath {
   what_to_look_for: string;       // What to read on that page (table row, exception, subsection)
 }
 
+export interface CalcStep {
+  label: string;    // What this step accomplishes, e.g. "Find the motor full-load current"
+  source: string;   // Where the variable/rule comes from, e.g. "Table 430.248 — 10 HP row, 230V column"
+  math?: string;    // The exact arithmetic, e.g. "50 A x 1.25 = 62.5 A"
+  result: string;   // The value carried into the next step
+}
+
 export interface QuestionCard {
   id: string;
   question: string;
@@ -21,6 +28,7 @@ export interface QuestionCard {
   difficulty: "journeyman" | "master" | "inspector";
   tags: string[];
   lookup_path: LookupPath;
+  calc_steps?: CalcStep[];   // For calculation questions: worked solution, step by step
 }
 
 export const questionBank: QuestionCard[] = [
@@ -239,6 +247,18 @@ export const questionBank: QuestionCard[] = [
     nec_versions: ["2017", "2020", "2023", "2026"],
     difficulty: "journeyman",
     tags: ["ampacity", "correction factor", "ambient temperature", "conductors"],
+    calc_steps: [
+      {
+        label: "Identify insulation rating and ambient",
+        source: "Question stem: 75°C conductor, 40°C ambient",
+        result: "75°C column, 36–40°C row",
+      },
+      {
+        label: "Read the correction table",
+        source: "Table 310.15(B)(1) (based on 30°C ambient) — 36–40°C row, 75°C column",
+        result: "0.88",
+      },
+    ],
     lookup_path: {
       index_keywords: ["Ampacity correction factors", "Temperature correction, conductors"],
       index_entry: "Conductors — ampacity correction factors, ambient temperature → 310.15(B)(1)",
@@ -381,6 +401,23 @@ export const questionBank: QuestionCard[] = [
     nec_versions: ["2017", "2020", "2023", "2026"],
     difficulty: "journeyman",
     tags: ["motors", "full-load current", "single-phase", "10 HP"],
+    calc_steps: [
+      {
+        label: "Identify what the question gives you",
+        source: "Question stem: 10 HP motor, 230 V, single-phase AC",
+        result: "HP = 10, V = 230, single-phase",
+      },
+      {
+        label: "Pick the right FLC table",
+        source: "430.6(A)(1) says use the table values, not nameplate — single-phase AC motors use Table 430.248",
+        result: "Table 430.248",
+      },
+      {
+        label: "Read the table",
+        source: "Table 430.248 — find the 10 HP row, then the 230 V column",
+        result: "50 A",
+      },
+    ],
     lookup_path: {
       index_keywords: ["Motors, full-load current", "Single-phase motors, FLC"],
       index_entry: "Motors — full-load currents, single-phase AC → Table 430.248",
@@ -398,6 +435,19 @@ export const questionBank: QuestionCard[] = [
     nec_versions: ["2017", "2020", "2023", "2026"],
     difficulty: "journeyman",
     tags: ["motors", "conductors", "branch circuit", "ampacity"],
+    calc_steps: [
+      {
+        label: "Find the rule for motor branch-circuit conductors",
+        source: "430.22(A) — conductors supplying a single motor",
+        result: "Ampacity ≥ 125% of motor FLC",
+      },
+      {
+        label: "Remember where FLC comes from",
+        source: "430.6(A)(1) — use the Table 430.247–430.250 value, not the nameplate",
+        math: "FLC (from table) x 1.25",
+        result: "Minimum conductor ampacity",
+      },
+    ],
     lookup_path: {
       index_keywords: ["Motors, branch-circuit conductors", "Motor conductors, size"],
       index_entry: "Motors — branch-circuit conductors, single motor → 430.22",
@@ -1183,6 +1233,25 @@ export const questionBank: QuestionCard[] = [
     nec_versions: ["2017", "2020", "2023", "2026"],
     difficulty: "master",
     tags: ["mobile homes", "service entrance", "load calculation", "550.18"],
+    calc_steps: [
+      {
+        label: "Convert VA to amperes",
+        source: "Calculated load 16,000 VA at 120/240 V — divide by 240 V",
+        math: "16,000 VA / 240 V = 66.7 A",
+        result: "66.7 A",
+      },
+      {
+        label: "Apply the mobile-home minimum",
+        source: "550.32(C) — mobile home service equipment must be rated not less than 100 A, even though the load is only 66.7 A",
+        result: "Conductors must be sized for 100 A",
+      },
+      {
+        label: "Size the conductor",
+        source: "Table 310.16, 75°C copper column — smallest size with ampacity ≥ 100 A",
+        math: "4 AWG = 85 A (too small) → 3 AWG = 100 A → 2 AWG = 115 A",
+        result: "2 AWG copper",
+      },
+    ],
     lookup_path: {
       index_keywords: ["Mobile homes, service conductors", "Mobile homes, feeder"],
       index_entry: "Mobile homes — service equipment, feeder conductors → 550.18(A)",
@@ -1362,6 +1431,24 @@ export const questionBank: QuestionCard[] = [
     nec_versions: ["2017", "2020", "2023", "2026"],
     difficulty: "journeyman",
     tags: ["feeders", "continuous load", "125%", "215.3"],
+    calc_steps: [
+      {
+        label: "Identify the load type",
+        source: "Question stem: 80 A continuous, 0 A noncontinuous",
+        result: "Continuous = 80 A",
+      },
+      {
+        label: "Apply the feeder OCPD rule",
+        source: "215.3 — rating ≥ noncontinuous + 125% of continuous",
+        math: "0 A + (80 A x 1.25) = 100 A",
+        result: "100 A minimum",
+      },
+      {
+        label: "Pick a standard rating",
+        source: "240.6(A) standard ratings — 100 A is a standard size",
+        result: "100 amperes",
+      },
+    ],
     lookup_path: {
       index_keywords: ["Feeders, overcurrent protection", "Continuous loads, feeders"],
       index_entry: "Feeders — overcurrent protection → 215.3",
@@ -1586,6 +1673,18 @@ export const questionBank: QuestionCard[] = [
     nec_versions: ["2020", "2023", "2026"],
     difficulty: "master",
     tags: ["ampacity", "correction factors", "ambient temperature", "310.15"],
+    calc_steps: [
+      {
+        label: "Identify insulation rating and ambient",
+        source: "Question stem: 90°C conductor, 40°C ambient",
+        result: "90°C column, 36–40°C row",
+      },
+      {
+        label: "Read the correction table",
+        source: "Table 310.15(B)(1) (based on 30°C ambient) — 36–40°C row, 90°C column",
+        result: "0.91",
+      },
+    ],
     lookup_path: {
       index_keywords: ["Ampacity, correction factors", "Temperature correction, conductors"],
       index_entry: "Ampacities — ambient temperature correction → Table 310.15(B)(1)",

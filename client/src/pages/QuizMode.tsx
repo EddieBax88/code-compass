@@ -8,7 +8,7 @@ import { PaywallGate } from "@/components/PaywallGate";
 import { getRandomQuestions, type QuestionCard } from "@/data/questionBank";
 import { Zap, CheckCircle, XCircle, BookOpen, RotateCcw, ArrowRight } from "lucide-react";
 import BackButton from "@/components/BackButton";
-import LookupGuide from "@/components/LookupGuide";
+import MethodGuide from "@/components/MethodGuide";
 
 type QuizState = "setup" | "active" | "complete";
 
@@ -194,7 +194,7 @@ function QuizContent() {
       </div>
       {revealed && (
         <>
-          <LookupGuide lookup={currentQ.lookup_path} />
+          <MethodGuide question={currentQ} />
           <div className="panel-card p-4 rounded-sm border-l-2 border-l-primary">
             <p className="text-sm text-muted-foreground leading-relaxed">{currentQ.explanation}</p>
             <p className="mt-2 text-xs text-muted-foreground italic">
