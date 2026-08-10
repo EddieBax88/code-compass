@@ -10,6 +10,8 @@ import QuizMode from "./pages/QuizMode";
 import SearchMode from "./pages/SearchMode";
 import Onboarding from "./pages/Onboarding";
 import Pricing from "./pages/Pricing";
+import FoundersFunnel from "./pages/FoundersFunnel";
+import ExamFunnel from "./pages/ExamFunnel";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentCancel from "./pages/PaymentCancel";
 import CoPilot from "./pages/CoPilot";
@@ -22,6 +24,8 @@ function Router() {
     <Switch>
       <Route path="/onboarding" component={Onboarding} />
       <Route path="/pricing" component={Pricing} />
+      <Route path="/founders" component={FoundersFunnel} />
+      <Route path="/pass" component={ExamFunnel} />
       <Route path="/payment-success" component={PaymentSuccess} />
       <Route path="/payment-cancel" component={PaymentCancel} />
       <Route path="/" component={Dashboard} />
