@@ -1191,15 +1191,784 @@ export const questionBank: QuestionCard[] = [
     }
   },
 
+  {
+    id: "090-001",
+    question: "According to Article 90, what is the stated purpose of the National Electrical Code?",
+    choices: [
+      "The practical safeguarding of persons and property from hazards arising from the use of electricity",
+      "To serve as a design manual for electrical engineers",
+      "To provide an instruction guide for untrained persons",
+      "To ensure electrical installations are efficient and convenient"
+    ],
+    correct_answer: "The practical safeguarding of persons and property from hazards arising from the use of electricity",
+    explanation: "NEC 90.1(A) states the purpose of the Code is the practical safeguarding of persons and property from hazards arising from the use of electricity. 90.1 also notes the NEC is not intended as a design specification or an instruction manual for untrained persons.",
+    nec_article: "90.1(A)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["article 90", "purpose", "scope"],
+    lookup_path: {
+      index_keywords: ["Purpose of Code", "Scope, NEC"],
+      index_entry: "Purpose (of the Code) → 90.1",
+      article_or_table: "90.1(A)",
+      what_to_look_for: "Read 90.1(A) — 'practical safeguarding of persons and property from hazards arising from the use of electricity'"
+    }
+  },
+  {
+    id: "100-001",
+    question: "Per the Article 100 definition, equipment that is 'readily accessible' must be reachable:",
+    choices: [
+      "Quickly, without climbing over obstacles or using ladders or tools to gain access",
+      "Within 25 feet of the equipment served",
+      "By removing a panel or cover with simple tools",
+      "Only by qualified persons"
+    ],
+    correct_answer: "Quickly, without climbing over obstacles or using ladders or tools to gain access",
+    explanation: "Article 100 defines 'Accessible, Readily (Readily Accessible)' as capable of being reached quickly for operation, renewal, or inspections without requiring those to whom ready access is requisite to take actions such as using tools (other than keys), climbing over or under, or removing obstacles, or resorting to portable ladders.",
+    nec_article: "Article 100",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["definitions", "readily accessible", "article 100"],
+    lookup_path: {
+      index_keywords: ["Readily accessible", "Definitions"],
+      index_entry: "Accessible, readily — definition → Article 100",
+      article_or_table: "Article 100 — Definitions",
+      what_to_look_for: "Find 'Accessible, Readily' — reachable quickly without tools, ladders, or climbing over obstacles"
+    }
+  },
+  {
+    id: "110-004",
+    question: "Service equipment in other than dwelling units must be legibly field-marked with the maximum available fault current. What else must the marking include?",
+    choices: [
+      "The date the fault-current calculation was performed",
+      "The name of the electrician who installed it",
+      "The utility transformer kVA rating",
+      "The conductor insulation type"
+    ],
+    correct_answer: "The date the fault-current calculation was performed",
+    explanation: "NEC 110.24(A) requires service equipment in other than dwelling units to be legibly marked in the field with the maximum available fault current, and the field marking must include the date the fault-current calculation was performed.",
+    nec_article: "110.24(A)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "master",
+    tags: ["available fault current", "field marking", "service equipment", "110.24"],
+    lookup_path: {
+      index_keywords: ["Fault current, available", "Service equipment, marking"],
+      index_entry: "Available fault current — field marking → 110.24",
+      article_or_table: "110.24(A)",
+      what_to_look_for: "Read (A) — marking must include the maximum available fault current and the date the calculation was performed"
+    }
+  },
+  {
+    id: "110-005",
+    question: "Each disconnecting means required by the Code must be legibly marked to indicate:",
+    choices: [
+      "Its purpose, unless located and arranged so the purpose is evident",
+      "The name of the manufacturer only",
+      "The wire size connected to it",
+      "The date of installation"
+    ],
+    correct_answer: "Its purpose, unless located and arranged so the purpose is evident",
+    explanation: "NEC 110.22(A) requires each disconnecting means to be legibly marked to indicate its purpose unless it is located and arranged so the purpose is evident. The marking must be of sufficient durability to withstand the environment involved.",
+    nec_article: "110.22(A)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["disconnecting means", "identification", "marking", "110.22"],
+    lookup_path: {
+      index_keywords: ["Disconnecting means, identification", "Identification, disconnecting means"],
+      index_entry: "Disconnecting means — identification → 110.22",
+      article_or_table: "110.22(A)",
+      what_to_look_for: "Read (A) — marked to indicate its purpose unless located and arranged so the purpose is evident"
+    }
+  },
+  {
+    id: "210-010",
+    question: "For one- and two-family dwellings, GFCI protection is required for outdoor outlets supplied by single-phase branch circuits rated 150 volts or less to ground and up to what ampere rating?",
+    choices: ["50 amperes", "20 amperes", "30 amperes", "60 amperes"],
+    correct_answer: "50 amperes",
+    explanation: "NEC 210.8(F), added in the 2020 code, requires GFCI protection for outdoor outlets (not just receptacles) at dwellings supplied by single-phase branch circuits rated 150V or less to ground, 50 amperes or less — this notably pulled in hard-wired equipment like HVAC condensers.",
+    nec_article: "210.8(F)",
+    nec_versions: ["2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["GFCI", "outdoor outlets", "dwelling", "210.8(F)"],
+    lookup_path: {
+      index_keywords: ["Ground-fault circuit interrupters", "Outdoor outlets, dwellings"],
+      index_entry: "GFCI — outdoor outlets, dwellings → 210.8(F)",
+      article_or_table: "210.8(F)",
+      what_to_look_for: "Read (F) — outdoor outlets, single-phase, 150V to ground or less, 50A or less require GFCI"
+    }
+  },
+  {
+    id: "210-011",
+    question: "In a dwelling kitchen, no point along the wall line of a countertop 12 inches or wider may be more than how far from a receptacle outlet?",
+    choices: ["24 inches", "12 inches", "36 inches", "48 inches"],
+    correct_answer: "24 inches",
+    explanation: "NEC 210.52(C) requires countertop receptacles so that no point along the wall line is more than 600 mm (24 in.) measured horizontally from a receptacle outlet — i.e., receptacles at least every 4 feet of countertop wall space.",
+    nec_article: "210.52(C)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["receptacles", "kitchen", "countertop", "210.52"],
+    lookup_path: {
+      index_keywords: ["Receptacles, countertop", "Kitchen, receptacle spacing"],
+      index_entry: "Receptacle outlets — countertops, dwelling → 210.52(C)",
+      article_or_table: "210.52(C)",
+      what_to_look_for: "Read the countertop spacing rule — no point more than 24 in. from a receptacle"
+    }
+  },
+  {
+    id: "210-012",
+    question: "In dwelling units, at least one wall switch-controlled lighting outlet is required in which of the following locations?",
+    choices: [
+      "Every habitable room, kitchen, and bathroom",
+      "Only kitchens and bathrooms",
+      "Only rooms larger than 70 square feet",
+      "Bedrooms only"
+    ],
+    correct_answer: "Every habitable room, kitchen, and bathroom",
+    explanation: "NEC 210.70(A)(1) requires at least one wall switch-controlled lighting outlet in every habitable room, kitchen, and bathroom of a dwelling unit. (Exceptions allow switched receptacles in rooms other than kitchens and bathrooms.)",
+    nec_article: "210.70(A)(1)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["lighting outlets", "switches", "dwelling", "210.70"],
+    lookup_path: {
+      index_keywords: ["Lighting outlets, required", "Dwelling units, lighting outlets"],
+      index_entry: "Lighting outlets — dwelling, required locations → 210.70(A)",
+      article_or_table: "210.70(A)(1)",
+      what_to_look_for: "Read (A)(1) — habitable rooms, kitchens, and bathrooms need a wall switch-controlled lighting outlet"
+    }
+  },
+  {
+    id: "210-013",
+    question: "In dwelling units, luminaires and cord-and-plug-connected loads up to 1440 VA must be supplied by branch circuits not exceeding how many volts between conductors?",
+    choices: ["120 volts", "208 volts", "240 volts", "277 volts"],
+    correct_answer: "120 volts",
+    explanation: "NEC 210.6(A) limits branch circuits in dwelling units supplying luminaires and cord-and-plug-connected loads up to 1440 VA (or less than 1/4 HP) to a maximum of 120 volts nominal between conductors.",
+    nec_article: "210.6(A)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "master",
+    tags: ["voltage limitations", "branch circuits", "dwelling", "210.6"],
+    lookup_path: {
+      index_keywords: ["Voltage limitations, branch circuits", "Branch circuits, voltage"],
+      index_entry: "Branch circuits — voltage limitations, dwellings → 210.6(A)",
+      article_or_table: "210.6(A)",
+      what_to_look_for: "Read (A) — 120V max between conductors for luminaires and small cord-and-plug loads in dwellings"
+    }
+  },
+  {
+    id: "215-001",
+    question: "A feeder supplies a continuous load of 80 amperes and no noncontinuous load. What is the minimum required rating of the feeder overcurrent device?",
+    choices: ["100 amperes", "80 amperes", "90 amperes", "125 amperes"],
+    correct_answer: "100 amperes",
+    explanation: "Per 215.3 (and 215.2(A)(1) for conductors), the feeder OCPD must be rated not less than the noncontinuous load plus 125% of the continuous load: 80A × 1.25 = 100A.",
+    nec_article: "215.3",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["feeders", "continuous load", "125%", "215.3"],
+    lookup_path: {
+      index_keywords: ["Feeders, overcurrent protection", "Continuous loads, feeders"],
+      index_entry: "Feeders — overcurrent protection → 215.3",
+      article_or_table: "215.3",
+      what_to_look_for: "Noncontinuous load + 125% of continuous load → 80 × 1.25 = 100A"
+    }
+  },
+  {
+    id: "220-005",
+    question: "What is the minimum load in a dwelling service calculation for an electric clothes dryer?",
+    choices: [
+      "5000 VA or the nameplate rating, whichever is larger",
+      "4000 VA in all cases",
+      "The nameplate rating only",
+      "1500 VA"
+    ],
+    correct_answer: "5000 VA or the nameplate rating, whichever is larger",
+    explanation: "NEC 220.54 requires the load for household electric clothes dryers to be either 5,000 watts (volt-amperes) or the nameplate rating, whichever is larger, with demand factors from Table 220.54 permitted for multiple dryers.",
+    nec_article: "220.54",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["load calculations", "dryers", "dwelling", "220.54"],
+    lookup_path: {
+      index_keywords: ["Clothes dryers, load", "Load calculations, dryers"],
+      index_entry: "Clothes dryers — load calculations → 220.54",
+      article_or_table: "220.54",
+      what_to_look_for: "Read the rule — 5000 VA or nameplate rating, whichever is larger"
+    }
+  },
+  {
+    id: "220-006",
+    question: "In a dwelling load calculation, a demand factor of 75% may be applied to the nameplate rating of how many fastened-in-place appliances (other than ranges, dryers, space heating, or A/C)?",
+    choices: ["Four or more", "Two or more", "Three or more", "Five or more"],
+    correct_answer: "Four or more",
+    explanation: "NEC 220.53 permits a 75% demand factor to be applied to the total nameplate rating of four or more appliances fastened in place (other than electric ranges, clothes dryers, space-heating, or air-conditioning equipment) served by the same feeder or service in a dwelling.",
+    nec_article: "220.53",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "master",
+    tags: ["load calculations", "appliances", "demand factor", "220.53"],
+    lookup_path: {
+      index_keywords: ["Appliances, demand factors", "Load calculations, appliances"],
+      index_entry: "Appliance load — dwelling, demand factor → 220.53",
+      article_or_table: "220.53",
+      what_to_look_for: "Read the rule — 75% demand for 4 or more fastened-in-place appliances"
+    }
+  },
+  {
+    id: "230-004",
+    question: "For one- and two-family dwellings, an emergency disconnect must be installed in a readily accessible location where?",
+    choices: [
+      "Outside the dwelling",
+      "Inside, at the main panelboard",
+      "In the garage",
+      "Within 10 feet of the electric meter, inside or outside"
+    ],
+    correct_answer: "Outside the dwelling",
+    explanation: "NEC 230.85, introduced in the 2020 code, requires service conductors for one- and two-family dwellings to be provided with an emergency disconnect in a readily accessible outdoor location, so first responders can de-energize the premises without entering.",
+    nec_article: "230.85",
+    nec_versions: ["2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["services", "emergency disconnect", "dwelling", "230.85"],
+    lookup_path: {
+      index_keywords: ["Emergency disconnects", "Services, disconnecting means"],
+      index_entry: "Services — emergency disconnects, dwellings → 230.85",
+      article_or_table: "230.85",
+      what_to_look_for: "Read the rule — readily accessible outdoor location, marked as emergency disconnect"
+    }
+  },
+  {
+    id: "230-005",
+    question: "Services supplying dwelling units are required to be provided with what protective device?",
+    choices: [
+      "A surge-protective device (SPD)",
+      "A lightning rod system",
+      "An isolation transformer",
+      "A phase-failure relay"
+    ],
+    correct_answer: "A surge-protective device (SPD)",
+    explanation: "NEC 230.67, added in the 2020 code, requires all services supplying dwelling units to be provided with a surge-protective device (Type 1 or Type 2), installed in or adjacent to the service equipment.",
+    nec_article: "230.67",
+    nec_versions: ["2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["surge protection", "SPD", "services", "dwelling", "230.67"],
+    lookup_path: {
+      index_keywords: ["Surge-protective devices", "Services, surge protection"],
+      index_entry: "Surge-protective devices — dwelling services → 230.67",
+      article_or_table: "230.67",
+      what_to_look_for: "Read the rule — SPD required for dwelling unit services, Type 1 or Type 2"
+    }
+  },
+  {
+    id: "240-004",
+    question: "Which of the following is NOT a standard ampere rating for fuses and inverse time circuit breakers?",
+    choices: ["75 amperes", "45 amperes", "70 amperes", "110 amperes"],
+    correct_answer: "75 amperes",
+    explanation: "NEC 240.6(A) lists the standard ampere ratings. 45A, 70A, and 110A are all in the list; 75A is not a standard rating.",
+    nec_article: "240.6(A)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["overcurrent", "standard ratings", "240.6"],
+    lookup_path: {
+      index_keywords: ["Overcurrent devices, standard ratings", "Standard ampere ratings"],
+      index_entry: "Overcurrent protection — standard ampere ratings → 240.6",
+      article_or_table: "240.6(A)",
+      what_to_look_for: "Scan the list of standard ratings — 75A does not appear"
+    }
+  },
+  {
+    id: "240-005",
+    question: "What is the maximum overcurrent protection permitted for 14 AWG copper conductors after any correction or adjustment factors?",
+    choices: ["15 amperes", "20 amperes", "25 amperes", "10 amperes"],
+    correct_answer: "15 amperes",
+    explanation: "NEC 240.4(D)(3) limits overcurrent protection for 14 AWG copper to 15 amperes, unless specifically permitted elsewhere (e.g., motor applications). This is the 'small conductor rule'.",
+    nec_article: "240.4(D)(3)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["overcurrent", "small conductors", "14 AWG", "240.4(D)"],
+    lookup_path: {
+      index_keywords: ["Small conductors, overcurrent protection", "Conductors, overcurrent protection"],
+      index_entry: "Conductors — small, overcurrent protection → 240.4(D)",
+      article_or_table: "240.4(D)(3)",
+      what_to_look_for: "Find the 14 AWG copper line — 15 amperes maximum"
+    }
+  },
+  {
+    id: "250-006",
+    question: "What is the minimum size copper equipment grounding conductor required for a circuit protected by a 100-ampere overcurrent device?",
+    choices: ["8 AWG", "10 AWG", "6 AWG", "4 AWG"],
+    correct_answer: "8 AWG",
+    explanation: "Per Table 250.122, a circuit with a 100-ampere rating or setting of the overcurrent device requires a minimum 8 AWG copper equipment grounding conductor.",
+    nec_article: "Table 250.122",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["grounding", "EGC", "Table 250.122"],
+    lookup_path: {
+      index_keywords: ["Equipment grounding conductors, size", "Grounding, equipment"],
+      index_entry: "Equipment grounding conductors — sizing → Table 250.122",
+      article_or_table: "Table 250.122",
+      what_to_look_for: "Find the '100' ampere row → copper column → 8 AWG"
+    }
+  },
+  {
+    id: "250-007",
+    question: "A concrete-encased electrode (Ufer ground) must consist of at least 20 feet of bare copper conductor not smaller than what size, or 1/2 inch reinforcing steel?",
+    choices: ["4 AWG", "6 AWG", "2 AWG", "8 AWG"],
+    correct_answer: "4 AWG",
+    explanation: "NEC 250.52(A)(3) describes the concrete-encased electrode: at least 6.0 m (20 ft) of either bare copper conductor not smaller than 4 AWG, or steel reinforcing bars at least 13 mm (1/2 in.) in diameter, encased by at least 2 in. of concrete near the bottom of a foundation or footing in direct contact with earth.",
+    nec_article: "250.52(A)(3)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "master",
+    tags: ["grounding electrodes", "concrete-encased", "Ufer", "250.52"],
+    lookup_path: {
+      index_keywords: ["Concrete-encased electrodes", "Grounding electrodes, types"],
+      index_entry: "Grounding electrodes — concrete-encased → 250.52(A)(3)",
+      article_or_table: "250.52(A)(3)",
+      what_to_look_for: "Read (A)(3) — 20 ft of 4 AWG bare copper or 1/2 in. rebar, encased in 2 in. of concrete"
+    }
+  },
+  {
+    id: "250-008",
+    question: "Where the grounding electrode conductor is connected only to a rod, pipe, or plate electrode, it is not required to be larger than:",
+    choices: ["6 AWG copper", "4 AWG copper", "8 AWG copper", "2 AWG copper"],
+    correct_answer: "6 AWG copper",
+    explanation: "NEC 250.66(A) states that where the GEC is connected solely to rod, pipe, or plate electrodes, that portion of the conductor is not required to be larger than 6 AWG copper (or 4 AWG aluminum).",
+    nec_article: "250.66(A)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["grounding electrode conductor", "ground rod", "250.66"],
+    lookup_path: {
+      index_keywords: ["Grounding electrode conductor, rod electrodes", "Ground rods, conductor size"],
+      index_entry: "Grounding electrode conductors — connections to rod electrodes → 250.66(A)",
+      article_or_table: "250.66(A)",
+      what_to_look_for: "Read (A) — sole connection to a rod electrode: 6 AWG copper max required"
+    }
+  },
+  {
+    id: "300-003",
+    question: "Where NM cable passes through bored holes in wood framing members, the edge of the hole must be at least how far from the nearest edge of the wood member, or the cable must be protected by a steel plate?",
+    choices: ["1-1/4 inches", "1 inch", "1-1/2 inches", "2 inches"],
+    correct_answer: "1-1/4 inches",
+    explanation: "NEC 300.4(A)(1) requires bored holes in wood members to be at least 32 mm (1-1/4 in.) from the nearest edge, or the cable must be protected from screws and nails by a steel plate at least 1.6 mm (1/16 in.) thick.",
+    nec_article: "300.4(A)(1)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["cable protection", "bored holes", "framing", "300.4"],
+    lookup_path: {
+      index_keywords: ["Protection against physical damage, cables", "Bored holes, cables through"],
+      index_entry: "Cables — through wood framing members → 300.4(A)",
+      article_or_table: "300.4(A)(1)",
+      what_to_look_for: "Read (A)(1) — 1-1/4 in. from the edge or a 1/16 in. steel plate"
+    }
+  },
+  {
+    id: "300-004",
+    question: "All conductors of the same circuit, including the grounded conductor and equipment grounding conductors, must generally be installed:",
+    choices: [
+      "In the same raceway, cable, or trench",
+      "In separate raceways to reduce heating",
+      "Within 10 feet of each other",
+      "In raceways of the same trade size"
+    ],
+    correct_answer: "In the same raceway, cable, or trench",
+    explanation: "NEC 300.3(B) requires all conductors of the same circuit — ungrounded, grounded, and equipment grounding conductors — to be contained within the same raceway, cable, or trench (with limited exceptions such as paralleled installations). This prevents inductive heating and high impedance in fault paths.",
+    nec_article: "300.3(B)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["wiring methods", "same circuit", "raceway", "300.3"],
+    lookup_path: {
+      index_keywords: ["Conductors, same circuit", "Wiring methods, conductors grouped"],
+      index_entry: "Conductors — of same circuit, grouped → 300.3(B)",
+      article_or_table: "300.3(B)",
+      what_to_look_for: "Read (B) — all circuit conductors in the same raceway, cable, or trench"
+    }
+  },
+  {
+    id: "310-005",
+    question: "Using the ambient temperature correction factors, what correction factor applies to a 90°C rated conductor installed where the ambient temperature is 40°C?",
+    choices: ["0.91", "0.88", "0.82", "1.00"],
+    correct_answer: "0.91",
+    explanation: "Per Table 310.15(B)(1) (based on a 30°C ambient), a conductor with 90°C insulation in a 36–40°C ambient has a correction factor of 0.91.",
+    nec_article: "Table 310.15(B)(1)",
+    nec_versions: ["2020", "2023", "2026"],
+    difficulty: "master",
+    tags: ["ampacity", "correction factors", "ambient temperature", "310.15"],
+    lookup_path: {
+      index_keywords: ["Ampacity, correction factors", "Temperature correction, conductors"],
+      index_entry: "Ampacities — ambient temperature correction → Table 310.15(B)(1)",
+      article_or_table: "Table 310.15(B)(1)",
+      what_to_look_for: "Find the '36–40°C' row → 90°C column → 0.91"
+    }
+  },
+  {
+    id: "314-004",
+    question: "An outlet box used as the sole support of a ceiling-suspended (paddle) fan must be:",
+    choices: [
+      "Listed and marked as suitable for ceiling fan support",
+      "Metal, with a minimum depth of 2-1/8 inches",
+      "Supported by at least two framing members",
+      "Rated for at least 50 pounds in all cases with no marking required"
+    ],
+    correct_answer: "Listed and marked as suitable for ceiling fan support",
+    explanation: "NEC 314.27(C) requires outlet boxes used as the sole support of ceiling-suspended (paddle) fans to be listed, marked as suitable for the purpose, and not support fans over 32 kg (70 lb). Fans over 35 lb must have the weight marked on the box if box-supported.",
+    nec_article: "314.27(C)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["boxes", "ceiling fans", "support", "314.27"],
+    lookup_path: {
+      index_keywords: ["Ceiling fans, outlet boxes", "Boxes, fan support"],
+      index_entry: "Boxes — ceiling (paddle) fan support → 314.27(C)",
+      article_or_table: "314.27(C)",
+      what_to_look_for: "Read (C) — box must be listed and marked for ceiling fan support"
+    }
+  },
+  {
+    id: "334-002",
+    question: "NM cable must be secured at intervals not exceeding 4-1/2 feet and within what distance of every box, cabinet, or fitting?",
+    choices: ["12 inches", "8 inches", "18 inches", "24 inches"],
+    correct_answer: "12 inches",
+    explanation: "NEC 334.30 requires nonmetallic-sheathed cable to be supported and secured at intervals not exceeding 1.4 m (4-1/2 ft) and within 300 mm (12 in.) of every box, cabinet, conduit body, or other cable termination.",
+    nec_article: "334.30",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["NM cable", "securing", "support", "334.30"],
+    lookup_path: {
+      index_keywords: ["Nonmetallic-sheathed cable, securing", "NM cable, support"],
+      index_entry: "Nonmetallic-sheathed cable — securing and supporting → 334.30",
+      article_or_table: "334.30",
+      what_to_look_for: "Read the rule — 4-1/2 ft intervals, within 12 in. of boxes and fittings"
+    }
+  },
+  {
+    id: "404-001",
+    question: "Switches and circuit breakers used as switches must be installed so the center of the operating handle grip, in its highest position, is not more than what height above the floor or working platform?",
+    choices: ["6 feet 7 inches", "6 feet 0 inches", "5 feet 6 inches", "7 feet 0 inches"],
+    correct_answer: "6 feet 7 inches",
+    explanation: "NEC 404.8(A) requires switches and circuit breakers used as switches to be operable from a readily accessible location, with the center of the grip of the operating handle not more than 2.0 m (6 ft 7 in.) above the floor or working platform when in its highest position.",
+    nec_article: "404.8(A)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["switches", "accessibility", "mounting height", "404.8"],
+    lookup_path: {
+      index_keywords: ["Switches, accessibility", "Switches, mounting height"],
+      index_entry: "Switches — accessibility and grouping → 404.8(A)",
+      article_or_table: "404.8(A)",
+      what_to_look_for: "Read (A) — handle grip center max 6 ft 7 in. above floor"
+    }
+  },
+  {
+    id: "406-002",
+    question: "A 15- or 20-ampere, 125-volt receptacle installed outdoors in a wet location must be:",
+    choices: [
+      "Listed weather-resistant type with an enclosure that is weatherproof with the plug inserted (in-use cover)",
+      "Standard type with a flat cover plate",
+      "GFCI type only, with any cover",
+      "Isolated-ground type with a metal cover"
+    ],
+    correct_answer: "Listed weather-resistant type with an enclosure that is weatherproof with the plug inserted (in-use cover)",
+    explanation: "NEC 406.9(B)(1) requires 15A and 20A, 125V and 250V receptacles in wet locations to have an enclosure that is weatherproof whether or not the attachment plug is inserted (an 'in-use' or 'bubble' cover), and 406.9(A)/(B) require them to be listed weather-resistant type.",
+    nec_article: "406.9(B)(1)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["receptacles", "wet locations", "weather-resistant", "406.9"],
+    lookup_path: {
+      index_keywords: ["Receptacles, wet locations", "Weatherproof enclosures"],
+      index_entry: "Receptacles — wet locations → 406.9(B)",
+      article_or_table: "406.9(B)(1)",
+      what_to_look_for: "Read (B)(1) — weatherproof with plug inserted; WR-type receptacle required"
+    }
+  },
+  {
+    id: "410-003",
+    question: "Within the actual outside dimension of a bathtub, and up to 8 feet vertically from the top of the bathtub rim, which luminaires are prohibited?",
+    choices: [
+      "Cord-connected, chain-, cable-, or cord-suspended luminaires, lighting track, pendants, and ceiling-suspended (paddle) fans",
+      "All luminaires of any type",
+      "Only incandescent luminaires",
+      "Recessed luminaires with lenses"
+    ],
+    correct_answer: "Cord-connected, chain-, cable-, or cord-suspended luminaires, lighting track, pendants, and ceiling-suspended (paddle) fans",
+    explanation: "NEC 410.10(D) prohibits cord-connected luminaires, chain/cable/cord-suspended luminaires, lighting track, pendants, and ceiling-suspended (paddle) fans within a zone 3 ft horizontally and 8 ft vertically from the top of the bathtub rim or shower stall threshold.",
+    nec_article: "410.10(D)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "master",
+    tags: ["luminaires", "bathtub zone", "bathrooms", "410.10"],
+    lookup_path: {
+      index_keywords: ["Luminaires, bathtub and shower areas", "Bathtubs, luminaires near"],
+      index_entry: "Luminaires — bathtub and shower areas → 410.10(D)",
+      article_or_table: "410.10(D)",
+      what_to_look_for: "Read (D) — the 3 ft × 8 ft zone and the list of prohibited luminaire types"
+    }
+  },
+  {
+    id: "422-001",
+    question: "A fixed storage-type water heater with a capacity of 120 gallons or less is considered what type of load for branch-circuit sizing?",
+    choices: ["A continuous load", "A noncontinuous load", "An intermittent load", "A standby load"],
+    correct_answer: "A continuous load",
+    explanation: "NEC 422.13 requires a fixed storage-type water heater with a capacity of 450 L (120 gal) or less to be considered a continuous load for branch-circuit sizing — so the branch circuit must be rated at least 125% of the nameplate rating.",
+    nec_article: "422.13",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["appliances", "water heaters", "continuous load", "422.13"],
+    lookup_path: {
+      index_keywords: ["Water heaters, branch circuits", "Appliances, water heaters"],
+      index_entry: "Water heaters — storage-type → 422.13",
+      article_or_table: "422.13",
+      what_to_look_for: "Read the rule — 120 gal or less = continuous load (125% branch circuit)"
+    }
+  },
+  {
+    id: "424-001",
+    question: "Fixed electric space-heating equipment must be considered a continuous load. The branch circuit must therefore be sized at what percentage of the total heating load?",
+    choices: ["125%", "100%", "115%", "150%"],
+    correct_answer: "125%",
+    explanation: "NEC 424.3(B) requires fixed electric space-heating equipment and any associated motors to be considered a continuous load, so branch-circuit conductors and OCPDs must be sized at not less than 125% of the total load.",
+    nec_article: "424.3(B)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["space heating", "continuous load", "125%", "424.3"],
+    lookup_path: {
+      index_keywords: ["Space-heating equipment, branch circuits", "Fixed electric space heating"],
+      index_entry: "Fixed electric space-heating equipment — branch circuits → 424.3(B)",
+      article_or_table: "424.3(B)",
+      what_to_look_for: "Read (B) — continuous load, size at 125%"
+    }
+  },
+  {
+    id: "430-005",
+    question: "Per the Article 100 definition used for motor disconnects, 'within sight' means visible and not more than what distance from the equipment?",
+    choices: ["50 feet", "25 feet", "75 feet", "100 feet"],
+    correct_answer: "50 feet",
+    explanation: "The Article 100 definition of 'In Sight From (Within Sight From, Within Sight)' specifies that equipment must be visible and not more than 15 m (50 ft) distant. This governs rules like 430.102(B) requiring a disconnecting means in sight from the motor location.",
+    nec_article: "Article 100 / 430.102(B)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["motors", "disconnecting means", "within sight", "430.102"],
+    lookup_path: {
+      index_keywords: ["In sight from, definition", "Motors, disconnecting means"],
+      index_entry: "In sight from — definition → Article 100",
+      article_or_table: "Article 100; 430.102(B)",
+      what_to_look_for: "Definition: visible and not more than 50 ft distant"
+    }
+  },
+  {
+    id: "440-001",
+    question: "The disconnecting means for air-conditioning or refrigerating equipment must be located:",
+    choices: [
+      "Within sight from, and readily accessible from, the equipment",
+      "At the service panel only",
+      "Within 100 feet of the equipment",
+      "Inside the conditioned space"
+    ],
+    correct_answer: "Within sight from, and readily accessible from, the equipment",
+    explanation: "NEC 440.14 requires the disconnecting means for air-conditioning and refrigerating equipment to be located within sight from, and readily accessible from, the equipment. It may be installed on or within the equipment if permitted.",
+    nec_article: "440.14",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["air conditioning", "disconnecting means", "440.14"],
+    lookup_path: {
+      index_keywords: ["Air-conditioning equipment, disconnecting means", "Disconnecting means, A/C"],
+      index_entry: "Air-conditioning and refrigerating equipment — disconnecting means → 440.14",
+      article_or_table: "440.14",
+      what_to_look_for: "Read the rule — within sight and readily accessible from the equipment"
+    }
+  },
+  {
+    id: "590-001",
+    question: "On construction sites, GFCI protection for personnel is required for which receptacle outlets used for temporary power?",
+    choices: [
+      "All 125-volt, single-phase, 15-, 20-, and 30-ampere receptacle outlets",
+      "Only 15-ampere receptacles",
+      "Only receptacles outdoors",
+      "Only receptacles within 6 feet of water"
+    ],
+    correct_answer: "All 125-volt, single-phase, 15-, 20-, and 30-ampere receptacle outlets",
+    explanation: "NEC 590.6(A) requires GFCI protection for personnel on all 125-volt, single-phase, 15-, 20-, and 30-ampere receptacle outlets that are not part of the permanent wiring and are used by personnel during construction, remodeling, maintenance, repair, or demolition.",
+    nec_article: "590.6(A)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["temporary power", "construction", "GFCI", "590.6"],
+    lookup_path: {
+      index_keywords: ["Temporary installations, GFCI", "Construction sites, receptacles"],
+      index_entry: "Temporary installations — GFCI protection → 590.6(A)",
+      article_or_table: "590.6(A)",
+      what_to_look_for: "Read (A) — 125V, 1-phase, 15/20/30A receptacles require GFCI"
+    }
+  },
+  {
+    id: "625-001",
+    question: "Electric vehicle supply equipment (EVSE) loads are considered continuous. The overcurrent protection for a feeder or branch circuit supplying EVSE must be sized at not less than:",
+    choices: [
+      "125% of the maximum load of the equipment",
+      "100% of the nameplate rating",
+      "115% of the maximum load",
+      "150% of the maximum load"
+    ],
+    correct_answer: "125% of the maximum load of the equipment",
+    explanation: "Article 625 treats EVSE loads as continuous: overcurrent protection for feeders and branch circuits supplying electric vehicle supply equipment must be rated not less than 125% of the maximum load of the equipment (625.41/625.42).",
+    nec_article: "625.41",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["EV charging", "EVSE", "continuous load", "625"],
+    lookup_path: {
+      index_keywords: ["Electric vehicle supply equipment", "EV charging, overcurrent protection"],
+      index_entry: "Electric vehicle supply equipment — overcurrent protection → 625.41",
+      article_or_table: "625.41",
+      what_to_look_for: "Read the rule — continuous load, OCPD at 125% of maximum load"
+    }
+  },
+  {
+    id: "680-002",
+    question: "GFCI protection is required for which pool pump motors?",
+    choices: [
+      "Pool pump motors connected to single-phase, 120V through 240V branch circuits, whether cord-and-plug-connected or hardwired",
+      "Only cord-and-plug-connected pump motors",
+      "Only pump motors on 120V circuits",
+      "Only pump motors installed outdoors"
+    ],
+    correct_answer: "Pool pump motors connected to single-phase, 120V through 240V branch circuits, whether cord-and-plug-connected or hardwired",
+    explanation: "NEC 680.21(C) requires GFCI protection for outlets supplying pool pump motors connected to single-phase, 120V through 240V branch circuits, regardless of whether they are cord-and-plug-connected or direct (hardwired) connections.",
+    nec_article: "680.21(C)",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["pools", "GFCI", "pump motors", "680.21"],
+    lookup_path: {
+      index_keywords: ["Swimming pools, pump motors", "GFCI, pool equipment"],
+      index_entry: "Swimming pools — motors, GFCI protection → 680.21(C)",
+      article_or_table: "680.21(C)",
+      what_to_look_for: "Read (C) — single-phase 120V–240V pump motors require GFCI, hardwired or cord-connected"
+    }
+  },
+  {
+    id: "690-002",
+    question: "PV system circuits installed on or in buildings must include a rapid shutdown function. Per the general rule, controlled conductors outside the array boundary must be reduced to 30 volts or less within how many seconds of rapid shutdown initiation?",
+    choices: ["30 seconds", "10 seconds", "60 seconds", "5 seconds"],
+    correct_answer: "30 seconds",
+    explanation: "NEC 690.12 requires rapid shutdown for PV system circuits on or in buildings. Controlled conductors located outside the array boundary (more than 1 ft from the array) must be limited to not more than 30 volts within 30 seconds of rapid shutdown initiation.",
+    nec_article: "690.12",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "master",
+    tags: ["solar", "PV", "rapid shutdown", "690.12"],
+    lookup_path: {
+      index_keywords: ["Photovoltaic systems, rapid shutdown", "Rapid shutdown, PV"],
+      index_entry: "Solar photovoltaic systems — rapid shutdown → 690.12",
+      article_or_table: "690.12",
+      what_to_look_for: "Read the limits — outside the array boundary: 30 volts within 30 seconds"
+    }
+  },
+  {
+    id: "700-002",
+    question: "Emergency systems must have power available within how many seconds after failure of the normal supply?",
+    choices: ["10 seconds", "60 seconds", "30 seconds", "5 seconds"],
+    correct_answer: "10 seconds",
+    explanation: "NEC 700.12 requires emergency system power to be available within 10 seconds of failure of the normal supply. (Legally required standby systems under Article 701 have 60 seconds.)",
+    nec_article: "700.12",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "journeyman",
+    tags: ["emergency systems", "transfer time", "700.12"],
+    lookup_path: {
+      index_keywords: ["Emergency systems, sources of power", "Transfer time, emergency"],
+      index_entry: "Emergency systems — general requirements, sources → 700.12",
+      article_or_table: "700.12",
+      what_to_look_for: "Read the rule — power available within 10 seconds; compare Article 701's 60 seconds"
+    }
+  },
+  {
+    id: "702-001",
+    question: "For optional standby systems, transfer equipment is required primarily to:",
+    choices: [
+      "Prevent the inadvertent interconnection of the normal and alternate sources of supply",
+      "Increase the available fault current",
+      "Provide surge protection for the generator",
+      "Allow both sources to operate in parallel at all times"
+    ],
+    correct_answer: "Prevent the inadvertent interconnection of the normal and alternate sources of supply",
+    explanation: "NEC 702.5 requires transfer equipment for optional standby systems, suitable for the intended use and designed and installed so as to prevent the inadvertent interconnection of normal and alternate sources of supply — protecting utility line workers from backfeed.",
+    nec_article: "702.5",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "master",
+    tags: ["standby systems", "transfer equipment", "generators", "702.5"],
+    lookup_path: {
+      index_keywords: ["Optional standby systems, transfer equipment", "Transfer switches"],
+      index_entry: "Optional standby systems — transfer equipment → 702.5",
+      article_or_table: "702.5",
+      what_to_look_for: "Read the rule — prevent inadvertent interconnection of normal and alternate sources"
+    }
+  },
+  {
+    id: "706-001",
+    question: "An energy storage system (ESS) must have a disconnecting means that is:",
+    choices: [
+      "Readily accessible and located within sight of the ESS, or capable of being locked in the open position where not within sight",
+      "Accessible only to the utility",
+      "Located at the service equipment only",
+      "Automatic with no manual operation permitted"
+    ],
+    correct_answer: "Readily accessible and located within sight of the ESS, or capable of being locked in the open position where not within sight",
+    explanation: "NEC 706.15 requires a disconnecting means for the ESS that is readily accessible and located within sight of the equipment; remote disconnects must be lockable in the open position and marked with their location.",
+    nec_article: "706.15",
+    nec_versions: ["2017", "2020", "2023", "2026"],
+    difficulty: "master",
+    tags: ["energy storage", "ESS", "disconnecting means", "706.15"],
+    lookup_path: {
+      index_keywords: ["Energy storage systems, disconnecting means", "Batteries, disconnects"],
+      index_entry: "Energy storage systems — disconnecting means → 706.15",
+      article_or_table: "706.15",
+      what_to_look_for: "Read the rule — readily accessible, within sight, or lockable open if remote"
+    }
+  },
 ];
+
+// ---------------------------------------------------------------------------
+// Random selection with "freshness" memory
+//
+// Every exam/quiz attempt should feel new. We use an unbiased Fisher–Yates
+// shuffle (Array.prototype.sort with a random comparator is biased) and we
+// remember recently served question IDs in localStorage so consecutive
+// attempts prioritize questions the user has NOT seen recently. Once the
+// whole pool has been seen, the memory naturally cycles.
+// ---------------------------------------------------------------------------
+
+const RECENT_QUESTIONS_KEY = "cc_recent_question_ids";
+const RECENT_QUESTIONS_LIMIT = 150;
+
+function shuffle<T>(input: T[]): T[] {
+  const arr = [...input];
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function getRecentQuestionIds(): string[] {
+  try {
+    const raw = localStorage.getItem(RECENT_QUESTIONS_KEY);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed.filter((x): x is string => typeof x === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+function markQuestionsAsSeen(ids: string[]): void {
+  try {
+    const merged = [...ids, ...getRecentQuestionIds().filter(id => !ids.includes(id))];
+    localStorage.setItem(RECENT_QUESTIONS_KEY, JSON.stringify(merged.slice(0, RECENT_QUESTIONS_LIMIT)));
+  } catch {
+    // localStorage unavailable (private mode, SSR) — selection still works, just without memory
+  }
+}
 
 export function getRandomQuestions(count: number, difficulty?: QuestionCard["difficulty"], version?: string): QuestionCard[] {
   let pool = difficulty ? questionBank.filter(q => q.difficulty === difficulty) : [...questionBank];
   if (version && version !== "all") {
     pool = pool.filter(q => q.nec_versions.includes(version as "2017" | "2020" | "2023" | "2026"));
   }
-  const shuffled = pool.sort(() => Math.random() - 0.5);
-  return shuffled.slice(0, Math.min(count, shuffled.length));
+
+  const recent = new Set(getRecentQuestionIds());
+  const unseen = pool.filter(q => !recent.has(q.id));
+  const seen = pool.filter(q => recent.has(q.id));
+
+  // Prefer questions the user hasn't seen recently, then fall back to seen ones
+  const picked = [...shuffle(unseen), ...shuffle(seen)].slice(0, Math.min(count, pool.length));
+  markQuestionsAsSeen(picked.map(q => q.id));
+
+  // Final shuffle so unseen/seen questions are interleaved in random order
+  return shuffle(picked);
 }
 
 // Helper: search questions

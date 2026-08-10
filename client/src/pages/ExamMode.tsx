@@ -79,7 +79,8 @@ function ExamContent() {
           {[
             { count: 5, label: "Quick Check", time: "12 min" },
             { count: 10, label: "Half Exam", time: "24 min" },
-            { count: 15, label: "Full Bank", time: "36 min" },
+            { count: 15, label: "Standard Exam", time: "36 min" },
+            { count: 25, label: "Full Simulation", time: "60 min" },
           ].map(({ count, label, time }) => (
             <button
               key={count}
