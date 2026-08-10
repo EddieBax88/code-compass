@@ -1,8 +1,3 @@
-/**
- * PaywallGate — wraps any paid-only page.
- * Shows a conversion screen if the user is not authenticated or has no active entitlement.
- * Passes children through if the user has paid access.
- */
 import { useEffect, useState, type ReactNode } from "react";
 import { Link } from "wouter";
 import { Lock, ArrowRight, Bot } from "lucide-react";
@@ -11,7 +6,9 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/_core/hooks/useAuth";
 import { getLoginUrl } from "@/const";
 
-const REVENUECAT_PUBLIC_KEY = "test_GxfiIfTxtuMnoNoeWuQanSUTCGI";
+const REVENUECAT_PUBLIC_KEY =
+  import.meta.env.VITE_REVENUECAT_PUBLIC_KEY ??
+  "test_GxfiIfTxtuMnoNoeWuQanSUTCGI";
 
 interface PaywallGateProps {
   children: ReactNode;
@@ -20,7 +17,7 @@ interface PaywallGateProps {
 }
 
 export function PaywallGate({ children, featureName }: PaywallGateProps) {
-  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { user, isAuthenticated, loading: authLoading } = useAuth();
   const [hasPaidAccess, setHasPaidAccess] = useState(false);
   const [accessLoading, setAccessLoading] = useState(true);
 
@@ -33,11 +30,14 @@ export function PaywallGate({ children, featureName }: PaywallGateProps) {
 
     let active = true;
 
-    Purchases.configure({ apiKey: REVENUECAT_PUBLIC_KEY });
-
     const loadAccess = async () => {
       try {
-        const customerInfo = await Purchases.getCustomerInfo();
+        const purchases = Purchases.configure({
+          apiKey: REVENUECAT_PUBLIC_KEY,
+          appUserId: user?.id ? String(user.id) : "anonymous_user_id",
+        });
+
+        const customerInfo = await purchases.getCustomerInfo();
         if (!active) return;
 
         const activeEntitlements = customerInfo.entitlements?.active ?? {};
@@ -55,9 +55,8 @@ export function PaywallGate({ children, featureName }: PaywallGateProps) {
     return () => {
       active = false;
     };
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user?.id]);
 
-  // Still loading — render nothing (AppLayout header stays visible)
   if (authLoading || accessLoading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
@@ -68,7 +67,6 @@ export function PaywallGate({ children, featureName }: PaywallGateProps) {
 
   if (hasPaidAccess) return <>{children}</>;
 
-  // ── Gate screen ──
   return (
     <div className="flex flex-col items-center justify-center min-h-[80vh] px-6 text-center">
       <div className="w-16 h-16 rounded-2xl bg-amber-500/10 flex items-center justify-center mb-6">

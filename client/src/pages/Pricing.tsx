@@ -20,18 +20,20 @@ const REVENUECAT_PUBLIC_KEY = "test_GxfiIfTxtuMnoNoeWuQanSUTCGI";
 
 export default function Pricing() {
   const [, navigate] = useLocation();
-  const { isAuthenticated } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
   const [hasAccess, setHasAccess] = useState(false);
 
   const { data: plans = [] } = trpc.plans.list.useQuery();
 
   useEffect(() => {
-    Purchases.configure({ apiKey: REVENUECAT_PUBLIC_KEY });
-
     const loadAccess = async () => {
       try {
-        const customerInfo = await Purchases.getCustomerInfo();
+        const purchases = Purchases.configure({
+          apiKey: REVENUECAT_PUBLIC_KEY,
+          appUserId: user?.id ? String(user.id) : "anonymous_user_id",
+        });
+        const customerInfo = await purchases.getCustomerInfo();
         const activeEntitlements = customerInfo.entitlements?.active ?? {};
         setHasAccess(Object.keys(activeEntitlements).length > 0);
       } catch (error) {
@@ -40,7 +42,7 @@ export default function Pricing() {
     };
 
     void loadAccess();
-  }, [isAuthenticated]);
+  }, [isAuthenticated, user?.id]);
 
   const handleCheckout = async (planId: string) => {
     if (!isAuthenticated) {
@@ -56,18 +58,22 @@ export default function Pricing() {
     setLoadingPlan(planId);
 
     try {
-      const offerings = await Purchases.getOfferings();
+      const purchases = Purchases.configure({
+        apiKey: REVENUECAT_PUBLIC_KEY,
+        appUserId: user?.id ? String(user.id) : "anonymous_user_id",
+      });
+      const offerings = await purchases.getOfferings();
       const lifetimePackage = offerings.current?.availablePackages.find(
-        pkg =>
+        (pkg) =>
           pkg.identifier?.toLowerCase().includes("lifetime") ||
-          pkg.product?.priceString?.includes("39.99")
+          pkg.webBillingProduct?.title?.toLowerCase().includes("lifetime")
       );
 
       if (!lifetimePackage) {
         throw new Error("Lifetime access package was not found.");
       }
 
-      const result = await Purchases.purchasePackage(lifetimePackage);
+      const result = await purchases.purchasePackage(lifetimePackage);
       const activeEntitlements =
         result.customerInfo?.entitlements?.active ?? {};
       setHasAccess(Object.keys(activeEntitlements).length > 0);
