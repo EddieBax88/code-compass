@@ -19,9 +19,9 @@ export const FOUNDER_OFFER = {
 /** Stripe payment link per funnel (leave "" to fall back to /pricing). */
 export const FOUNDER_CHECKOUT_LINKS: Record<string, string> = {
   /** /founders — working-electrician "co-pilot" angle */
-  founders: "",
+  founders: "https://buy.stripe.com/cNieVd3jY3RE6qKgKZ3sI01",
   /** /pass — exam-prep angle */
-  pass: "",
+  pass: "https://buy.stripe.com/7sYeVd6waag23eygKZ3sI02",
 };
 
 export function getFounderCheckoutUrl(funnel: keyof typeof FOUNDER_CHECKOUT_LINKS): string {
