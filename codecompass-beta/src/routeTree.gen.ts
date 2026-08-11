@@ -26,6 +26,7 @@ import { Route as CourseCourseIdRouteImport } from './routes/course.$courseId'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe-webhook'
 import { Route as ApiStripeCheckoutRouteImport } from './routes/api/stripe-checkout'
 import { Route as ApiParseL5xRouteImport } from './routes/api/parse-l5x'
+import { Route as ApiNecLookupRouteImport } from './routes/api/nec-lookup'
 import { Route as ApiChatRouteImport } from './routes/api/chat'
 import { Route as Char91DotwellKnownChar93OauthProtectedResourceRouteImport } from './routes/[.well-known]/oauth-protected-resource'
 import { Route as Char91DotmcpChar93ListToolsRouteImport } from './routes/[.mcp]/list-tools'
@@ -118,6 +119,11 @@ const ApiParseL5xRoute = ApiParseL5xRouteImport.update({
   path: '/api/parse-l5x',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiNecLookupRoute = ApiNecLookupRouteImport.update({
+  id: '/api/nec-lookup',
+  path: '/api/nec-lookup',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiChatRoute = ApiChatRouteImport.update({
   id: '/api/chat',
   path: '/api/chat',
@@ -166,6 +172,7 @@ export interface FileRoutesByFullPath {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/nec-lookup': typeof ApiNecLookupRoute
   '/api/parse-l5x': typeof ApiParseL5xRoute
   '/api/stripe-checkout': typeof ApiStripeCheckoutRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
@@ -191,6 +198,7 @@ export interface FileRoutesByTo {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/nec-lookup': typeof ApiNecLookupRoute
   '/api/parse-l5x': typeof ApiParseL5xRoute
   '/api/stripe-checkout': typeof ApiStripeCheckoutRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
@@ -217,6 +225,7 @@ export interface FileRoutesById {
   '/.mcp/list-tools': typeof Char91DotmcpChar93ListToolsRoute
   '/.well-known/oauth-protected-resource': typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   '/api/chat': typeof ApiChatRoute
+  '/api/nec-lookup': typeof ApiNecLookupRoute
   '/api/parse-l5x': typeof ApiParseL5xRoute
   '/api/stripe-checkout': typeof ApiStripeCheckoutRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
@@ -244,6 +253,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
+    | '/api/nec-lookup'
     | '/api/parse-l5x'
     | '/api/stripe-checkout'
     | '/api/stripe-webhook'
@@ -269,6 +279,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
+    | '/api/nec-lookup'
     | '/api/parse-l5x'
     | '/api/stripe-checkout'
     | '/api/stripe-webhook'
@@ -294,6 +305,7 @@ export interface FileRouteTypes {
     | '/.mcp/list-tools'
     | '/.well-known/oauth-protected-resource'
     | '/api/chat'
+    | '/api/nec-lookup'
     | '/api/parse-l5x'
     | '/api/stripe-checkout'
     | '/api/stripe-webhook'
@@ -320,6 +332,7 @@ export interface RootRouteChildren {
   Char91DotmcpChar93ListToolsRoute: typeof Char91DotmcpChar93ListToolsRoute
   Char91DotwellKnownChar93OauthProtectedResourceRoute: typeof Char91DotwellKnownChar93OauthProtectedResourceRoute
   ApiChatRoute: typeof ApiChatRoute
+  ApiNecLookupRoute: typeof ApiNecLookupRoute
   ApiParseL5xRoute: typeof ApiParseL5xRoute
   ApiStripeCheckoutRoute: typeof ApiStripeCheckoutRoute
   ApiStripeWebhookRoute: typeof ApiStripeWebhookRoute
@@ -453,6 +466,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiParseL5xRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/nec-lookup': {
+      id: '/api/nec-lookup'
+      path: '/api/nec-lookup'
+      fullPath: '/api/nec-lookup'
+      preLoaderRoute: typeof ApiNecLookupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/chat': {
       id: '/api/chat'
       path: '/api/chat'
@@ -513,6 +533,7 @@ const rootRouteChildren: RootRouteChildren = {
   Char91DotwellKnownChar93OauthProtectedResourceRoute:
     Char91DotwellKnownChar93OauthProtectedResourceRoute,
   ApiChatRoute: ApiChatRoute,
+  ApiNecLookupRoute: ApiNecLookupRoute,
   ApiParseL5xRoute: ApiParseL5xRoute,
   ApiStripeCheckoutRoute: ApiStripeCheckoutRoute,
   ApiStripeWebhookRoute: ApiStripeWebhookRoute,

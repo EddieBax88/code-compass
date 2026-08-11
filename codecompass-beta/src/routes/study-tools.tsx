@@ -51,16 +51,25 @@ function CoPilot() {
     setError("");
     setResponse("");
     try {
-      const res = await fetch("/api/chat", {
+      const res = await fetch("/api/nec-lookup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ message: query, mode }),
+        body: JSON.stringify({
+          question: query,
+          role: "apprentice",
+          edition: "2026",
+        }),
       });
       if (!res.ok) throw new Error(`Request failed: ${res.status}`);
       const data = await res.json();
-      setResponse(
-        typeof data === "string" ? data : (data.text ?? data.message ?? JSON.stringify(data)),
-      );
+      let text = data.answer || "";
+      if (Array.isArray(data.assumptions) && data.assumptions.length > 0) {
+        text += "\n\nAssumptions:\n" + data.assumptions.map((a: string) => `• ${a}`).join("\n");
+      }
+      if (Array.isArray(data.verification_notes) && data.verification_notes.length > 0) {
+        text += "\n\nVerification Notes:\n" + data.verification_notes.map((v: string) => `• ${v}`).join("\n");
+      }
+      setResponse(text || (typeof data === "string" ? data : JSON.stringify(data)));
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong.");
     } finally {
