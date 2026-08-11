@@ -1,83 +1,51 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Zap, Cpu, ShieldCheck, ArrowRight, Search, BookOpen, MessageCircle, Calculator, Zap as ZapIcon } from "lucide-react";
+import { Zap, Cpu, ShieldCheck, ArrowRight, Search, BookOpen, MessageCircle, Calculator, ChevronDown, ChevronUp } from "lucide-react";
 
 export const Route = createFileRoute("/")({
+  validateSearch: (s: Record<string, unknown>) => ({
+    q: typeof s.q === "string" ? s.q : undefined,
+    role: s.role === "field_electrician" ? "field_electrician" : "apprentice",
+    edition: typeof s.edition === "string" ? s.edition : "2026",
+  }),
   head: () => ({
     meta: [
-      { title: "Code Compass - NEC Exam Prep" },
+      { title: "Code Compass — Understand the Electrical Code" },
       {
         name: "description",
         content:
-          "Automating NEC Compliance and PLC Logic Translation for Active Data Centers. Elite training for electrical professionals.",
+          "Code Compass helps apprentices learn and helps working electricians navigate NEC questions with clear Gemini-powered explanations, stated assumptions, and practical verification steps.",
       },
-      { property: "og:title", content: "Code Compass - NEC Exam Prep" },
+      { property: "og:title", content: "Code Compass — Understand the Electrical Code" },
       {
         property: "og:description",
         content:
-          "Elite training weapon for electrical apprentices. NEC 2026 rapid lookup, PLC parsing, and data-center compliance.",
+          "Gemini-powered NEC guidance for apprentices and working electricians.",
       },
-      { property: "og:url", content: "https://codecompass-beta.lovable.app/" },
+      { property: "og:url", content: "https://www.codecompass.work/" },
     ],
-    links: [{ rel: "canonical", href: "https://codecompass-beta.lovable.app/" }],
+    links: [{ rel: "canonical", href: "https://www.codecompass.work/" }],
   }),
   component: Home,
 });
 
-type ModuleCard = {
-  to: "/study-tools" | "/plc" | "/data-center";
-  kicker: string;
-  title: string;
-  desc: string;
-  Icon: typeof Zap;
-  cta: string;
-  tier: "FREE" | "PREMIUM";
-};
-
-const MODULES: ModuleCard[] = [
-  {
-    to: "/study-tools",
-    kicker: "Module 01 · Free",
-    title: "NEC 2026 Rapid Lookup",
-    desc: "AI co-pilot for the National Electrical Code. Paste any exam question or field scenario — get the article, section, and answer in seconds.",
-    Icon: Zap,
-    cta: "Open lookup",
-    tier: "FREE",
-  },
-  {
-    to: "/plc",
-    kicker: "Module 02 · Premium",
-    title: "Industrial PLC Parsing",
-    desc: "Upload Rockwell L5K / L5X exports. Parse tags, routines, and rung logic for controls-engineer troubleshooting and code review.",
-    Icon: Cpu,
-    cta: "Open PLC parser",
-    tier: "PREMIUM",
-  },
-  {
-    to: "/data-center",
-    kicker: "Module 03 · Premium",
-    title: "Data Center Compliance",
-    desc: "Arc-flash boundary calcs and EMS compliance workflows for hyperscale and colo environments. Built to NFPA 70E and NEC Article 645.",
-    Icon: ShieldCheck,
-    cta: "Open compliance",
-    tier: "PREMIUM",
-  },
-];
-
-const MODULE_02 = MODULES.find((m) => m.kicker.includes("Module 02"))!;
-const MODULE_03 = MODULES.find((m) => m.kicker.includes("Module 03"))!;
-
 function Home() {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"book" | "fast" | "quick" | "uglys">("book");
+  const [role, setRole] = useState<"apprentice" | "field_electrician">("apprentice");
   const [edition, setEdition] = useState("2026");
   const [query, setQuery] = useState("");
+  const [showBetaTools, setShowBetaTools] = useState(false);
 
   const handleSearch = () => {
     if (query.trim()) {
       navigate({
         to: "/study-tools",
-        search: { mode, edition, q: query }
+        search: { role, edition, q: query },
+      });
+    } else {
+      navigate({
+        to: "/study-tools",
+        search: { role, edition },
       });
     }
   };
@@ -93,102 +61,106 @@ function Home() {
       {/* HERO */}
       <section className="relative pt-14 pb-10 sm:pt-20 sm:pb-14">
         <div className="max-w-4xl">
-          <h1 className="mt-6 font-display text-5xl sm:text-7xl font-black leading-[0.95] tracking-tight">
-            Automating NEC Compliance and PLC Logic Translation for Active Data Centers.
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
+            <Zap className="h-3.5 w-3.5" />
+            Gemini 3.6-Flash Powered NEC Engine
+          </div>
+          <h1 className="mt-6 font-display text-4xl sm:text-6xl font-black leading-[1.05] tracking-tight">
+            Understand the electrical code. Work with more confidence.
           </h1>
-          <p className="mt-6 text-lg sm:text-2xl text-foreground/85 max-w-3xl font-medium">
-            The elite training weapon for electrical apprentices to pass their exam and instantly
-            look up code on the job site.
+          <p className="mt-6 text-lg sm:text-xl text-foreground/85 max-w-3xl font-medium leading-relaxed">
+            Code Compass helps apprentices learn and helps working electricians navigate NEC questions with clear Gemini-powered explanations, stated assumptions, and practical verification steps.
           </p>
-          <Link
-            to="/study-tools"
-            className="mt-6 inline-flex items-center gap-2 rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground hover:bg-secondary transition"
-          >
-            <Zap className="h-3.5 w-3.5 text-primary" />
-            Open NEC Co-Pilot
-          </Link>
+          <div className="mt-8 flex flex-wrap items-center gap-3">
+            <button
+              onClick={handleSearch}
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-ember hover:opacity-90 transition"
+            >
+              Ask Code Compass
+              <ArrowRight className="h-4 w-4" />
+            </button>
+            <Link
+              to="/practice-test"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-background px-5 py-3.5 text-sm font-medium hover:bg-secondary transition"
+            >
+              Take Practice Drill
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* SEARCH BAR */}
+      {/* ROLE SELECTION & CO-PILOT SEARCH */}
       <section
-        aria-labelledby="what"
-        className="mt-10 rounded-2xl border border-border bg-card/40 p-6 sm:p-8"
+        aria-labelledby="lookup-heading"
+        className="mt-6 rounded-2xl border border-border bg-card/60 p-6 sm:p-8 shadow-sm"
       >
-        <div className="text-[10px] uppercase tracking-[0.2em] text-accent">
-          What Code Compass does
-        </div>
-        <h2 id="what" className="mt-2 font-display text-2xl sm:text-3xl font-semibold">
-          One clear path to the code, the logic, and the compliance answer.
+        <h2 id="lookup-heading" className="font-display text-2xl font-semibold">
+          Select your role & ask a code question
         </h2>
-        
-        {/* Search Bar */}
-        <div className="mt-8 max-w-3xl mx-auto">
+        <p className="mt-1 text-sm text-muted-foreground">
+          Choose your perspective so Gemini tailors the guidance and verification steps to your workflow.
+        </p>
+
+        {/* Role Cards */}
+        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+          <button
+            type="button"
+            onClick={() => setRole("apprentice")}
+            className={`flex flex-col items-start text-left rounded-xl border p-4 transition ${
+              role === "apprentice"
+                ? "border-primary bg-primary/10 ring-1 ring-primary"
+                : "border-border bg-background hover:border-border/80"
+            }`}
+          >
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">
+              Apprentice
+            </span>
+            <span className="mt-1 text-sm font-medium text-foreground">
+              Learn the code, prepare for licensing, and build confidence.
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setRole("field_electrician")}
+            className={`flex flex-col items-start text-left rounded-xl border p-4 transition ${
+              role === "field_electrician"
+                ? "border-primary bg-primary/10 ring-1 ring-primary"
+                : "border-border bg-background hover:border-border/80"
+            }`}
+          >
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">
+              Field Electrician
+            </span>
+            <span className="mt-1 text-sm font-medium text-foreground">
+              Navigate a real code question quickly and know what to verify.
+            </span>
+          </button>
+        </div>
+
+        {/* Search Input Box */}
+        <div className="mt-6">
           <div className="rounded-xl border border-border bg-background shadow-sm">
-            <input
-              type="text"
+            <textarea
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyDown={handleKeyDown}
-              placeholder="Ask a question or paste an NEC scenario..."
-              className="w-full px-5 py-4 text-base bg-transparent border-0 focus:outline-none focus:ring-0"
+              rows={3}
+              placeholder={
+                role === "apprentice"
+                  ? "Ask an NEC question (e.g. What is the working space depth for a 120V panel?)..."
+                  : "Enter a jobsite scenario (e.g. Conductor derating for 6 current-carrying wires in 40°C ambient)..."
+              }
+              className="w-full resize-none bg-transparent p-4 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none"
             />
-            
-            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 px-5 py-3 border-t border-border bg-secondary/30">
-              <div className="flex flex-wrap items-center gap-3">
-                {/* Mode Toggle */}
-                <div className="flex items-center gap-1">
-                  <button
-                    onClick={() => setMode("book")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${
-                      mode === "book"
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <BookOpen className="h-4 w-4" />
-                    Guided Method
-                  </button>
-                  <button
-                    onClick={() => setMode("fast")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${
-                      mode === "fast"
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <ZapIcon className="h-4 w-4" />
-                    Index Search
-                  </button>
-                  <button
-                    onClick={() => setMode("quick")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${
-                      mode === "quick"
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <MessageCircle className="h-4 w-4" />
-                    Quick Answer
-                  </button>
-                  <button
-                    onClick={() => setMode("uglys")}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition ${
-                      mode === "uglys"
-                        ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:text-foreground"
-                    }`}
-                  >
-                    <Calculator className="h-4 w-4" />
-                    Ugly's Reference
-                  </button>
-                </div>
-                
-                {/* Edition Dropdown */}
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-3 border-t border-border bg-secondary/30">
+              <div className="flex items-center gap-3">
+                <span className="text-xs font-medium text-muted-foreground">Code Edition:</span>
                 <select
                   value={edition}
                   onChange={(e) => setEdition(e.target.value)}
-                  className="px-3 py-1.5 rounded-md border border-border bg-background text-sm font-medium focus:outline-none focus:ring-2 focus:ring-primary"
+                  className="px-3 py-1.5 rounded-md border border-border bg-background text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary"
                 >
                   <option value="2026">NEC 2026</option>
                   <option value="2023">NEC 2023</option>
@@ -196,34 +168,29 @@ function Home() {
                   <option value="2017">NEC 2017</option>
                 </select>
               </div>
-              
-              {/* Submit Button */}
+
               <button
                 onClick={handleSearch}
-                disabled={!query.trim()}
-                className="flex items-center gap-2 px-4 py-2 rounded-md bg-primary text-primary-foreground font-medium hover:opacity-90 transition disabled:opacity-50 disabled:cursor-not-allowed"
+                className="inline-flex items-center gap-2 px-5 py-2 rounded-md bg-primary text-primary-foreground text-sm font-semibold hover:opacity-90 transition"
               >
                 <Search className="h-4 w-4" />
-                Search
+                Ask Code Compass
               </button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* MODULE 02 — PLC */}
-      <ModuleCard {...MODULE_02} />
-
-      {/* EXAM PREP */}
-      <section className="mt-14 rounded-2xl border border-border bg-card/50 p-6 sm:p-8">
+      {/* EXAM PREP SECTION */}
+      <section className="mt-12 rounded-2xl border border-border bg-card/50 p-6 sm:p-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="text-[10px] uppercase tracking-[0.2em] text-primary">
-              Sharpen your license track
+              License Track
             </div>
             <h2 className="mt-2 font-display text-2xl font-semibold">Journeyman exam prep</h2>
             <p className="mt-1 text-sm text-muted-foreground max-w-xl">
-              Timed NEC drills and a full 25-question practice test. Read the answer, keep moving.
+              Timed NEC drills and 25-question practice tests to prepare for licensing.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -244,47 +211,47 @@ function Home() {
         </div>
       </section>
 
-      {/* MODULE 03 — Data Center */}
-      <ModuleCard {...MODULE_03} />
-    </main>
-  );
-}
+      {/* NON-PRIMARY BETA / FUTURE TOOLS LOCATION */}
+      <section className="mt-12 pt-6 border-t border-border/40">
+        <button
+          type="button"
+          onClick={() => setShowBetaTools(!showBetaTools)}
+          className="flex items-center justify-between w-full rounded-xl border border-border/60 bg-card/30 p-4 text-xs font-semibold text-muted-foreground hover:text-foreground transition"
+        >
+          <span>Beta / Future Enterprise Modules (PLC Parsing & Compliance)</span>
+          {showBetaTools ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+        </button>
 
-function ModuleCard({ to, kicker, title, desc, Icon, cta, tier }: ModuleCard) {
-  return (
-    <section aria-labelledby="modules" className="mt-14">
-      <Link
-        to={to}
-        className="group relative flex flex-col gap-4 overflow-hidden rounded-2xl border border-border bg-card p-6 transition hover:border-primary/60 hover:shadow-ember sm:flex-row sm:items-center sm:justify-between"
-      >
-        <div className="flex items-start gap-4">
-          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-md bg-gradient-to-br from-primary to-accent text-primary-foreground">
-            <Icon className="h-5 w-5" />
-          </span>
-          <div>
-            <div className="flex items-center gap-2">
-              <span className="text-[10px] uppercase tracking-[0.2em] text-accent">{kicker}</span>
-              <span
-                className={
-                  tier === "FREE"
-                    ? "rounded-full bg-primary/15 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-primary"
-                    : "rounded-full border border-border px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-muted-foreground"
-                }
-              >
-                {tier}
-              </span>
-            </div>
-            <h3 className="mt-1 font-display text-xl sm:text-2xl font-semibold leading-tight">
-              {title}
-            </h3>
-            <p className="mt-2 text-sm text-muted-foreground max-w-2xl">{desc}</p>
+        {showBetaTools && (
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <Link
+              to="/plc"
+              className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 transition hover:border-primary/50"
+            >
+              <Cpu className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <div className="text-sm font-semibold text-foreground">PLC Parser (Beta)</div>
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  Upload Rockwell L5X files for ladder logic analysis.
+                </div>
+              </div>
+            </Link>
+
+            <Link
+              to="/data-center"
+              className="flex items-start gap-3 rounded-xl border border-border bg-card p-4 transition hover:border-primary/50"
+            >
+              <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+              <div>
+                <div className="text-sm font-semibold text-foreground">Data Center Compliance (Beta)</div>
+                <div className="text-xs text-muted-foreground mt-0.5">
+                  Arc-flash boundary & NFPA 70E compliance workflows.
+                </div>
+              </div>
+            </Link>
           </div>
-        </div>
-        <div className="flex items-center gap-2 text-sm text-primary sm:pl-4">
-          {cta}
-          <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
-        </div>
-      </Link>
-    </section>
+        )}
+      </section>
+    </main>
   );
 }
