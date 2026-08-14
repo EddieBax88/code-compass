@@ -91,8 +91,7 @@ const OCP_MULTIPLIER: Record<OcpDeviceType, number> = {
 // -------------------------------------------------------------------
 
 export type LookupResult =
-  | { ok: true; amps: number; citation: string }
-  | { ok: false; missing: true; reason: string };
+  { ok: true; amps: number; citation: string } | { ok: false; missing: true; reason: string };
 
 export function lookupFLA(hp: number, voltage: number, phase: Phase): LookupResult {
   const table = phase === 1 ? FLA_SINGLE_PHASE : FLA_THREE_PHASE;

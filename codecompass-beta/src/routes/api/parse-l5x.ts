@@ -62,7 +62,7 @@ export const Route = createFileRoute("/api/parse-l5x")({
           const stack = error instanceof Error ? error.stack : undefined;
           console.error("L5X parse error:", { message: errMsg, stack });
           return new Response(
-            JSON.stringify({ 
+            JSON.stringify({
               error: "Failed to parse L5X file. Invalid format or unsupported schema.",
               details: process.env.NODE_ENV === "development" ? errMsg : undefined,
             }),
