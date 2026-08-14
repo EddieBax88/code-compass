@@ -7,7 +7,7 @@ export const Route = createFileRoute("/api/chat")({
       POST: async ({ request }) => {
         try {
           const body = await request.json().catch(() => ({}));
-          const { message, role = "apprentice", edition = "2026" } = body;
+          const { message, edition = "2026" } = body;
 
           if (!message || typeof message !== "string") {
             return new Response(JSON.stringify({ error: "No message provided" }), {
@@ -29,59 +29,49 @@ export const Route = createFileRoute("/api/chat")({
               {
                 status: 500,
                 headers: { "content-type": "application/json" },
-              },
+              }
             );
           }
-
-          const validRoles = ["apprentice", "journeyman", "master"] as const;
-          type ValidRole = (typeof validRoles)[number];
-          const activeRole: ValidRole = validRoles.includes(role as ValidRole)
-            ? (role as ValidRole)
-            : "apprentice";
 
           const genAI = new GoogleGenerativeAI(apiKey);
           const modelName = "gemini-3.7-flash";
           const model = genAI.getGenerativeModel({ model: modelName });
 
-          const prompt = `You are the Code Compass NEC Co-Pilot. You provide educational decision support for electrical trade professionals and apprentices.
+          const prompt = `You are the Code Compass NEC Co-Pilot. Your job is to teach electricians how to look up answers in their NEC codebook using the true Codeology method combined with practical index navigation. You NEVER give the answer directly — you always walk through the 4-step lookup process first, then tell them to open their codebook and verify.
 
-TRADE-LEVEL OUTPUT RULES:
-${
-  activeRole === "apprentice"
-    ? `APPRENTICE PROTOCOL (Book Navigation & Learning Focus):
-1. Quick Answer: Output the concise, direct Quick Answer first.
-2. 5-Step NEC Code Navigation Protocol & Manual Math Breakdown (Teach physical book navigation):
-   - Step 1: Index Key Words (Search Strategy) - State the exact primary subject/term to look up in the physical NEC Index (e.g., search "Tubing, Electrical Metallic" instead of "EMT").
-   - Step 2: Chapter & Article Path - Map out the structural path through the NEC (e.g., Chapter 3 Wiring Methods -> Article 358 EMT -> Chapter 9 Tables).
-   - Step 3: Table & Section Lookup - Detail how to locate exact values in code tables or sections (e.g., Chapter 9 Table 4 for raceway area, Table 5 for conductor area, or Annex C for pre-calculated fill).
-   - Step 4: Step-by-Step Calculation & Manual Math Breakdown - Show clear manual mathematical steps using the extracted code numbers and values so the apprentice masters manual calculation fundamentals.
-   - Step 5: Cross-References & Field Exceptions - List mandatory follow-up sections, derating factors, and safety rules.
-Goal: Train the apprentice to navigate the physical codebook and perform trade calculations under exam and jobsite conditions.`
-    : `JOURNEYMAN & MASTER PROTOCOL (Rapid Jobsite Verification Focus):
-1. Quick Answer & Exact NEC Citation: Output the direct bottom-line Quick Answer and exact NEC article, section, and table citations first.
-2. Field Verification Notes & Exception Cross-References: Provide rapid verification points for immediate on-site verification, including:
-   - Conductor ampacity derating and ambient temperature adjustment factors (Table 310.15/Article 310)
-   - Nipple fill rules and raceway length exceptions (Chapter 9 Note 4 for raceways <= 24 inches / 600mm)
-   - Continuous load rules (125% sizing where applicable)
-   - Terminal temperature ratings (60°C / 75°C / 90°C per 110.14(C))
-   - Authority Having Jurisdiction (AHJ) notes and common local inspection checkpoints.
-Goal: Rapid on-site verification and exception cross-referencing without unnecessary exposition.`
-}
+CRITICAL CODEOLOGY BUCKET MAPPINGS:
+- General = Chapter 1. Use this for baseline rules, definitions, working spaces, and general requirements.
+- Plan = Chapter 2. Use this for circuits, services, feeders, grounding, and protection.
+- Build = Chapter 3. Use this for wiring methods, raceways, conduit, boxes, and installation methods.
+- Use = Chapter 4. Use this for equipment, motors, appliances, and general-use equipment.
 
-SAFETY DIRECTIVE:
-1. This tool provides educational guidance only. It does NOT replace the applicable adopted code, local amendments, authority having jurisdiction (AHJ), employer procedures, licensed electrician, engineer, inspector, or required supervision.
-2. Do NOT fabricate NEC article or section citations. Verify all requirements against your local adopted codebook and AHJ.
-3. Do NOT use trademarked terms such as "Codeology".
+Your ONLY response format — every single time, no exceptions:
 
-USER CONTEXT:
-- Role: ${activeRole === "apprentice" ? "Apprentice" : activeRole === "journeyman" ? "Journeyman" : "Master"}
-- Edition: NEC ${edition}
-- Question: "${message}"`;
+STEP 1 - CLASSIFY: Identify which Codeology bucket the question belongs to first (General / Plan / Build / Use), then name the NEC chapter (Chapter 1-4). Example: working space questions are ALWAYS General / Chapter 1, never Build.
+
+STEP 2 - KEYWORDS: Pull the 1-3 keywords the electrician should look up in the index.
+
+STEP 3 - ARTICLE: Explain what the index should point them to, then name the specific article and section number.
+
+STEP 4 - VERIFY: Name the exact table or subsection that contains the answer and state the answer clearly.
+
+Open your codebook to Article [X.XX] and verify.
+
+Rules:
+- NEVER skip the 4-step format. If a question is unclear, ask them to rephrase using an NEC-related term.
+- NEVER paste copyrighted NEC text verbatim. Paraphrase and cite.
+- NEVER say 'the answer is...' without walking through all 4 steps first.
+- Always end with 'Open your codebook to Article [number] and verify.'
+- Keep each step to 1-2 sentences max. Be direct like a Master Electrician teaching an apprentice to move fast in the book.
+- Use plain text only — no markdown bold, no bullet asterisks, no headers, no extra commentary.
+
+Question: "${message}"
+NEC Edition: ${edition}`;
 
           const result = await model.generateContent(prompt);
-          const text = result.response.text();
+          const text = result.response.text().trim();
 
-          return new Response(JSON.stringify({ text, message: text, role: activeRole }), {
+          return new Response(JSON.stringify({ text, message: text }), {
             status: 200,
             headers: { "content-type": "application/json" },
           });
@@ -92,7 +82,7 @@ USER CONTEXT:
             {
               status: 500,
               headers: { "content-type": "application/json" },
-            },
+            }
           );
         }
       },

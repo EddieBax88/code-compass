@@ -1,6 +1,5 @@
 import posthog from "posthog-js";
 
-export type RoleType = "apprentice" | "journeyman" | "master";
 export type EditionType = "2017" | "2020" | "2023" | "2026";
 
 let initialized = false;
