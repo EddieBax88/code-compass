@@ -333,6 +333,31 @@ function PracticeTest() {
   const [answers, setAnswers] = useState<Record<string, number>>({});
   const [submitted, setSubmitted] = useState(false);
   const [startedAt, setStartedAt] = useState<number | null>(null);
+  const [showPaywall, setShowPaywall] = useState(false);
+
+  const startDrill = () => {
+    if (typeof window !== "undefined") {
+      const isPaid = localStorage.getItem("cc_pro_subscriber") === "true";
+      const testCount = parseInt(localStorage.getItem("cc_test_count") || "0", 10);
+      if (!isPaid && testCount >= 1) {
+        setShowPaywall(true);
+        return;
+      }
+    }
+    setStarted(true);
+    setStartedAt(Date.now());
+  };
+
+  const handleFinish = () => {
+    setSubmitted(true);
+    if (typeof window !== "undefined") {
+      const isPaid = localStorage.getItem("cc_pro_subscriber") === "true";
+      if (!isPaid) {
+        const testCount = parseInt(localStorage.getItem("cc_test_count") || "0", 10);
+        localStorage.setItem("cc_test_count", (testCount + 1).toString());
+      }
+    }
+  };
 
   const q = QUESTIONS[idx];
 
@@ -392,10 +417,7 @@ function PracticeTest() {
 
         <div className="mt-8 flex flex-wrap gap-3">
           <button
-            onClick={() => {
-              setStarted(true);
-              setStartedAt(Date.now());
-            }}
+            onClick={startDrill}
             className="inline-flex items-center gap-2 rounded-md bg-primary px-5 py-3 font-medium text-primary-foreground shadow-ember hover:opacity-90 transition"
           >
             Start test →
@@ -566,7 +588,7 @@ function PracticeTest() {
           </button>
         ) : (
           <button
-            onClick={() => setSubmitted(true)}
+            onClick={handleFinish}
             disabled={answered < QUESTIONS.length}
             className="rounded-md bg-primary px-5 py-2 text-sm font-medium text-primary-foreground shadow-ember hover:opacity-90 disabled:opacity-40"
             title={
@@ -599,6 +621,38 @@ function PracticeTest() {
           );
         })}
       </div>
+
+      {/* PAYWALL MODAL */}
+      {showPaywall && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="max-w-md w-full rounded-2xl border border-amber-500/40 bg-card p-6 shadow-2xl text-center space-y-4">
+            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20 text-amber-500 font-bold text-xl">
+              ⚡
+            </div>
+            <h2 className="font-display text-2xl font-bold">Unlock Unlimited Practice Tests</h2>
+            <p className="text-sm text-muted-foreground">
+              You've completed your free practice drill. Become a Founding Member for unlimited
+              journeyman practice drills, full explanations, and AI code assistance.
+            </p>
+            <div className="pt-2">
+              <a
+                href="https://buy.stripe.com/7sYeVd6waag23eygKZ3sI02"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 px-6 py-3.5 text-base font-bold text-black shadow-lg transition"
+              >
+                Founding Member - $1.99
+              </a>
+            </div>
+            <button
+              onClick={() => setShowPaywall(false)}
+              className="text-xs text-muted-foreground hover:text-foreground pt-1"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
     </main>
   );
 }

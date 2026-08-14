@@ -14,6 +14,7 @@ import { NecBanner, NecPill } from "@/components/NecBanner";
 import { AuthNav, SignInPrompt } from "@/components/AuthNav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { reportLovableError } from "../lib/lovable-error-reporting";
+import { initPostHog } from "../lib/posthog";
 
 function NotFoundComponent() {
   return (
@@ -216,6 +217,10 @@ function SiteHeader() {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+
+  useEffect(() => {
+    initPostHog();
+  }, []);
 
   return (
     <QueryClientProvider client={queryClient}>

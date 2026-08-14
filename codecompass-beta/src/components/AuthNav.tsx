@@ -3,21 +3,37 @@ import { useAuth } from "@/lib/auth";
 
 export function AuthNav() {
   const { user, loading, signOut } = useAuth();
+
+  const upgradeBtn = (
+    <a
+      href="https://buy.stripe.com/7sYeVd6waag23eygKZ3sI02"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-1 rounded-md bg-amber-500 hover:bg-amber-600 px-3 py-1.5 text-xs font-bold text-black shadow-sm transition"
+    >
+      Founding Member - $1.99
+    </a>
+  );
+
   if (loading) return <div className="w-16" />;
   if (!user) {
     return (
-      <Link
-        to="/auth"
-        search={{ next: undefined }}
-        className="rounded-md border border-primary/60 bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary hover:text-primary-foreground transition"
-      >
-        Sign in
-      </Link>
+      <div className="flex items-center gap-2">
+        {upgradeBtn}
+        <Link
+          to="/auth"
+          search={{ next: undefined }}
+          className="rounded-md border border-primary/60 bg-primary/10 px-3 py-1.5 text-sm font-medium text-primary hover:bg-primary hover:text-primary-foreground transition"
+        >
+          Sign in
+        </Link>
+      </div>
     );
   }
   const initial = (user.email ?? "?").slice(0, 1).toUpperCase();
   return (
     <div className="flex items-center gap-2">
+      {upgradeBtn}
       <Link
         to="/profile"
         aria-label={`Open profile for ${user.email ?? "your account"}`}

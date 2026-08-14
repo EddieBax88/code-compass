@@ -1,26 +1,44 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Zap, Cpu, ShieldCheck, ArrowRight, Search, BookOpen, MessageCircle, Calculator, ChevronDown, ChevronUp } from "lucide-react";
+import { Zap, Cpu, ShieldCheck, ArrowRight, Search, ChevronDown, ChevronUp } from "lucide-react";
 
 export const Route = createFileRoute("/")({
-  validateSearch: (s: Record<string, unknown>) => ({
-    q: typeof s.q === "string" ? s.q : undefined,
-    role: s.role === "field_electrician" ? "field_electrician" : "apprentice",
-    edition: typeof s.edition === "string" ? s.edition : "2026",
-  }),
+  validateSearch: (
+    s: Record<string, unknown>,
+  ): { q?: string; role?: "apprentice" | "journeyman" | "master"; edition?: string } => {
+    try {
+      const clean = (v: unknown) => {
+        if (!v) return undefined;
+        if (Array.isArray(v)) v = v[0];
+        const str = String(v).replace(/["']/g, "").trim();
+        return str.length > 0 ? str : undefined;
+      };
+
+      const rawRole = clean(s.role);
+      const role =
+        rawRole === "master" ? "master" : rawRole === "journeyman" ? "journeyman" : "apprentice";
+      const rawEd = clean(s.edition);
+      const edition = rawEd && ["2017", "2020", "2023", "2026"].includes(rawEd) ? rawEd : "2026";
+      const q = clean(s.q);
+
+      return { q, role, edition };
+    } catch {
+      return { q: undefined, role: "apprentice", edition: "2026" };
+    }
+  },
   head: () => ({
     meta: [
       { title: "Code Compass — Understand the Electrical Code" },
       {
         name: "description",
         content:
-          "Code Compass helps apprentices learn and helps working electricians navigate NEC questions with clear Gemini-powered explanations, stated assumptions, and practical verification steps.",
+          "Code Compass helps apprentices learn book navigation and helps journeymen and master electricians verify NEC questions with clear Gemini-powered citations, stated assumptions, and jobsite verification steps.",
       },
       { property: "og:title", content: "Code Compass — Understand the Electrical Code" },
       {
         property: "og:description",
         content:
-          "Gemini-powered NEC guidance for apprentices and working electricians.",
+          "Gemini-powered NEC guidance for apprentices, journeymen, and master electricians.",
       },
       { property: "og:url", content: "https://www.codecompass.work/" },
     ],
@@ -31,23 +49,16 @@ export const Route = createFileRoute("/")({
 
 function Home() {
   const navigate = useNavigate();
-  const [role, setRole] = useState<"apprentice" | "field_electrician">("apprentice");
+  const [role, setRole] = useState<"apprentice" | "journeyman" | "master">("apprentice");
   const [edition, setEdition] = useState("2026");
   const [query, setQuery] = useState("");
   const [showBetaTools, setShowBetaTools] = useState(false);
 
   const handleSearch = () => {
-    if (query.trim()) {
-      navigate({
-        to: "/study-tools",
-        search: { role, edition, q: query },
-      });
-    } else {
-      navigate({
-        to: "/study-tools",
-        search: { role, edition },
-      });
-    }
+    navigate({
+      to: "/study-tools",
+      search: { role, edition, q: query.trim() || undefined },
+    });
   };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
@@ -69,7 +80,9 @@ function Home() {
             Understand the electrical code. Work with more confidence.
           </h1>
           <p className="mt-6 text-lg sm:text-xl text-foreground/85 max-w-3xl font-medium leading-relaxed">
-            Code Compass helps apprentices learn and helps working electricians navigate NEC questions with clear Gemini-powered explanations, stated assumptions, and practical verification steps.
+            Code Compass helps apprentices learn book navigation and helps journeymen and master
+            electricians verify NEC questions with clear Gemini-powered citations, stated
+            assumptions, and jobsite verification steps.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <button
@@ -98,11 +111,12 @@ function Home() {
           Select your role & ask a code question
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Choose your perspective so Gemini tailors the guidance and verification steps to your workflow.
+          Choose your trade tier so Gemini tailors the guidance and verification steps to your
+          workflow.
         </p>
 
         {/* Role Cards */}
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
+        <div className="mt-6 grid gap-3 sm:grid-cols-3">
           <button
             type="button"
             onClick={() => setRole("apprentice")}
@@ -115,25 +129,40 @@ function Home() {
             <span className="text-xs font-bold uppercase tracking-wider text-primary">
               Apprentice
             </span>
-            <span className="mt-1 text-sm font-medium text-foreground">
-              Learn the code, prepare for licensing, and build confidence.
+            <span className="mt-1 text-xs sm:text-sm font-medium text-foreground">
+              Learn the code, master book navigation, and prepare for licensing.
             </span>
           </button>
 
           <button
             type="button"
-            onClick={() => setRole("field_electrician")}
+            onClick={() => setRole("journeyman")}
             className={`flex flex-col items-start text-left rounded-xl border p-4 transition ${
-              role === "field_electrician"
+              role === "journeyman"
                 ? "border-primary bg-primary/10 ring-1 ring-primary"
                 : "border-border bg-background hover:border-border/80"
             }`}
           >
             <span className="text-xs font-bold uppercase tracking-wider text-primary">
-              Field Electrician
+              Journeyman
             </span>
-            <span className="mt-1 text-sm font-medium text-foreground">
-              Navigate a real code question quickly and know what to verify.
+            <span className="mt-1 text-xs sm:text-sm font-medium text-foreground">
+              Rapid code citations, field verification, and jobsite exceptions.
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setRole("master")}
+            className={`flex flex-col items-start text-left rounded-xl border p-4 transition ${
+              role === "master"
+                ? "border-primary bg-primary/10 ring-1 ring-primary"
+                : "border-border bg-background hover:border-border/80"
+            }`}
+          >
+            <span className="text-xs font-bold uppercase tracking-wider text-primary">Master</span>
+            <span className="mt-1 text-xs sm:text-sm font-medium text-foreground">
+              Advanced compliance, system sizing, and AHJ cross-references.
             </span>
           </button>
         </div>
@@ -149,7 +178,9 @@ function Home() {
               placeholder={
                 role === "apprentice"
                   ? "Ask an NEC question (e.g. What is the working space depth for a 120V panel?)..."
-                  : "Enter a jobsite scenario (e.g. Conductor derating for 6 current-carrying wires in 40°C ambient)..."
+                  : role === "journeyman"
+                    ? "Enter a jobsite scenario (e.g. Conductor derating for 6 current-carrying wires in 40°C ambient)..."
+                    : "Enter a system compliance scenario (e.g. Sizing 400A commercial service conductors or transformer OCPD)..."
               }
               className="w-full resize-none bg-transparent p-4 text-sm leading-relaxed text-foreground placeholder:text-muted-foreground focus:outline-none"
             />
@@ -185,12 +216,12 @@ function Home() {
       <section className="mt-12 rounded-2xl border border-border bg-card/50 p-6 sm:p-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-primary">
-              License Track
-            </div>
-            <h2 className="mt-2 font-display text-2xl font-semibold">Journeyman exam prep</h2>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-primary">License Track</div>
+            <h2 className="mt-2 font-display text-2xl font-semibold">
+              Journeyman & Master exam prep
+            </h2>
             <p className="mt-1 text-sm text-muted-foreground max-w-xl">
-              Timed NEC drills and 25-question practice tests to prepare for licensing.
+              Timed NEC drills and 25-question practice tests to sharpen trade exam mastery.
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -243,7 +274,9 @@ function Home() {
             >
               <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div>
-                <div className="text-sm font-semibold text-foreground">Data Center Compliance (Beta)</div>
+                <div className="text-sm font-semibold text-foreground">
+                  Data Center Compliance (Beta)
+                </div>
                 <div className="text-xs text-muted-foreground mt-0.5">
                   Arc-flash boundary & NFPA 70E compliance workflows.
                 </div>
