@@ -3,9 +3,7 @@ import { useState } from "react";
 import { Zap, Cpu, ShieldCheck, ArrowRight, Search, ChevronDown, ChevronUp } from "lucide-react";
 
 export const Route = createFileRoute("/")({
-  validateSearch: (
-    s: Record<string, unknown>,
-  ): { q?: string; edition?: string } => {
+  validateSearch: (s: Record<string, unknown>): { q?: string; edition?: string } => {
     try {
       const clean = (v: unknown) => {
         if (!v) return undefined;
@@ -73,10 +71,12 @@ function Home() {
             Gemini-Powered Codeology Engine
           </div>
           <h1 className="mt-6 font-display text-4xl sm:text-6xl font-black leading-[1.05] tracking-tight">
-            Understand the electrical code. Work with more confidence.
+            The future of the trades starts here.
           </h1>
           <p className="mt-6 text-lg sm:text-xl text-foreground/85 max-w-3xl font-medium leading-relaxed">
-            Code Compass trains electricians to master the NEC using the 4-Step Codeology method: Classify (General / Plan / Build / Use), Index Keywords, Article Structure, and Physical Book Verification.
+            Ask anything on the job — bending pipe, conduit fill, wiring — get the answer AND the
+            exact article and page to open in your own code book. Then let it drill you for your
+            license exam.
           </p>
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <button
@@ -151,9 +151,7 @@ function Home() {
       <section className="mt-12 rounded-2xl border border-border bg-card/50 p-6 sm:p-8">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <div className="text-[10px] uppercase tracking-[0.2em] text-primary">
-              License Track
-            </div>
+            <div className="text-[10px] uppercase tracking-[0.2em] text-primary">License Track</div>
             <h2 className="mt-2 font-display text-2xl font-semibold">State exam prep</h2>
             <p className="mt-1 text-sm text-muted-foreground max-w-xl">
               Timed NEC drills and 25-question practice tests to sharpen trade exam mastery.
@@ -173,6 +171,30 @@ function Home() {
             >
               Timed drills
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* NO GATEKEEPING SECTION */}
+      <section className="mt-12 rounded-2xl border border-border bg-card/50 p-6 sm:p-8">
+        <div className="max-w-3xl">
+          <h2 className="font-display text-2xl sm:text-3xl font-semibold">
+            Nobody's holding you back anymore.
+          </h2>
+          <div className="mt-4 space-y-4 text-sm sm:text-base text-foreground/85 leading-relaxed">
+            <p>
+              You shouldn't have to wait four years for someone to hand you information they
+              could've taught you in a week. Most apprentices aren't held back because the code is
+              hard — they're held back because the people teaching it get paid to take their time.
+            </p>
+            <p>
+              Code Compass doesn't drip-feed you. Ask any question, get the how-to, the article, the
+              section, and the exact page to open in your own book. Then go get paid what you're
+              worth.
+            </p>
+            <p className="font-medium text-foreground">
+              $1.99/month. No school. No waiting list. No permission needed.
+            </p>
           </div>
         </div>
       </section>
@@ -209,7 +231,9 @@ function Home() {
             >
               <ShieldCheck className="h-5 w-5 text-primary shrink-0 mt-0.5" />
               <div>
-                <div className="text-sm font-semibold text-foreground">Data Center Compliance (Beta)</div>
+                <div className="text-sm font-semibold text-foreground">
+                  Data Center Compliance (Beta)
+                </div>
                 <div className="text-xs text-muted-foreground mt-0.5">
                   Arc-flash boundary & NFPA 70E compliance workflows.
                 </div>
