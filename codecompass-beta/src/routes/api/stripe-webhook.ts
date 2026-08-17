@@ -34,7 +34,7 @@ async function upsertSubscriptionRecord(data: {
       method: "POST",
       headers: {
         apikey: serviceKey,
-        Authorization: `Bearer ${serviceKey}`,
+        Authorization: "Bearer " + serviceKey,
         "Content-Type": "application/json",
         Prefer: "resolution=merge-duplicates",
       },
@@ -152,7 +152,7 @@ export const Route = createFileRoute("/api/stripe-webhook")({
                     method: "PATCH",
                     headers: {
                       apikey: serviceKey,
-                      Authorization: `Bearer ${serviceKey}`,
+                      Authorization: "Bearer " + serviceKey,
                       "Content-Type": "application/json",
                       Prefer: "return=minimal",
                     },
@@ -184,7 +184,7 @@ export const Route = createFileRoute("/api/stripe-webhook")({
             if (stripeKey && customerId) {
               try {
                 const custRes = await fetch(`https://api.stripe.com/v1/customers/${customerId}`, {
-                  headers: { Authorization: `Bearer ${stripeKey}` },
+                  headers: { Authorization: "Bearer " + stripeKey },
                 });
                 if (custRes.ok) {
                   const cust = await custRes.json();

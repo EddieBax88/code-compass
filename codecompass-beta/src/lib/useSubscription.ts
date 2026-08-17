@@ -26,7 +26,7 @@ export function useSubscription() {
 
       const headers: Record<string, string> = {};
       if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
+        headers["Authorization"] = "Bearer " + token;
       }
 
       const res = await fetch("/api/subscription-status", {

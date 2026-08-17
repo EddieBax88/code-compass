@@ -117,7 +117,7 @@ export async function getAuthUser(
     const res = await fetch(`${supabaseUrl}/auth/v1/user`, {
       headers: {
         apikey: serviceKey,
-        Authorization: `Bearer ${token}`,
+        Authorization: "Bearer " + token,
       },
     });
 
@@ -144,38 +144,53 @@ export async function checkIsFoundingMember(userId?: string, userEmail?: string)
 
   if (supabaseUrl && serviceKey) {
     try {
-      // Query subscriptions table in Supabase
-      const queryParams = new URLSearchParams();
+      let subscriptions: any[] = [];
+
+      // First try by user_id
       if (userId) {
-        queryParams.set("user_id", `eq.${userId}`);
-      } else if (userEmail) {
-        queryParams.set("customer_email", `eq.${userEmail}`);
-      }
-      queryParams.set("status", "in.(active,trialing)");
-
-      const res = await fetch(`${supabaseUrl}/rest/v1/subscriptions?${queryParams.toString()}`, {
-        headers: {
-          apikey: serviceKey,
-          Authorization: `Bearer ${serviceKey}`,
-        },
-      });
-
-      if (res.ok) {
-        const subscriptions = await res.json();
-        if (Array.isArray(subscriptions) && subscriptions.length > 0) {
-          // Check if subscription has valid status and price/plan
-          const hasActiveSub = subscriptions.some((sub: any) => {
-            const isActive = sub.status === "active" || sub.status === "trialing";
-            const isTargetPrice =
-              !sub.price_id ||
-              sub.price_id === FOUNDING_MEMBER_PRICE_ID ||
-              sub.price_id === LIFETIME_PRICE_ID ||
-              sub.plan === "founding_member" ||
-              sub.plan === "lifetime";
-            return isActive && isTargetPrice;
-          });
-          if (hasActiveSub) return true;
+        const res = await fetch(
+          `${supabaseUrl}/rest/v1/subscriptions?user_id=eq.${userId}&status=in.(active,trialing)`,
+          {
+            headers: {
+              apikey: serviceKey,
+              Authorization: "Bearer " + serviceKey,
+            },
+          },
+        );
+        if (res.ok) {
+          subscriptions = await res.json();
         }
+      }
+
+      // Fallback by customer_email if not found by user_id
+      if ((!subscriptions || subscriptions.length === 0) && userEmail) {
+        const res = await fetch(
+          `${supabaseUrl}/rest/v1/subscriptions?customer_email=eq.${encodeURIComponent(userEmail)}&status=in.(active,trialing)`,
+          {
+            headers: {
+              apikey: serviceKey,
+              Authorization: "Bearer " + serviceKey,
+            },
+          },
+        );
+        if (res.ok) {
+          subscriptions = await res.json();
+        }
+      }
+
+      if (Array.isArray(subscriptions) && subscriptions.length > 0) {
+        // Check if subscription has valid status and price/plan
+        const hasActiveSub = subscriptions.some((sub: any) => {
+          const isActive = sub.status === "active" || sub.status === "trialing";
+          const isTargetPrice =
+            !sub.price_id ||
+            sub.price_id === FOUNDING_MEMBER_PRICE_ID ||
+            sub.price_id === LIFETIME_PRICE_ID ||
+            sub.plan === "founding_member" ||
+            sub.plan === "lifetime";
+          return isActive && isTargetPrice;
+        });
+        if (hasActiveSub) return true;
       }
     } catch (err) {
       console.warn("[Paywall] Error querying Supabase subscriptions table:", err);
@@ -189,7 +204,7 @@ export async function checkIsFoundingMember(userId?: string, userEmail?: string)
       const custRes = await fetch(
         `https://api.stripe.com/v1/customers?email=${encodeURIComponent(userEmail)}&limit=1`,
         {
-          headers: { Authorization: `Bearer ${stripeKey}` },
+          headers: { Authorization: "Bearer " + stripeKey },
         },
       );
       if (custRes.ok) {
@@ -199,7 +214,7 @@ export async function checkIsFoundingMember(userId?: string, userEmail?: string)
           const subRes = await fetch(
             `https://api.stripe.com/v1/subscriptions?customer=${customer.id}&status=active&limit=5`,
             {
-              headers: { Authorization: `Bearer ${stripeKey}` },
+              headers: { Authorization: "Bearer " + stripeKey },
             },
           );
           if (subRes.ok) {

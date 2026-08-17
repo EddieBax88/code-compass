@@ -2,6 +2,7 @@ import { describe, it, expect } from "vitest";
 import {
   parseUsageCookie,
   createSignedUsageCookie,
+  enforcePaywall,
 } from "../codecompass-beta/src/lib/paywall.server";
 
 describe("Paywall Cookie Signing & Verification", () => {
@@ -38,5 +39,61 @@ describe("Paywall Cookie Signing & Verification", () => {
       count: 0,
       valid: false,
     });
+  });
+});
+
+describe("enforcePaywall Server-Side Enforcement", () => {
+  it("should allow first guest question and reject subsequent questions with 402 error", async () => {
+    const testIp = `198.51.100.${Math.floor(Math.random() * 200) + 10}`;
+
+    // First request from guest
+    const req1 = new Request("http://localhost:3000/api/nec-lookup", {
+      method: "POST",
+      headers: {
+        "x-forwarded-for": testIp,
+        "content-type": "application/json",
+      },
+    });
+
+    const result1 = await enforcePaywall(req1);
+    expect(result1.allowed).toBe(true);
+    expect(result1.isPaid).toBe(false);
+    expect(result1.setCookieHeader).toBeTruthy();
+
+    // Extract cookie for second request
+    const cookieVal = result1.setCookieHeader?.split(";")[0];
+
+    // Second request with cookie
+    const req2WithCookie = new Request("http://localhost:3000/api/nec-lookup", {
+      method: "POST",
+      headers: {
+        "x-forwarded-for": `198.51.100.${Math.floor(Math.random() * 200) + 10}`, // different IP
+        cookie: cookieVal || "",
+        "content-type": "application/json",
+      },
+    });
+
+    const result2 = await enforcePaywall(req2WithCookie);
+    expect(result2.allowed).toBe(false);
+    expect(result2.isPaid).toBe(false);
+    if (!result2.allowed) {
+      expect(result2.error).toBe("founding_member_required");
+    }
+
+    // Second request from same IP even without cookie
+    const req2SameIp = new Request("http://localhost:3000/api/nec-lookup", {
+      method: "POST",
+      headers: {
+        "x-forwarded-for": testIp,
+        "content-type": "application/json",
+      },
+    });
+
+    const result3 = await enforcePaywall(req2SameIp);
+    expect(result3.allowed).toBe(false);
+    expect(result3.isPaid).toBe(false);
+    if (!result3.allowed) {
+      expect(result3.error).toBe("founding_member_required");
+    }
   });
 });

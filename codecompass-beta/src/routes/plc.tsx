@@ -9,7 +9,7 @@ export const Route = createFileRoute("/plc")({
     const title = "Industrial PLC Parsing (L5X) — NFPA 70 NEC 2026 Edition | Code Compass";
     const description =
       "NFPA 70 National Electrical Code (NEC) 2026 Edition — upload Rockwell L5X exports and parse tags, routines, and rung logic with SHA-256 verification for NEC-compliant controls-engineer troubleshooting.";
-    const url = "https://codecompass.com/plc";
+    const url = "https://codecompass.work/plc";
     return {
       meta: [
         { title },
@@ -71,7 +71,7 @@ function PlcPage() {
 
       const headers: Record<string, string> = {};
       if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
+        headers["Authorization"] = "Bearer " + token;
       }
 
       const formData = new FormData();
