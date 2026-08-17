@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNecEdition } from "@/lib/nec-edition";
+import { useSubscription } from "@/lib/useSubscription";
+import { FoundingMemberModal } from "@/components/FoundingMemberModal";
 
 export const Route = createFileRoute("/exam-prep")({
   head: () => {
@@ -179,7 +181,17 @@ type ModeId = (typeof MODES)[number]["id"];
 
 function ExamPrep() {
   const { edition } = useNecEdition();
+  const { isFoundingMember, guestUsage } = useSubscription();
   const [mode, setMode] = useState<ModeId>("speed");
+  const [showPaywall, setShowPaywall] = useState(false);
+
+  const handleSelectMode = (newMode: ModeId) => {
+    if (!isFoundingMember && guestUsage.used >= 1 && newMode !== mode) {
+      setShowPaywall(true);
+      return;
+    }
+    setMode(newMode);
+  };
 
   return (
     <main className="mx-auto max-w-3xl px-5 py-10">
@@ -210,7 +222,7 @@ function ExamPrep() {
         {MODES.map((m) => (
           <button
             key={m.id}
-            onClick={() => setMode(m.id)}
+            onClick={() => handleSelectMode(m.id)}
             className={`rounded-md border px-4 py-2 text-sm font-medium transition ${
               mode === m.id
                 ? "border-primary bg-primary text-primary-foreground shadow-ember"
@@ -226,18 +238,38 @@ function ExamPrep() {
         {MODES.find((m) => m.id === mode)!.desc}
       </div>
 
-      <Drill key={mode} mode={mode} />
+      <Drill
+        key={mode}
+        mode={mode}
+        isFoundingMember={isFoundingMember}
+        onRequirePaywall={() => setShowPaywall(true)}
+      />
 
       <div className="mt-10 text-sm">
         <Link to="/study-tools" className="text-primary hover:underline">
           ← Back to study tools
         </Link>
       </div>
+
+      <FoundingMemberModal
+        isOpen={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        title="Unlock Unlimited Timed Drills"
+        description="Become a Founding Member for unlimited timed drills across Speed-Find, Motor Calculations, and Code Hunt."
+      />
     </main>
   );
 }
 
-function Drill({ mode }: { mode: ModeId }) {
+function Drill({
+  mode,
+  isFoundingMember,
+  onRequirePaywall,
+}: {
+  mode: ModeId;
+  isFoundingMember: boolean;
+  onRequirePaywall: () => void;
+}) {
   const bank = useMemo(() => shuffle(MODES.find((m) => m.id === mode)!.bank), [mode]);
   const [idx, setIdx] = useState(0);
   const [answer, setAnswer] = useState("");
@@ -280,6 +312,10 @@ function Drill({ mode }: { mode: ModeId }) {
         </div>
         <button
           onClick={() => {
+            if (!isFoundingMember) {
+              onRequirePaywall();
+              return;
+            }
             setIdx(0);
             setCorrect(0);
             setAnswer("");

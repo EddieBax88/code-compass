@@ -1,12 +1,33 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { parseL5X } from "@/lib/l5x-parser";
 import { renderLadderSVG } from "@/lib/svg-renderer";
+import { enforcePaywall } from "@/lib/paywall.server";
 
 export const Route = createFileRoute("/api/parse-l5x")({
   server: {
     handlers: {
       POST: async ({ request }) => {
         try {
+          // Enforce server-side paywall for PLC tools
+          const paywallResult = await enforcePaywall(request);
+          if (!paywallResult.allowed) {
+            return new Response(
+              JSON.stringify({
+                error: "founding_member_required",
+                message: "Founding Member access required for industrial PLC parsing.",
+              }),
+              {
+                status: 402,
+                headers: {
+                  "content-type": "application/json",
+                  ...(paywallResult.setCookieHeader
+                    ? { "set-cookie": paywallResult.setCookieHeader }
+                    : {}),
+                },
+              },
+            );
+          }
+
           const formData = await request.formData();
           const file = formData.get("file") as File | null;
 
@@ -54,7 +75,12 @@ export const Route = createFileRoute("/api/parse-l5x")({
             }),
             {
               status: 200,
-              headers: { "content-type": "application/json" },
+              headers: {
+                "content-type": "application/json",
+                ...(paywallResult.setCookieHeader
+                  ? { "set-cookie": paywallResult.setCookieHeader }
+                  : {}),
+              },
             },
           );
         } catch (error) {

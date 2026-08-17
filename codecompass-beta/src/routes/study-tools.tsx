@@ -1,6 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { Zap, BookOpen, ShieldAlert } from "lucide-react";
+import { FoundingMemberModal } from "@/components/FoundingMemberModal";
+import { supabase } from "@/integrations/supabase/client";
 
 type LookupResult = {
   answer: string;
@@ -60,44 +62,48 @@ function CoPilot() {
     const activeQuery = (qText !== undefined ? qText : query).trim();
     if (!activeQuery) return;
 
-    // Check search limit for guest/unpaid users
-    if (typeof window !== "undefined") {
-      const isPaid = localStorage.getItem("cc_pro_subscriber") === "true";
-      const currentCount = parseInt(localStorage.getItem("cc_search_count") || "0", 10);
-      if (!isPaid && currentCount >= 3) {
-        setShowPaywall(true);
-        return;
-      }
-    }
-
     setLoading(true);
     setError("");
     setResult(null);
 
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json",
+      };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
       const res = await fetch("/api/nec-lookup", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers,
         body: JSON.stringify({
           question: activeQuery,
           edition: edition,
         }),
       });
 
+      if (res.status === 402) {
+        setShowPaywall(true);
+        setError("Founding Member access required for additional searches.");
+        return;
+      }
+
       if (!res.ok) {
+        const errorData = await res.json().catch(() => ({}));
+        if (errorData.error === "founding_member_required") {
+          setShowPaywall(true);
+          setError("Founding Member access required for additional searches.");
+          return;
+        }
         throw new Error(`Lookup failed with HTTP status ${res.status}`);
       }
 
       const data: LookupResult = await res.json();
       setResult(data);
-
-      if (typeof window !== "undefined") {
-        const isPaid = localStorage.getItem("cc_pro_subscriber") === "true";
-        if (!isPaid) {
-          const currentCount = parseInt(localStorage.getItem("cc_search_count") || "0", 10);
-          localStorage.setItem("cc_search_count", (currentCount + 1).toString());
-        }
-      }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Lookup failed");
     } finally {
@@ -116,11 +122,10 @@ function CoPilot() {
       <div className="mx-auto max-w-3xl">
         {/* HEADER */}
         <div className="text-center mb-8">
-          <h1 className="font-display text-3xl font-black sm:text-4xl">
-            NEC Code Co-Pilot
-          </h1>
+          <h1 className="font-display text-3xl font-black sm:text-4xl">NEC Code Co-Pilot</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Work through any NEC question with the 4-Step Codeology method: Classify, Keywords, Article, and Verify.
+            Work through any NEC question with the 4-Step Codeology method: Classify, Keywords,
+            Article, and Verify.
           </p>
         </div>
 
@@ -142,12 +147,14 @@ function CoPilot() {
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-between gap-3">
+            {/* Edition Selector */}
             <div className="flex items-center gap-2">
-              <span className="text-xs font-medium text-muted-foreground">Edition:</span>
+              <span className="text-xs font-semibold text-muted-foreground">NEC Edition:</span>
               <select
+                aria-label="Select NEC Edition"
                 value={edition}
                 onChange={(e) => setEdition(e.target.value)}
-                className="rounded-md border border-border bg-background px-3 py-1.5 text-xs font-semibold text-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+                className="rounded-lg border border-border bg-background px-3 py-1.5 text-xs font-semibold focus:outline-none focus:ring-1 focus:ring-primary"
               >
                 <option value="2026">NEC 2026</option>
                 <option value="2023">NEC 2023</option>
@@ -156,50 +163,78 @@ function CoPilot() {
               </select>
             </div>
 
-            <button
-              type="button"
-              onClick={() => sendLookup()}
-              disabled={loading || !query.trim()}
-              className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-lg bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground shadow-sm transition hover:opacity-90 disabled:opacity-50"
-            >
-              <Zap className="h-4 w-4" />
-              {loading ? "Analyzing..." : "Ask Code Compass"}
-            </button>
+            {/* Action Buttons */}
+            <div className="flex w-full sm:w-auto items-center gap-2">
+              <button
+                type="button"
+                onClick={() =>
+                  setQuery(
+                    "What is the minimum burial depth for direct burial cables under a residential driveway?",
+                  )
+                }
+                className="text-xs text-primary hover:underline"
+              >
+                Try example
+              </button>
+              <button
+                onClick={() => sendLookup()}
+                disabled={loading || !query.trim()}
+                className="inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-ember hover:opacity-90 disabled:opacity-50 transition"
+              >
+                <Zap className="h-4 w-4" />
+                {loading ? "Searching..." : "Ask Co-Pilot"}
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* ERROR DISPLAY */}
-        {error && (
-          <div className="mt-6 rounded-2xl border border-destructive/50 bg-destructive/10 p-5 text-sm text-destructive">
-            {error}
+        {/* LOADING INDICATOR */}
+        {loading && (
+          <div className="mt-8 rounded-2xl border border-border bg-card p-6 text-center shadow-sm">
+            <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mb-3" />
+            <p className="text-sm font-medium text-foreground">
+              Working through the 4-Step Codeology method...
+            </p>
+            <p className="text-xs text-muted-foreground mt-1">
+              Classifying bucket & finding index keywords
+            </p>
           </div>
         )}
 
-        {/* RESPONSE DISPLAY */}
-        {result && (
-          <div className="mt-6 space-y-6">
-            <div className="rounded-2xl bg-card p-6 shadow-md ring-1 ring-border space-y-5">
-              {/* Answer Label */}
-              <div className="flex items-center justify-between border-b border-border/60 pb-3">
-                <span className="inline-flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-primary">
-                  <BookOpen className="h-4 w-4" />
-                  Codeology Lookup
-                </span>
-                <span className="text-xs text-muted-foreground">
-                  NEC {result.edition} Edition
-                </span>
+        {/* ERROR STATE */}
+        {error && !loading && (
+          <div className="mt-8 rounded-2xl border border-destructive/30 bg-destructive/10 p-5 text-sm text-destructive">
+            <p className="font-semibold">{error}</p>
+          </div>
+        )}
+
+        {/* RESULT CARD */}
+        {result && !loading && (
+          <div className="mt-8 space-y-6">
+            <div className="rounded-2xl border border-border bg-card p-6 shadow-md">
+              <div className="flex items-center justify-between border-b border-border pb-4 mb-4">
+                <div className="flex items-center gap-2">
+                  <BookOpen className="h-5 w-5 text-primary" />
+                  <span className="font-display font-bold text-foreground">
+                    Codeology Lookup (NEC {result.edition})
+                  </span>
+                </div>
+                <span className="text-[10px] text-muted-foreground font-mono">{result.model}</span>
               </div>
 
-              {/* Main Answer Text */}
-              <div className="text-sm leading-relaxed text-foreground whitespace-pre-wrap font-mono">
+              {/* Formatted Answer */}
+              <div className="whitespace-pre-line text-sm leading-relaxed text-foreground font-sans">
                 {result.answer}
               </div>
 
-              {/* SAFETY DISCLAIMER */}
-              <div className="rounded-xl border border-border bg-background/50 p-3.5 text-xs text-muted-foreground flex items-start gap-2.5">
+              {/* Verification Callout */}
+              <div className="mt-6 rounded-xl border border-primary/20 bg-primary/5 p-4 text-xs text-muted-foreground flex items-start gap-2.5">
                 <ShieldAlert className="h-4 w-4 text-primary shrink-0 mt-0.5" />
                 <p>
-                  <strong>Safety Notice:</strong> Code Compass is educational decision support—not code enforcement or engineering approval. Verify the currently adopted NEC edition, local amendments, site conditions, employer procedures, and requirements of the authority having jurisdiction.
+                  <strong>Safety Notice:</strong> Code Compass is educational decision support—not
+                  code enforcement or engineering approval. Verify the currently adopted NEC
+                  edition, local amendments, site conditions, employer procedures, and requirements
+                  of the authority having jurisdiction.
                 </p>
               </div>
             </div>
@@ -207,38 +242,12 @@ function CoPilot() {
         )}
 
         {/* PAYWALL MODAL */}
-        {showPaywall && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-            <div className="max-w-md w-full rounded-2xl border border-amber-500/40 bg-card p-6 shadow-2xl text-center space-y-4">
-              <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20 text-amber-500 font-bold text-xl">
-                ⚡
-              </div>
-              <h2 className="font-display text-2xl font-bold">
-                You've reached your free search limit
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                You've used all 3 free guest AI searches. Become a Founding Member for unlimited
-                Gemini-powered NEC searches, practice test drills, and PLC tools.
-              </p>
-              <div className="pt-2">
-                <a
-                  href="https://buy.stripe.com/7sYeVd6waag23eygKZ3sI02"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 px-6 py-3.5 text-base font-bold text-black shadow-lg transition"
-                >
-                  Founding Member - $1.99
-                </a>
-              </div>
-              <button
-                onClick={() => setShowPaywall(false)}
-                className="text-xs text-muted-foreground hover:text-foreground pt-1"
-              >
-                Close
-              </button>
-            </div>
-          </div>
-        )}
+        <FoundingMemberModal
+          isOpen={showPaywall}
+          onClose={() => setShowPaywall(false)}
+          title="You've reached your free search limit"
+          description="You've used your 1 free AI question. Become a Founding Member for unlimited Gemini-powered NEC searches, practice test drills, and PLC tools."
+        />
       </div>
     </main>
   );

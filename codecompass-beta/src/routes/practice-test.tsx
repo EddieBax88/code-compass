@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useMemo, useState } from "react";
 import { useNecEdition, citeLabel } from "@/lib/nec-edition";
+import { useSubscription } from "@/lib/useSubscription";
+import { FoundingMemberModal } from "@/components/FoundingMemberModal";
 
 export const Route = createFileRoute("/practice-test")({
   head: () => {
@@ -328,6 +330,7 @@ const DURATION_MIN = 50; // real journeyman exams give ~2 min/question
 
 function PracticeTest() {
   const { edition } = useNecEdition();
+  const { isFoundingMember, guestUsage } = useSubscription();
   const [started, setStarted] = useState(false);
   const [idx, setIdx] = useState(0);
   const [answers, setAnswers] = useState<Record<string, number>>({});
@@ -336,13 +339,9 @@ function PracticeTest() {
   const [showPaywall, setShowPaywall] = useState(false);
 
   const startDrill = () => {
-    if (typeof window !== "undefined") {
-      const isPaid = localStorage.getItem("cc_pro_subscriber") === "true";
-      const testCount = parseInt(localStorage.getItem("cc_test_count") || "0", 10);
-      if (!isPaid && testCount >= 1) {
-        setShowPaywall(true);
-        return;
-      }
+    if (!isFoundingMember && guestUsage.used >= 1) {
+      setShowPaywall(true);
+      return;
     }
     setStarted(true);
     setStartedAt(Date.now());
@@ -350,12 +349,8 @@ function PracticeTest() {
 
   const handleFinish = () => {
     setSubmitted(true);
-    if (typeof window !== "undefined") {
-      const isPaid = localStorage.getItem("cc_pro_subscriber") === "true";
-      if (!isPaid) {
-        const testCount = parseInt(localStorage.getItem("cc_test_count") || "0", 10);
-        localStorage.setItem("cc_test_count", (testCount + 1).toString());
-      }
+    if (!isFoundingMember) {
+      setShowPaywall(true);
     }
   };
 
@@ -623,36 +618,12 @@ function PracticeTest() {
       </div>
 
       {/* PAYWALL MODAL */}
-      {showPaywall && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-          <div className="max-w-md w-full rounded-2xl border border-amber-500/40 bg-card p-6 shadow-2xl text-center space-y-4">
-            <div className="inline-flex h-12 w-12 items-center justify-center rounded-full bg-amber-500/20 text-amber-500 font-bold text-xl">
-              ⚡
-            </div>
-            <h2 className="font-display text-2xl font-bold">Unlock Unlimited Practice Tests</h2>
-            <p className="text-sm text-muted-foreground">
-              You've completed your free practice drill. Become a Founding Member for unlimited
-              journeyman practice drills, full explanations, and AI code assistance.
-            </p>
-            <div className="pt-2">
-              <a
-                href="https://buy.stripe.com/7sYeVd6waag23eygKZ3sI02"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 px-6 py-3.5 text-base font-bold text-black shadow-lg transition"
-              >
-                Founding Member - $1.99
-              </a>
-            </div>
-            <button
-              onClick={() => setShowPaywall(false)}
-              className="text-xs text-muted-foreground hover:text-foreground pt-1"
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      )}
+      <FoundingMemberModal
+        isOpen={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        title="Unlock Unlimited Practice Tests"
+        description="You've completed your free practice drill. Become a Founding Member for unlimited journeyman practice drills, full explanations, and AI code assistance."
+      />
     </main>
   );
 }

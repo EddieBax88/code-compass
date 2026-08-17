@@ -1,18 +1,45 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { enforcePaywall } from "@/lib/paywall.server";
 
 export const Route = createFileRoute("/api/chat")({
   server: {
     handlers: {
       POST: async ({ request }) => {
         try {
+          // Enforce server-side paywall (1 free query for guests/unpaid, 402 onward)
+          const paywallResult = await enforcePaywall(request);
+          if (!paywallResult.allowed) {
+            return new Response(
+              JSON.stringify({
+                error: "founding_member_required",
+                message:
+                  "You've used your free AI question. Become a Founding Member for unlimited access.",
+              }),
+              {
+                status: 402,
+                headers: {
+                  "content-type": "application/json",
+                  ...(paywallResult.setCookieHeader
+                    ? { "set-cookie": paywallResult.setCookieHeader }
+                    : {}),
+                },
+              },
+            );
+          }
+
           const body = await request.json().catch(() => ({}));
           const { message, edition = "2026" } = body;
 
           if (!message || typeof message !== "string") {
             return new Response(JSON.stringify({ error: "No message provided" }), {
               status: 400,
-              headers: { "content-type": "application/json" },
+              headers: {
+                "content-type": "application/json",
+                ...(paywallResult.setCookieHeader
+                  ? { "set-cookie": paywallResult.setCookieHeader }
+                  : {}),
+              },
             });
           }
 
@@ -29,7 +56,7 @@ export const Route = createFileRoute("/api/chat")({
               {
                 status: 500,
                 headers: { "content-type": "application/json" },
-              }
+              },
             );
           }
 
@@ -73,7 +100,12 @@ NEC Edition: ${edition}`;
 
           return new Response(JSON.stringify({ text, message: text }), {
             status: 200,
-            headers: { "content-type": "application/json" },
+            headers: {
+              "content-type": "application/json",
+              ...(paywallResult.setCookieHeader
+                ? { "set-cookie": paywallResult.setCookieHeader }
+                : {}),
+            },
           });
         } catch (error) {
           const errMsg = error instanceof Error ? error.message : "Unknown error";
@@ -82,7 +114,7 @@ NEC Edition: ${edition}`;
             {
               status: 500,
               headers: { "content-type": "application/json" },
-            }
+            },
           );
         }
       },

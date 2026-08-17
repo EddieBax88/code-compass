@@ -1,10 +1,18 @@
 import { Link } from "@tanstack/react-router";
 import { useAuth } from "@/lib/auth";
+import { useSubscription } from "@/lib/useSubscription";
+import { Zap } from "lucide-react";
 
 export function AuthNav() {
-  const { user, loading, signOut } = useAuth();
+  const { user, loading: authLoading, signOut } = useAuth();
+  const { isFoundingMember, loading: subLoading } = useSubscription();
 
-  const upgradeBtn = (
+  const upgradeBtn = isFoundingMember ? (
+    <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/15 border border-amber-500/30 px-2.5 py-1 text-xs font-semibold text-amber-500">
+      <Zap className="h-3 w-3 fill-amber-500" />
+      Founding Member
+    </span>
+  ) : (
     <a
       href="https://buy.stripe.com/7sYeVd6waag23eygKZ3sI02"
       target="_blank"
@@ -15,7 +23,7 @@ export function AuthNav() {
     </a>
   );
 
-  if (loading) return <div className="w-16" />;
+  if (authLoading || subLoading) return <div className="w-16" />;
   if (!user) {
     return (
       <div className="flex items-center gap-2">

@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GoogleGenerativeAI } from "@google/generative-ai";
+import { enforcePaywall } from "@/lib/paywall.server";
 
 export const Route = createFileRoute("/api/nec-lookup")({
   server: {
@@ -7,17 +8,41 @@ export const Route = createFileRoute("/api/nec-lookup")({
       POST: async ({ request }) => {
         const requestId = `req_${Date.now()}_${Math.random().toString(36).substring(2, 7)}`;
         try {
+          // Enforce server-side paywall (1 free query for guests/unpaid, 402 onward)
+          const paywallResult = await enforcePaywall(request);
+          if (!paywallResult.allowed) {
+            return new Response(
+              JSON.stringify({
+                error: "founding_member_required",
+                message:
+                  "You've used your free AI question. Become a Founding Member for unlimited access.",
+                request_id: requestId,
+              }),
+              {
+                status: 402,
+                headers: {
+                  "content-type": "application/json",
+                  ...(paywallResult.setCookieHeader
+                    ? { "set-cookie": paywallResult.setCookieHeader }
+                    : {}),
+                },
+              },
+            );
+          }
+
           const body = await request.json().catch(() => ({}));
           const { question, edition = "2026" } = body;
 
           if (!question || typeof question !== "string" || !question.trim()) {
-            return new Response(
-              JSON.stringify({ error: "Invalid question provided" }),
-              {
-                status: 400,
-                headers: { "content-type": "application/json" },
-              }
-            );
+            return new Response(JSON.stringify({ error: "Invalid question provided" }), {
+              status: 400,
+              headers: {
+                "content-type": "application/json",
+                ...(paywallResult.setCookieHeader
+                  ? { "set-cookie": paywallResult.setCookieHeader }
+                  : {}),
+              },
+            });
           }
 
           const apiKey =
@@ -25,7 +50,9 @@ export const Route = createFileRoute("/api/nec-lookup")({
             process.env.GOOGLE_API_KEY ||
             process.env.GOOGLE_GENERATIVE_AI_API_KEY;
           if (!apiKey) {
-            console.error(`[nec-lookup][${requestId}] Missing API key: GEMINI_API_KEY, GOOGLE_API_KEY, or GOOGLE_GENERATIVE_AI_API_KEY not configured`);
+            console.error(
+              `[nec-lookup][${requestId}] Missing API key: GEMINI_API_KEY, GOOGLE_API_KEY, or GOOGLE_GENERATIVE_AI_API_KEY not configured`,
+            );
             return new Response(
               JSON.stringify({
                 error: "Server configuration error",
@@ -34,7 +61,7 @@ export const Route = createFileRoute("/api/nec-lookup")({
               {
                 status: 500,
                 headers: { "content-type": "application/json" },
-              }
+              },
             );
           }
 
@@ -77,7 +104,10 @@ NEC Edition: ${edition}`;
           try {
             result = await model.generateContent(systemPrompt);
           } catch (modelErr) {
-            console.warn(`[nec-lookup][${requestId}] Model ${modelName} failed, falling back to gemini-3.6-flash:`, modelErr);
+            console.warn(
+              `[nec-lookup][${requestId}] Model ${modelName} failed, falling back to gemini-3.6-flash:`,
+              modelErr,
+            );
             modelName = "gemini-3.6-flash";
             model = genAI.getGenerativeModel({ model: modelName });
             result = await model.generateContent(systemPrompt);
@@ -94,8 +124,13 @@ NEC Edition: ${edition}`;
             }),
             {
               status: 200,
-              headers: { "content-type": "application/json" },
-            }
+              headers: {
+                "content-type": "application/json",
+                ...(paywallResult.setCookieHeader
+                  ? { "set-cookie": paywallResult.setCookieHeader }
+                  : {}),
+              },
+            },
           );
         } catch (error) {
           const errMsg = error instanceof Error ? error.message : "Failed to process request";
@@ -109,7 +144,7 @@ NEC Edition: ${edition}`;
             {
               status: 500,
               headers: { "content-type": "application/json" },
-            }
+            },
           );
         }
       },

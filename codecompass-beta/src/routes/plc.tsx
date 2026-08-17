@@ -1,6 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { Cpu, ArrowLeft, Upload, FileCode, AlertTriangle } from "lucide-react";
 import { useState } from "react";
+import { FoundingMemberModal } from "@/components/FoundingMemberModal";
+import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/plc")({
   head: () => {
@@ -55,6 +57,7 @@ function PlcPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<ParseResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [showPaywall, setShowPaywall] = useState(false);
 
   const handleUpload = async () => {
     if (!file) return;
@@ -63,17 +66,37 @@ function PlcPage() {
     setResult(null);
 
     try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+
+      const headers: Record<string, string> = {};
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
       const formData = new FormData();
       formData.append("file", file);
 
       const response = await fetch("/api/parse-l5x", {
         method: "POST",
+        headers,
         body: formData,
       });
+
+      if (response.status === 402) {
+        setShowPaywall(true);
+        setError("Founding Member access required for industrial PLC parsing.");
+        return;
+      }
 
       const data = await response.json();
 
       if (!response.ok) {
+        if (data.error === "founding_member_required") {
+          setShowPaywall(true);
+          setError("Founding Member access required for industrial PLC parsing.");
+          return;
+        }
         setError(data.error || "Failed to parse file");
         return;
       }
@@ -317,6 +340,13 @@ function PlcPage() {
           </div>
         </div>
       )}
+
+      <FoundingMemberModal
+        isOpen={showPaywall}
+        onClose={() => setShowPaywall(false)}
+        title="Unlock Industrial PLC Parser"
+        description="Become a Founding Member to upload Rockwell L5X files, parse tags and routines, and render SVG ladder logic."
+      />
     </main>
   );
 }
