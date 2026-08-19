@@ -456,7 +456,7 @@ export default function Dashboard() {
             Code Compass · The AI-driven predictive training engine for the NEC, PLC systems, and data center compliance.
           </p>
           <p className="text-[11px] text-muted-foreground/70">
-            Unofficial study tool — not affiliated with NFPA. Always verify answers in your physical codebook.
+            NEC® and National Electrical Code® are registered trademarks of the National Fire Protection Association (NFPA). Code Compass is an independent study tool and is not affiliated with, endorsed by, or sponsored by the NFPA. Always verify answers in your physical codebook.
           </p>
         </div>
       </footer>

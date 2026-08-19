@@ -54,7 +54,7 @@
 
 ### Bryan Hensley (IBEW 453) — LIVE LEAD
 - 453jatc@gmail.com
-- Journeyman, understands Codeology
+- Journeyman, understands the Code Compass Method
 - Potential first paying customer / champion
 
 ## WHAT WE HAVE

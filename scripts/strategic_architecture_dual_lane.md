@@ -10,7 +10,7 @@ Source: Gemini agent session, pasted 2026-07-27
 - **Infrastructure Upgrade:** Migration to Google Gemini Enterprise Agent Platform + ADK 2.0 → targeting $2M Gemini XPRIZE
 - **Tiered Multi-Agent Network:**
   - The Foreman Agent: Master orchestration, safety gates, ISO 13849 compliance
-  - The Codeology Agent: NEC 2017–2026 navigation, fast field lookups
+  - The Code Compass Method Agent: NEC 2017–2026 navigation, fast field lookups
   - The Industrial Agent: L5X XML parsing, tag mapping, SVG ladder logic rendering
 
 ## 2. Industrial Logic Engine & Deterministic Safety
@@ -64,7 +64,7 @@ Key rules: Arc-Flash 110.16(B), Equipment Egress 110.26, Special GFCI 210.8(B), 
 
 | Item | Status | Evidence |
 |------|--------|----------|
-| **DashScope/Qwen API** | DONE | Tested live: NEC Co-Pilot returned full 4-step Codeology response for "NEC 110.26". API is functional. The $42.79 balance may exist on the Alibaba Cloud account but is NOT blocking operations. |
+| **DashScope/Qwen API** | DONE | Tested live: NEC Co-Pilot returned full 4-step Code Compass Method response for "NEC 110.26". API is functional. The $42.79 balance may exist on the Alibaba Cloud account but is NOT blocking operations. |
 | **DNS / Cloudflare / Vercel** | DONE | codecompass.work → 308 → www.codecompass.work. Both served by Vercel (x-vercel-id confirmed). Site is fully live and functional. No Cloudflare in the chain (server header is "Vercel" not "cloudflare"). If Cloudflare was planned as a CDN layer, it's not currently needed — Vercel handles DNS + edge. |
 | **GitHub Enterprise** | STILL BLOCKED / NEEDS MANUAL USER ACTION | Aug 19 trial expiration is real. gh CLI is not authenticated locally. You need to upgrade in GitHub billing settings. This affects repo management, CI/CD, and XPRIZE submission (requires sharing repo with Devpost). |
 | **Namecheap ICANN verification** | REMOVE FROM CHECKLIST | Domain is resolving and live. ICANN verification is a one-time email confirmation — if the domain works, this is done. Not an ongoing operational concern. |
@@ -72,7 +72,7 @@ Key rules: Arc-Flash 110.16(B), Equipment Egress 110.26, Special GFCI 210.8(B), 
 ### What's Actually Working Right Now
 - codecompass.work is LIVE on Vercel
 - NEC Co-Pilot is FUNCTIONAL (4-mode: Guided Method, Index Search, Quick Answer, Ugly's Reference)
-- Intent routing + scope guards are working (tested: NEC 110.26 → correct Codeology 4-step response)
+- Intent routing + scope guards are working (tested: NEC 110.26 → correct Code Compass Method 4-step response)
 - Exam prep module is accessible (25-question practice test, timed drills)
 - PLC Parsing and Data Center Compliance modules are on the landing page (marked PREMIUM)
 

@@ -33,7 +33,7 @@ export const Route = createFileRoute("/study-tools")({
   head: () => {
     const title = "NEC Code Co-Pilot — Code Compass";
     const description =
-      "Ask the Code Compass NEC Code Co-Pilot any question and work it out through the 4-Step Codeology method.";
+      "Ask the Code Compass NEC Code Co-Pilot any question and work it out through the 4-Step Code Compass Method.";
     const url = "https://www.codecompass.work/study-tools";
     return {
       meta: [
@@ -124,7 +124,7 @@ function CoPilot() {
         <div className="text-center mb-8">
           <h1 className="font-display text-3xl font-black sm:text-4xl">NEC Code Co-Pilot</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            Work through any NEC question with the 4-Step Codeology method: Classify, Keywords,
+            Work through any NEC question with the 4-Step Code Compass Method: Classify, Keywords,
             Article, and Verify.
           </p>
         </div>
@@ -193,7 +193,7 @@ function CoPilot() {
           <div className="mt-8 rounded-2xl border border-border bg-card p-6 text-center shadow-sm">
             <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent mb-3" />
             <p className="text-sm font-medium text-foreground">
-              Working through the 4-Step Codeology method...
+              Working through the 4-Step Code Compass Method...
             </p>
             <p className="text-xs text-muted-foreground mt-1">
               Classifying bucket & finding index keywords
@@ -216,7 +216,7 @@ function CoPilot() {
                 <div className="flex items-center gap-2">
                   <BookOpen className="h-5 w-5 text-primary" />
                   <span className="font-display font-bold text-foreground">
-                    Codeology Lookup (NEC {result.edition})
+                    Code Compass Method Lookup (NEC {result.edition})
                   </span>
                 </div>
                 <span className="text-[10px] text-muted-foreground font-mono">{result.model}</span>

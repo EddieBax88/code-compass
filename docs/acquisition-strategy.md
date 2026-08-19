@@ -17,7 +17,7 @@ A curated list of active electrical content creators, instructors, and trade inf
 | **Mike Holt Enterprises** | YouTube & Web | [@MikeHoltNEC](https://www.youtube.com/@MikeHoltNEC) | Apprentices, JATC Instructors, Master Candidates, Contractors | `info@mikeholt.com` / [mikeholt.com](https://www.mikeholt.com) | **Educational Partnership**: Align Code Compass citations with Mike Holt's textbook chapters as a digital co-pilot validation tool. |
 | **Paul Abernathy** (*Electrical Code Academy / Fast Trax*) | YouTube & Web | [@PaulAbernathy](https://www.youtube.com/@PaulAbernathy) | Master & Journeyman Licensing Candidates, Electrical Inspectors | `paul@electricalcodeacademy.com` / [masterthenec.com](https://masterthenec.com) | **Instructor Endorsement**: Offer Fast Trax students Code Compass as an AI-powered study verification tool for state licensing exams. |
 | **Craig Michaud** (*Sparky Channel*) | YouTube | [@SparkyChannel](https://www.youtube.com/@SparkyChannel) | Apprentices, DIYers, Residential Electricians | YouTube DM / `sparkychannel@gmail.com` | **Hands-On Calc Demo**: Quick video demonstrating box fill and conduit fill calculations verified instantly against NEC 314.16. |
-| **Ryan Jackson** (*Ryan Jackson Electrical Training*) | YouTube & Web | Ryan Jackson Electrical Training | Journeymen, Inspectors, Senior Apprentices | `info@ryanjacksontraining.com` / [ryanjacksontraining.com](https://ryanjacksontraining.com) | **High-Level Codeology Feature**: Highlight 2023/2026 NEC code change analysis and industrial compliance workflows. |
+| **Ryan Jackson** (*Ryan Jackson Electrical Training*) | YouTube & Web | Ryan Jackson Electrical Training | Journeymen, Inspectors, Senior Apprentices | `info@ryanjacksontraining.com` / [ryanjacksontraining.com](https://ryanjacksontraining.com) | **High-Level Code Navigation Feature**: Highlight 2023/2026 NEC code change analysis and industrial compliance workflows. |
 | **Terry ("The Electrical Guy")** | TikTok & YouTube | [@theelectricalguy](https://www.tiktok.com/@theelectricalguy) | Gen-Z & Millennial Apprentices, Vocational High School Students | TikTok DM / Email on profile | **Short-Form Viral Challenges**: "Can AI find this NEC article faster than a Master Electrician?" speed-lookup challenge videos. |
 
 ---
@@ -59,7 +59,7 @@ A curated list of active electrical content creators, instructors, and trade inf
 >
 > Here is the exact 4-step hunting protocol to locate any article in under 60 seconds:
 >
-> 1. **Classify the Subject (Codeology)**: Is this General (Ch. 1-4), Specific Occupancies (Ch. 5), Equipment (Ch. 6), or Special Conditions (Ch. 7)?
+> 1. **Classify the Subject (Code Compass Method)**: Is this General (Ch. 1-4), Specific Occupancies (Ch. 5), Equipment (Ch. 6), or Special Conditions (Ch. 7)?
 > 2. **Identify the Index Keyword**: Never look up the answer directly in the index. Look up the *noun* or *equipment type* (e.g., for "wall outlet spacing in a bedroom", search `Receptacle Outlets`, NOT `Bedroom`).
 > 3. **Trace the Drill-Down Path**: `Receptacle Outlets` → `Dwelling Units` → `General Provisions` → **210.52(A)**.
 > 4. **Locate & Verify in the Book**: Turn to 210.52(A), check for exceptions, and confirm the exact distance (12 ft rule / 6 ft from any point).
@@ -111,7 +111,7 @@ A curated list of active electrical content creators, instructors, and trade inf
 > A few of us put together **Code Compass** ([codecompass.work](https://codecompass.work)) — a free tool designed specifically to act as an AI co-pilot for code navigation, exam prep, and industrial PLC parsing.
 >
 > **What it does**:
-> 1. **Guided Method (Codeology)**: Shows you the exact index keywords and article path so you learn *how* to find it in your physical book.
+> 1. **Guided Method (Code Compass Method)**: Shows you the exact index keywords and article path so you learn *how* to find it in your physical book.
 > 2. **NEC Edition Selector**: Toggle seamlessly between NEC 2017, 2020, 2023, and 2026 depending on what edition your local AHJ / state uses.
 > 3. **Timed Journeyman & Master Simulations**: 25-question timed practice exams with fresh randomized questions on every attempt.
 > 4. **Industrial PLC & Compliance Modules**: For controls & industrial apprentices working with Rockwell L5X files or NFPA 70E arc-flash boundaries.

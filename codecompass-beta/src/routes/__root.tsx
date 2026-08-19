@@ -230,9 +230,14 @@ function RootComponent() {
       <NecBanner />
       <SignInPrompt />
       <Outlet />
-      <footer className="mx-auto max-w-6xl px-5 py-10 text-xs text-muted-foreground/70">
-        Code Compass — NFPA 70 National Electrical Code (NEC) 2026 Edition. The AI-driven predictive
-        training engine for the NEC, PLC systems, and data center compliance.
+      <footer className="mx-auto max-w-6xl px-5 py-10 text-xs text-muted-foreground/70 space-y-2">
+        <p>
+          Code Compass — NFPA 70 National Electrical Code (NEC) 2026 Edition. The AI-driven predictive
+          training engine for the NEC, PLC systems, and data center compliance.
+        </p>
+        <p className="text-[11px] leading-relaxed text-muted-foreground/60">
+          NEC® and National Electrical Code® are registered trademarks of the National Fire Protection Association (NFPA). Code Compass is an independent study tool and is not affiliated with, endorsed by, or sponsored by the NFPA.
+        </p>
       </footer>
     </QueryClientProvider>
   );

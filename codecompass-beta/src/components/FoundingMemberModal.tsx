@@ -42,7 +42,7 @@ export function FoundingMemberModal({
         <div className="space-y-2 text-left bg-secondary/40 rounded-xl p-3.5 text-xs text-foreground/90">
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0" />
-            <span>Unlimited 4-Step Codeology lookups across all NEC editions</span>
+            <span>Unlimited 4-Step Code Compass Method lookups across all NEC editions</span>
           </div>
           <div className="flex items-center gap-2">
             <CheckCircle2 className="h-4 w-4 text-amber-500 shrink-0" />

@@ -27,13 +27,13 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "Code Compass helps electricians navigate NEC questions through the 4-step Codeology method with clear citations, chapter classifications, and verification steps.",
+          "Code Compass helps electricians navigate NEC questions through the 4-step Code Compass Method with clear citations, chapter classifications, and verification steps.",
       },
       { property: "og:title", content: "Code Compass — Understand the Electrical Code" },
       {
         property: "og:description",
         content:
-          "Code Compass helps electricians navigate NEC questions through the 4-step Codeology method.",
+          "Code Compass helps electricians navigate NEC questions through the 4-step Code Compass Method.",
       },
       { property: "og:url", content: "https://www.codecompass.work/" },
     ],
@@ -68,7 +68,7 @@ function Home() {
         <div className="max-w-4xl">
           <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
             <Zap className="h-3.5 w-3.5" />
-            Gemini-Powered Codeology Engine
+            Gemini-Powered Code Compass Method Engine
           </div>
           <h1 className="mt-6 font-display text-4xl sm:text-6xl font-black leading-[1.05] tracking-tight">
             The future of the trades starts here.
@@ -105,7 +105,7 @@ function Home() {
           Ask a code question
         </h2>
         <p className="mt-1 text-sm text-muted-foreground">
-          Enter any NEC scenario to work it through the 4-Step Codeology method.
+          Enter any NEC scenario to work it through the 4-Step Code Compass Method.
         </p>
 
         {/* Search Input Box */}

@@ -4,7 +4,7 @@
 **Focus:** High-frequency NEC topics, timed lookup drills, measurable speed improvement
 
 **Core Objectives:**
-- Master the Codeology 4-step lookup method (Classify → Keywords → Article → Verify)
+- Master the Code Compass Method 4-step lookup method (Classify → Keywords → Article → Verify)
 - Build speed on common exam topics: working space, GFCI requirements, conductor sizing, overcurrent protection
 - Develop pattern recognition for NEC chapter organization
 - Measure progress through timed drills (target: <2 minutes per lookup)
@@ -18,7 +18,7 @@
 **Success Metrics:**
 - Lookup time: Start at 5+ minutes → Target under 2 minutes
 - Accuracy: Correct article/section identification
-- Confidence: Can explain the Codeology reasoning for each lookup
+- Confidence: Can explain the Code Compass Method reasoning for each lookup
 
 **Recommended Mode:** Guided Method (book mode) for learning, Index Search (fast mode) for practice
 
@@ -59,7 +59,7 @@
 **Concept:** Real-time collaborative lookup sessions
 **Features:**
 - Shared timer and question queue
-- Group Codeology walkthrough
+- Group Code Compass Method walkthrough
 - Competitive lookup challenges
 - Instructor-led sessions with live codebook navigation
 
@@ -88,7 +88,7 @@
 **Apprentice Metrics:**
 - Time to lookup (start → answer)
 - Correct article/section identification rate
-- Codeology explanation quality (can they teach it back?)
+- Code Compass Method explanation quality (can they teach it back?)
 - Exam pass rate on practice tests
 
 **Journeyman/Master Metrics:**

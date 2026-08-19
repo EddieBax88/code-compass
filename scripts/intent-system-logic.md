@@ -6,8 +6,8 @@ The Code Compass NEC Co-Pilot uses an intent-based routing system to ensure each
 ## Modes and Purposes
 
 ### 1. Guided Method (book)
-**Purpose:** Teaching mode that walks users through the Codeology lookup process
-**Response Format:** 4-step Codeology framework (Classify → Keywords → Article → Verify)
+**Purpose:** Teaching mode that walks users through the Code Compass Method lookup process
+**Response Format:** 4-step Code Compass Method framework (Classify → Keywords → Article → Verify)
 **Use Case:** Learning how to navigate the NEC codebook systematically
 
 ### 2. Index Search (fast)
