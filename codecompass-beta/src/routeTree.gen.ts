@@ -23,6 +23,7 @@ import { Route as ShareTokenRouteImport } from './routes/share.$token'
 import { Route as DevMotorCalcsRouteImport } from './routes/dev.motor-calcs'
 import { Route as CoursesTradeRouteImport } from './routes/courses.$trade'
 import { Route as CourseCourseIdRouteImport } from './routes/course.$courseId'
+import { Route as AuthResetRouteImport } from './routes/auth.reset'
 import { Route as ApiSubscriptionStatusRouteImport } from './routes/api/subscription-status'
 import { Route as ApiStripeWebhookRouteImport } from './routes/api/stripe-webhook'
 import { Route as ApiStripeCheckoutRouteImport } from './routes/api/stripe-checkout'
@@ -105,6 +106,11 @@ const CourseCourseIdRoute = CourseCourseIdRouteImport.update({
   path: '/course/$courseId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthResetRoute = AuthResetRouteImport.update({
+  id: '/reset',
+  path: '/reset',
+  getParentRoute: () => AuthRoute,
+} as any)
 const ApiSubscriptionStatusRoute = ApiSubscriptionStatusRouteImport.update({
   id: '/api/subscription-status',
   path: '/api/subscription-status',
@@ -166,7 +172,7 @@ const ApiPublicShareTokenRoute = ApiPublicShareTokenRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/data-center': typeof DataCenterRoute
   '/exam-prep': typeof ExamPrepRoute
   '/mcp': typeof McpRoute
@@ -183,6 +189,7 @@ export interface FileRoutesByFullPath {
   '/api/stripe-checkout': typeof ApiStripeCheckoutRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
   '/api/subscription-status': typeof ApiSubscriptionStatusRoute
+  '/auth/reset': typeof AuthResetRoute
   '/course/$courseId': typeof CourseCourseIdRoute
   '/courses/$trade': typeof CoursesTradeRoute
   '/dev/motor-calcs': typeof DevMotorCalcsRoute
@@ -193,7 +200,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/data-center': typeof DataCenterRoute
   '/exam-prep': typeof ExamPrepRoute
   '/mcp': typeof McpRoute
@@ -210,6 +217,7 @@ export interface FileRoutesByTo {
   '/api/stripe-checkout': typeof ApiStripeCheckoutRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
   '/api/subscription-status': typeof ApiSubscriptionStatusRoute
+  '/auth/reset': typeof AuthResetRoute
   '/course/$courseId': typeof CourseCourseIdRoute
   '/courses/$trade': typeof CoursesTradeRoute
   '/dev/motor-calcs': typeof DevMotorCalcsRoute
@@ -221,7 +229,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/auth': typeof AuthRouteWithChildren
   '/data-center': typeof DataCenterRoute
   '/exam-prep': typeof ExamPrepRoute
   '/mcp': typeof McpRoute
@@ -238,6 +246,7 @@ export interface FileRoutesById {
   '/api/stripe-checkout': typeof ApiStripeCheckoutRoute
   '/api/stripe-webhook': typeof ApiStripeWebhookRoute
   '/api/subscription-status': typeof ApiSubscriptionStatusRoute
+  '/auth/reset': typeof AuthResetRoute
   '/course/$courseId': typeof CourseCourseIdRoute
   '/courses/$trade': typeof CoursesTradeRoute
   '/dev/motor-calcs': typeof DevMotorCalcsRoute
@@ -267,6 +276,7 @@ export interface FileRouteTypes {
     | '/api/stripe-checkout'
     | '/api/stripe-webhook'
     | '/api/subscription-status'
+    | '/auth/reset'
     | '/course/$courseId'
     | '/courses/$trade'
     | '/dev/motor-calcs'
@@ -294,6 +304,7 @@ export interface FileRouteTypes {
     | '/api/stripe-checkout'
     | '/api/stripe-webhook'
     | '/api/subscription-status'
+    | '/auth/reset'
     | '/course/$courseId'
     | '/courses/$trade'
     | '/dev/motor-calcs'
@@ -321,6 +332,7 @@ export interface FileRouteTypes {
     | '/api/stripe-checkout'
     | '/api/stripe-webhook'
     | '/api/subscription-status'
+    | '/auth/reset'
     | '/course/$courseId'
     | '/courses/$trade'
     | '/dev/motor-calcs'
@@ -332,7 +344,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  AuthRoute: typeof AuthRoute
+  AuthRoute: typeof AuthRouteWithChildren
   DataCenterRoute: typeof DataCenterRoute
   ExamPrepRoute: typeof ExamPrepRoute
   McpRoute: typeof McpRoute
@@ -458,6 +470,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CourseCourseIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/auth/reset': {
+      id: '/auth/reset'
+      path: '/reset'
+      fullPath: '/auth/reset'
+      preLoaderRoute: typeof AuthResetRouteImport
+      parentRoute: typeof AuthRoute
+    }
     '/api/subscription-status': {
       id: '/api/subscription-status'
       path: '/api/subscription-status'
@@ -538,9 +557,19 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface AuthRouteChildren {
+  AuthResetRoute: typeof AuthResetRoute
+}
+
+const AuthRouteChildren: AuthRouteChildren = {
+  AuthResetRoute: AuthResetRoute,
+}
+
+const AuthRouteWithChildren = AuthRoute._addFileChildren(AuthRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  AuthRoute: AuthRoute,
+  AuthRoute: AuthRouteWithChildren,
   DataCenterRoute: DataCenterRoute,
   ExamPrepRoute: ExamPrepRoute,
   McpRoute: McpRoute,

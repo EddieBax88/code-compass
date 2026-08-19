@@ -3,6 +3,7 @@ import {
   parseUsageCookie,
   createSignedUsageCookie,
   enforcePaywall,
+  checkIpRateLimit,
 } from "../codecompass-beta/src/lib/paywall.server";
 
 describe("Paywall Cookie Signing & Verification", () => {
@@ -95,5 +96,26 @@ describe("enforcePaywall Server-Side Enforcement", () => {
     if (!result3.allowed) {
       expect(result3.error).toBe("founding_member_required");
     }
+  });
+});
+
+describe("Per-IP Rate Limiting (20 req/hour backstop)", () => {
+  it("should allow requests up to 20 per IP and block on request 21", async () => {
+    const testIp = `203.0.113.${Math.floor(Math.random() * 200) + 10}`;
+
+    // Requests 1 to 20 should all be allowed
+    for (let i = 1; i <= 20; i++) {
+      const res = await checkIpRateLimit(testIp);
+      expect(res.allowed).toBe(true);
+    }
+
+    // Request 21 should be blocked (rate limited)
+    const res21 = await checkIpRateLimit(testIp);
+    expect(res21.allowed).toBe(false);
+
+    // Another IP should still be allowed
+    const otherIp = `203.0.113.${Math.floor(Math.random() * 200) + 10}_diff`;
+    const resOther = await checkIpRateLimit(otherIp);
+    expect(resOther.allowed).toBe(true);
   });
 });

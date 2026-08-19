@@ -288,3 +288,148 @@ export async function enforcePaywall(request: Request): Promise<PaywallCheckResu
     setCookieHeader,
   };
 }
+
+const RATE_LIMIT_MAX_REQUESTS = 20;
+const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
+
+// In-memory sliding window cache as supplementary / fallback cache
+const localRateLimitCache = new Map<string, { count: number; windowStart: number }>();
+
+export type RateLimitResult = { allowed: boolean };
+
+/**
+ * Per-IP request cap (20 requests per hour per IP) enforced before LLM calls.
+ * Backed by Supabase ip_rate_limits table with local in-memory fallback.
+ * Fails OPEN on any database or network error.
+ */
+export async function checkIpRateLimit(clientIp: string): Promise<RateLimitResult> {
+  try {
+    if (!clientIp) return { allowed: true };
+
+    const now = Date.now();
+    const supabaseUrl = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+    const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    // Check local in-memory cache first
+    const local = localRateLimitCache.get(clientIp);
+    if (local && now - local.windowStart < RATE_LIMIT_WINDOW_MS) {
+      if (local.count >= RATE_LIMIT_MAX_REQUESTS) {
+        return { allowed: false };
+      }
+    }
+
+    if (!supabaseUrl || !serviceKey) {
+      // If no Supabase config, track in memory and fail open
+      if (!local || now - local.windowStart >= RATE_LIMIT_WINDOW_MS) {
+        localRateLimitCache.set(clientIp, { count: 1, windowStart: now });
+      } else {
+        local.count += 1;
+        if (local.count > RATE_LIMIT_MAX_REQUESTS) {
+          return { allowed: false };
+        }
+      }
+      return { allowed: true };
+    }
+
+    // Query Supabase ip_rate_limits table
+    const getRes = await fetch(
+      `${supabaseUrl}/rest/v1/ip_rate_limits?ip=eq.${encodeURIComponent(clientIp)}&select=*`,
+      {
+        headers: {
+          apikey: serviceKey,
+          Authorization: "Bearer " + serviceKey,
+        },
+      },
+    );
+
+    if (getRes.ok) {
+      const rows = await getRes.json();
+      if (Array.isArray(rows) && rows.length > 0) {
+        const record = rows[0];
+        const windowStart = new Date(record.window_start).getTime();
+        const requestCount = typeof record.request_count === "number" ? record.request_count : 1;
+
+        if (now - windowStart > RATE_LIMIT_WINDOW_MS) {
+          // Reset window
+          await fetch(
+            `${supabaseUrl}/rest/v1/ip_rate_limits?ip=eq.${encodeURIComponent(clientIp)}`,
+            {
+              method: "PATCH",
+              headers: {
+                apikey: serviceKey,
+                Authorization: "Bearer " + serviceKey,
+                "Content-Type": "application/json",
+                Prefer: "return=minimal",
+              },
+              body: JSON.stringify({
+                request_count: 1,
+                window_start: new Date(now).toISOString(),
+                updated_at: new Date(now).toISOString(),
+              }),
+            },
+          ).catch(() => {});
+          localRateLimitCache.set(clientIp, { count: 1, windowStart: now });
+          return { allowed: true };
+        } else {
+          if (requestCount >= RATE_LIMIT_MAX_REQUESTS) {
+            localRateLimitCache.set(clientIp, { count: requestCount, windowStart });
+            return { allowed: false };
+          }
+          // Increment count
+          const nextCount = requestCount + 1;
+          await fetch(
+            `${supabaseUrl}/rest/v1/ip_rate_limits?ip=eq.${encodeURIComponent(clientIp)}`,
+            {
+              method: "PATCH",
+              headers: {
+                apikey: serviceKey,
+                Authorization: "Bearer " + serviceKey,
+                "Content-Type": "application/json",
+                Prefer: "return=minimal",
+              },
+              body: JSON.stringify({
+                request_count: nextCount,
+                updated_at: new Date(now).toISOString(),
+              }),
+            },
+          ).catch(() => {});
+          localRateLimitCache.set(clientIp, { count: nextCount, windowStart });
+          return { allowed: true };
+        }
+      } else {
+        // Insert new row
+        await fetch(`${supabaseUrl}/rest/v1/ip_rate_limits`, {
+          method: "POST",
+          headers: {
+            apikey: serviceKey,
+            Authorization: "Bearer " + serviceKey,
+            "Content-Type": "application/json",
+            Prefer: "return=minimal",
+          },
+          body: JSON.stringify({
+            ip: clientIp,
+            request_count: 1,
+            window_start: new Date(now).toISOString(),
+            updated_at: new Date(now).toISOString(),
+          }),
+        }).catch(() => {});
+        localRateLimitCache.set(clientIp, { count: 1, windowStart: now });
+        return { allowed: true };
+      }
+    } else {
+      // If table query returned non-2xx, track locally & fail open
+      if (!local || now - local.windowStart >= RATE_LIMIT_WINDOW_MS) {
+        localRateLimitCache.set(clientIp, { count: 1, windowStart: now });
+      } else {
+        local.count += 1;
+        if (local.count > RATE_LIMIT_MAX_REQUESTS) {
+          return { allowed: false };
+        }
+      }
+      return { allowed: true };
+    }
+  } catch (err) {
+    console.warn("[RateLimit] Error checking IP rate limit, failing open:", err);
+    return { allowed: true };
+  }
+}

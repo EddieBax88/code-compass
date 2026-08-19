@@ -12,6 +12,7 @@ import { useEffect, type ReactNode } from "react";
 import appCss from "../styles.css?url";
 import { NecBanner, NecPill } from "@/components/NecBanner";
 import { AuthNav, SignInPrompt } from "@/components/AuthNav";
+import { EmailConfirmationBanner } from "@/components/EmailConfirmationBanner";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { initPostHog } from "../lib/posthog";
@@ -225,6 +226,7 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <SiteHeader />
+      <EmailConfirmationBanner />
       <NecBanner />
       <SignInPrompt />
       <Outlet />

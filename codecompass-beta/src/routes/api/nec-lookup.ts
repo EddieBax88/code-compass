@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { enforcePaywall } from "@/lib/paywall.server";
+import { enforcePaywall, getClientIp, checkIpRateLimit } from "@/lib/paywall.server";
 
 export const Route = createFileRoute("/api/nec-lookup")({
   server: {
@@ -22,6 +22,24 @@ export const Route = createFileRoute("/api/nec-lookup")({
                 status: 402,
                 headers: {
                   "content-type": "application/json",
+                  ...(paywallResult.setCookieHeader
+                    ? { "set-cookie": paywallResult.setCookieHeader }
+                    : {}),
+                },
+              },
+            );
+          }
+
+          // Enforce per-IP rate limit backstop (20 req/hour per IP) before Gemini call
+          const clientIp = getClientIp(request);
+          const rateLimit = await checkIpRateLimit(clientIp);
+          if (!rateLimit.allowed) {
+            return new Response(
+              "Too many requests from this network. Try again in an hour.",
+              {
+                status: 429,
+                headers: {
+                  "content-type": "text/plain",
                   ...(paywallResult.setCookieHeader
                     ? { "set-cookie": paywallResult.setCookieHeader }
                     : {}),
