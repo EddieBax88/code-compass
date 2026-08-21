@@ -7,6 +7,7 @@ import crypto from "crypto";
  * Env: STRIPE_SECRET_KEY, STRIPE_WEBHOOK_SECRET, SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY
  */
 
+const PRO_PRICE_ID = "price_1U6umNDLlScoKoy8AWbyvpjQ";
 const FOUNDING_MEMBER_PRICE_ID = "price_1U2zPJDLlScoKoy8h04AOjRq";
 const LIFETIME_PRICE_ID = "price_1Ten4FRjzbxMHVlJikIz0EJR";
 
@@ -45,8 +46,8 @@ async function upsertSubscriptionRecord(data: {
         stripe_customer_id: data.stripe_customer_id,
         stripe_subscription_id: data.stripe_subscription_id || data.id,
         status: data.status,
-        price_id: data.price_id || FOUNDING_MEMBER_PRICE_ID,
-        plan: data.plan || "founding_member",
+        price_id: data.price_id || PRO_PRICE_ID,
+        plan: data.plan || (data.price_id === FOUNDING_MEMBER_PRICE_ID ? "founding_member" : "pro"),
         current_period_end:
           data.current_period_end || new Date(Date.now() + 30 * 86400000).toISOString(),
         updated_at: new Date().toISOString(),
@@ -131,6 +132,14 @@ export const Route = createFileRoute("/api/stripe-webhook")({
             if (session.payment_status === "paid" || session.status === "complete") {
               const isSubscription = session.mode === "subscription";
               const subscriptionId = session.subscription as string | undefined;
+              const planId = session.metadata?.plan_id;
+              const isFounding = planId === "founding_member";
+              const priceId = isSubscription
+                ? (isFounding ? FOUNDING_MEMBER_PRICE_ID : PRO_PRICE_ID)
+                : LIFETIME_PRICE_ID;
+              const plan = isSubscription
+                ? (isFounding ? "founding_member" : "pro")
+                : "lifetime";
 
               await upsertSubscriptionRecord({
                 id: subscriptionId || session.id,
@@ -139,8 +148,8 @@ export const Route = createFileRoute("/api/stripe-webhook")({
                 stripe_customer_id: customerId,
                 stripe_subscription_id: subscriptionId,
                 status: "active",
-                plan: isSubscription ? "founding_member" : "lifetime",
-                price_id: isSubscription ? FOUNDING_MEMBER_PRICE_ID : LIFETIME_PRICE_ID,
+                plan,
+                price_id: priceId,
               });
 
               // Also update user profile metadata if user_id is known
@@ -158,7 +167,7 @@ export const Route = createFileRoute("/api/stripe-webhook")({
                     },
                     body: JSON.stringify({
                       subscription_status: "active",
-                      subscription_plan: isSubscription ? "founding_member" : "lifetime",
+                      subscription_plan: plan,
                       stripe_customer_id: customerId,
                     }),
                   }).catch(() => {});
@@ -193,6 +202,13 @@ export const Route = createFileRoute("/api/stripe-webhook")({
               } catch {}
             }
 
+            const plan =
+              priceId === FOUNDING_MEMBER_PRICE_ID
+                ? "founding_member"
+                : priceId === LIFETIME_PRICE_ID
+                  ? "lifetime"
+                  : "pro";
+
             await upsertSubscriptionRecord({
               id: subscription.id,
               user_id: subscription.metadata?.user_id,
@@ -200,8 +216,8 @@ export const Route = createFileRoute("/api/stripe-webhook")({
               stripe_customer_id: customerId,
               stripe_subscription_id: subscription.id,
               status,
-              price_id: priceId,
-              plan: "founding_member",
+              price_id: priceId || PRO_PRICE_ID,
+              plan,
               current_period_end: currentPeriodEnd,
             });
           }
@@ -215,7 +231,6 @@ export const Route = createFileRoute("/api/stripe-webhook")({
               stripe_customer_id: subscription.customer as string,
               stripe_subscription_id: subscription.id,
               status: "canceled",
-              plan: "founding_member",
             });
           }
 
@@ -223,13 +238,22 @@ export const Route = createFileRoute("/api/stripe-webhook")({
           if (event.type === "invoice.payment_succeeded") {
             const invoice = event.data.object;
             if (invoice.subscription) {
+              const priceId = invoice.lines?.data?.[0]?.price?.id;
+              const plan =
+                priceId === FOUNDING_MEMBER_PRICE_ID
+                  ? "founding_member"
+                  : priceId === LIFETIME_PRICE_ID
+                    ? "lifetime"
+                    : "pro";
+
               await upsertSubscriptionRecord({
                 id: invoice.subscription as string,
                 customer_email: invoice.customer_email,
                 stripe_customer_id: invoice.customer as string,
                 stripe_subscription_id: invoice.subscription as string,
                 status: "active",
-                plan: "founding_member",
+                price_id: priceId || PRO_PRICE_ID,
+                plan,
               });
             }
           }

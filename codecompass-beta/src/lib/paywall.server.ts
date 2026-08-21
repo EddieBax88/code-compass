@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { supabaseAdmin } from "@/integrations/supabase/client.server";
 
+const PRO_PRICE_ID = "price_1U6umNDLlScoKoy8AWbyvpjQ";
 const FOUNDING_MEMBER_PRICE_ID = "price_1U2zPJDLlScoKoy8h04AOjRq";
 const LIFETIME_PRICE_ID = "price_1Ten4FRjzbxMHVlJikIz0EJR";
 
@@ -184,8 +185,10 @@ export async function checkIsFoundingMember(userId?: string, userEmail?: string)
           const isActive = sub.status === "active" || sub.status === "trialing";
           const isTargetPrice =
             !sub.price_id ||
+            sub.price_id === PRO_PRICE_ID ||
             sub.price_id === FOUNDING_MEMBER_PRICE_ID ||
             sub.price_id === LIFETIME_PRICE_ID ||
+            sub.plan === "pro" ||
             sub.plan === "founding_member" ||
             sub.plan === "lifetime";
           return isActive && isTargetPrice;
