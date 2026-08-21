@@ -193,7 +193,7 @@ function Home() {
               worth.
             </p>
             <p className="font-medium text-foreground">
-              Code Compass Pro — $19.99/month (Founding rate is closed). No school. No waiting list. No permission needed.
+              Code Compass Pro — $19.99/month. No school. No waiting list. No permission needed.
             </p>
           </div>
         </div>

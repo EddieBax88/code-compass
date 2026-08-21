@@ -70,7 +70,7 @@ function DataCenterPage() {
         </h2>
         <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
           Incident-energy tables, working-boundary calculators, and EMS audit checklists are being
-          wired to the predictive training engine for Pro Members (founding rate is closed).
+          wired to the predictive training engine for Pro Members.
         </p>
 
         {!isFoundingMember && (

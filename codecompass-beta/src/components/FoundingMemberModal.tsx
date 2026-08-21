@@ -12,7 +12,7 @@ export function FoundingMemberModal({
   isOpen,
   onClose,
   title = "You've reached your free limit",
-  description = "You've used your 1 free AI question. Upgrade to Code Compass Pro for unlimited Gemini-powered NEC searches, practice test drills, and PLC tools (founding rate is closed).",
+  description = "You've used your 1 free AI question. Upgrade to Code Compass Pro for unlimited Gemini-powered NEC searches, practice test drills, and PLC tools.",
 }: FoundingMemberModalProps) {
   if (!isOpen) return null;
 

@@ -85,7 +85,7 @@ function PlcPage() {
 
       if (response.status === 402) {
         setShowPaywall(true);
-        setError("Code Compass Pro access required for industrial PLC parsing (Founding rate is closed).");
+        setError("Code Compass Pro access required for industrial PLC parsing.");
         return;
       }
 
@@ -94,7 +94,7 @@ function PlcPage() {
       if (!response.ok) {
         if (data.error === "founding_member_required") {
           setShowPaywall(true);
-          setError("Code Compass Pro access required for industrial PLC parsing (Founding rate is closed).");
+          setError("Code Compass Pro access required for industrial PLC parsing.");
           return;
         }
         setError(data.error || "Failed to parse file");
@@ -345,7 +345,7 @@ function PlcPage() {
         isOpen={showPaywall}
         onClose={() => setShowPaywall(false)}
         title="Unlock Industrial PLC Parser"
-        description="Upgrade to Code Compass Pro to upload Rockwell L5X files, parse tags and routines, and render SVG ladder logic (founding rate is closed)."
+        description="Upgrade to Code Compass Pro to upload Rockwell L5X files, parse tags and routines, and render SVG ladder logic."
       />
     </main>
   );

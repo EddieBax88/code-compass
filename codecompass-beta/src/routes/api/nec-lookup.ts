@@ -15,7 +15,7 @@ export const Route = createFileRoute("/api/nec-lookup")({
               JSON.stringify({
                 error: "founding_member_required",
                 message:
-                  "You've used your free AI question. Upgrade to Code Compass Pro for unlimited access (founding rate is closed).",
+                  "You've used your free AI question. Upgrade to Code Compass Pro for unlimited access.",
                 request_id: requestId,
               }),
               {
