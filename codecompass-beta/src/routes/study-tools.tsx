@@ -88,7 +88,7 @@ function CoPilot() {
 
       if (res.status === 402) {
         setShowPaywall(true);
-        setError("Founding Member access required for additional searches.");
+        setError("Code Compass Pro access required for additional searches (Founding rate is closed).");
         return;
       }
 
@@ -96,7 +96,7 @@ function CoPilot() {
         const errorData = await res.json().catch(() => ({}));
         if (errorData.error === "founding_member_required") {
           setShowPaywall(true);
-          setError("Founding Member access required for additional searches.");
+          setError("Code Compass Pro access required for additional searches (Founding rate is closed).");
           return;
         }
         throw new Error(`Lookup failed with HTTP status ${res.status}`);
@@ -246,7 +246,7 @@ function CoPilot() {
           isOpen={showPaywall}
           onClose={() => setShowPaywall(false)}
           title="You've reached your free search limit"
-          description="You've used your 1 free AI question. Become a Founding Member for unlimited Gemini-powered NEC searches, practice test drills, and PLC tools."
+          description="You've used your 1 free AI question. Upgrade to Code Compass Pro for unlimited Gemini-powered NEC searches, practice test drills, and PLC tools (founding rate is closed)."
         />
       </div>
     </main>

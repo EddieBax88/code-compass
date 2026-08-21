@@ -14,7 +14,7 @@ export const Route = createFileRoute("/api/chat")({
               JSON.stringify({
                 error: "founding_member_required",
                 message:
-                  "You've used your free AI question. Become a Founding Member for unlimited access.",
+                  "You've used your free AI question. Upgrade to Code Compass Pro for unlimited access (founding rate is closed).",
               }),
               {
                 status: 402,

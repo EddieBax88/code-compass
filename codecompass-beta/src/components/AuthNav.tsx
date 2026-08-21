@@ -10,16 +10,14 @@ export function AuthNav() {
   const upgradeBtn = isFoundingMember ? (
     <span className="inline-flex items-center gap-1 rounded-md bg-amber-500/15 border border-amber-500/30 px-2.5 py-1 text-xs font-semibold text-amber-500">
       <Zap className="h-3 w-3 fill-amber-500" />
-      Founding Member
+      Pro Member
     </span>
   ) : (
     <a
-      href="https://buy.stripe.com/7sYeVd6waag23eygKZ3sI02"
-      target="_blank"
-      rel="noopener noreferrer"
+      href="/api/stripe-checkout"
       className="inline-flex items-center gap-1 rounded-md bg-amber-500 hover:bg-amber-600 px-3 py-1.5 text-xs font-bold text-black shadow-sm transition"
     >
-      Founding Member - $1.99
+      Code Compass Pro — $19.99/month
     </a>
   );
 

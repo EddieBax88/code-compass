@@ -50,7 +50,7 @@ function DataCenterPage() {
             onClick={() => setShowPaywall(true)}
             className="inline-flex items-center gap-1.5 rounded-lg bg-amber-500/20 border border-amber-500/40 px-3 py-1.5 text-xs font-semibold text-amber-500 hover:bg-amber-500/30 transition"
           >
-            <Lock className="h-3.5 w-3.5" /> Founding Member Early Access
+            <Lock className="h-3.5 w-3.5" /> Pro Early Access
           </button>
         )}
       </div>
@@ -70,7 +70,7 @@ function DataCenterPage() {
         </h2>
         <p className="mt-2 text-sm text-muted-foreground max-w-md mx-auto">
           Incident-energy tables, working-boundary calculators, and EMS audit checklists are being
-          wired to the predictive training engine for Founding Members.
+          wired to the predictive training engine for Pro Members (founding rate is closed).
         </p>
 
         {!isFoundingMember && (
@@ -79,7 +79,7 @@ function DataCenterPage() {
               onClick={() => setShowPaywall(true)}
               className="inline-flex items-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 px-6 py-2.5 text-sm font-bold text-black shadow-lg transition"
             >
-              Get Founding Member Access - $1.99
+              Code Compass Pro — $19.99/month
             </button>
           </div>
         )}
@@ -89,7 +89,7 @@ function DataCenterPage() {
         isOpen={showPaywall}
         onClose={() => setShowPaywall(false)}
         title="Unlock Data Center Compliance"
-        description="Become a Founding Member to access upcoming arc-flash calculators, EMS compliance tools, and high-voltage training modules."
+        description="Upgrade to Code Compass Pro to access upcoming arc-flash calculators, EMS compliance tools, and high-voltage training modules."
       />
     </main>
   );

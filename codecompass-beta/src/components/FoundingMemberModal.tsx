@@ -12,7 +12,7 @@ export function FoundingMemberModal({
   isOpen,
   onClose,
   title = "You've reached your free limit",
-  description = "You've used your 1 free AI question. Become a Founding Member for unlimited Gemini-powered NEC searches, practice test drills, and PLC tools.",
+  description = "You've used your 1 free AI question. Upgrade to Code Compass Pro for unlimited Gemini-powered NEC searches, practice test drills, and PLC tools (founding rate is closed).",
 }: FoundingMemberModalProps) {
   if (!isOpen) return null;
 
@@ -56,12 +56,10 @@ export function FoundingMemberModal({
 
         <div className="pt-2">
           <a
-            href="https://buy.stripe.com/7sYeVd6waag23eygKZ3sI02"
-            target="_blank"
-            rel="noopener noreferrer"
+            href="/api/stripe-checkout"
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 px-6 py-3.5 text-base font-bold text-black shadow-lg transition"
           >
-            Founding Member - $1.99
+            Code Compass Pro — $19.99/month
           </a>
         </div>
 

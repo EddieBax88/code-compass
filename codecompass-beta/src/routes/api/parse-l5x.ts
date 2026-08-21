@@ -14,7 +14,8 @@ export const Route = createFileRoute("/api/parse-l5x")({
             return new Response(
               JSON.stringify({
                 error: "founding_member_required",
-                message: "Founding Member access required for industrial PLC parsing.",
+                message:
+                  "Code Compass Pro access required for industrial PLC parsing (founding rate is closed).",
               }),
               {
                 status: 402,

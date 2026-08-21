@@ -622,7 +622,7 @@ function PracticeTest() {
         isOpen={showPaywall}
         onClose={() => setShowPaywall(false)}
         title="Unlock Unlimited Practice Tests"
-        description="You've completed your free practice drill. Become a Founding Member for unlimited journeyman practice drills, full explanations, and AI code assistance."
+        description="You've completed your free practice drill. Upgrade to Code Compass Pro for unlimited journeyman practice drills, full explanations, and AI code assistance (founding rate is closed)."
       />
     </main>
   );

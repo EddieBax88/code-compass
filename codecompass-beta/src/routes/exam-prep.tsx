@@ -255,7 +255,7 @@ function ExamPrep() {
         isOpen={showPaywall}
         onClose={() => setShowPaywall(false)}
         title="Unlock Unlimited Timed Drills"
-        description="Become a Founding Member for unlimited timed drills across Speed-Find, Motor Calculations, and Code Hunt."
+        description="Upgrade to Code Compass Pro for unlimited timed drills across Speed-Find, Motor Calculations, and Code Hunt (founding rate is closed)."
       />
     </main>
   );
