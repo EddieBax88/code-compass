@@ -14,7 +14,7 @@ export function AuthNav() {
     </span>
   ) : (
     <a
-      href="/api/stripe-checkout"
+      href="https://buy.stripe.com/5kQdR98Ei4VI9CWbqF3sI03"
       className="inline-flex items-center gap-1 rounded-md bg-amber-500 hover:bg-amber-600 px-3 py-1.5 text-xs font-bold text-black shadow-sm transition"
     >
       Code Compass Pro — $19.99/month

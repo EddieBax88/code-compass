@@ -56,7 +56,7 @@ export function FoundingMemberModal({
 
         <div className="pt-2">
           <a
-            href="/api/stripe-checkout"
+            href="https://buy.stripe.com/5kQdR98Ei4VI9CWbqF3sI03"
             className="inline-flex w-full items-center justify-center gap-2 rounded-xl bg-amber-500 hover:bg-amber-600 px-6 py-3.5 text-base font-bold text-black shadow-lg transition"
           >
             Code Compass Pro — $19.99/month
