@@ -92,6 +92,12 @@ function Home() {
             >
               Take Practice Drill
             </Link>
+            <a
+              href="https://buy.stripe.com/5kQdR98Ei4VI9CWbqF3sI03"
+              className="inline-flex items-center gap-2 rounded-lg bg-primary px-6 py-3.5 text-sm font-semibold text-primary-foreground shadow-ember hover:opacity-90 transition"
+            >
+              Go Pro — $19.99/month
+            </a>
           </div>
         </div>
       </section>
