@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { Zap, Cpu, ShieldCheck, ArrowRight, Search, ChevronDown, ChevronUp } from "lucide-react";
+import { Zap, Cpu, ShieldCheck, ArrowRight, Search, ChevronDown, ChevronUp, Check } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   validateSearch: (s: Record<string, unknown>): { q?: string; edition?: string } => {
@@ -202,6 +202,51 @@ function Home() {
               Code Compass Pro — $19.99/month. No school. No waiting list. No permission needed.
             </p>
           </div>
+        </div>
+      </section>
+
+      {/* PRICING SECTION */}
+      <section className="mt-12 rounded-2xl border border-primary/40 bg-card/60 p-6 sm:p-8 shadow-sm">
+        <div>
+          <div className="text-[10px] uppercase tracking-[0.2em] font-semibold text-primary">
+            Code Compass Pro
+          </div>
+          <h2 className="mt-2 font-display text-3xl font-bold">
+            Everything. $19.99/month.
+          </h2>
+          <ul className="mt-6 space-y-3">
+            <li className="flex items-center gap-3 text-sm sm:text-base text-foreground/90">
+              <Check className="h-4 w-4 text-primary shrink-0" />
+              <span>Unlimited code questions — answer, article, and the exact page in your book</span>
+            </li>
+            <li className="flex items-center gap-3 text-sm sm:text-base text-foreground/90">
+              <Check className="h-4 w-4 text-primary shrink-0" />
+              <span>25-question practice tests</span>
+            </li>
+            <li className="flex items-center gap-3 text-sm sm:text-base text-foreground/90">
+              <Check className="h-4 w-4 text-primary shrink-0" />
+              <span>Timed exam drills for your license</span>
+            </li>
+            <li className="flex items-center gap-3 text-sm sm:text-base text-foreground/90">
+              <Check className="h-4 w-4 text-primary shrink-0" />
+              <span>PLC Parser + Data Center Compliance (Beta)</span>
+            </li>
+            <li className="flex items-center gap-3 text-sm sm:text-base text-foreground/90">
+              <Check className="h-4 w-4 text-primary shrink-0" />
+              <span>Every new tool we ship, included</span>
+            </li>
+          </ul>
+          <div className="mt-8 flex flex-col sm:flex-row items-start sm:items-center gap-4">
+            <a
+              href="https://buy.stripe.com/5kQdR98Ei4VI9CWbqF3sI03"
+              className="inline-flex items-center justify-center gap-2 rounded-lg bg-primary px-8 py-4 text-base font-semibold text-primary-foreground shadow-ember hover:opacity-90 transition"
+            >
+              Start now — $19.99/month
+            </a>
+          </div>
+          <p className="mt-3 text-xs text-muted-foreground">
+            Cancel anytime. Your first question is free — try it above.
+          </p>
         </div>
       </section>
 
